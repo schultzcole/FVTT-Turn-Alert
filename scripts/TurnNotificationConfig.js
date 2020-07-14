@@ -14,6 +14,20 @@ export default class TurnNotificationConfig extends FormApplication {
         }
     }
 
+    get validRound() {
+        const combat = game.combats.get(this.object.combat);
+        const thisRoundLater = combat.data.round < this.object.round;
+        const isCurrentRound = combat.data.round == this.object.round;
+        const thisTurnIndex = combat.turns.findIndex(turn => turn._id === this.object.turn);
+        const thisTurnLater = combat.data.turn < thisTurnIndex;
+
+        if (this.object.roundAbsolute) {
+            return thisRoundLater || (isCurrentRound && thisTurnLater);
+        } else {
+            return this.object.round > 0 || thisTurnLater;
+        }
+    }
+
     /** @override */
 	static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -32,7 +46,8 @@ export default class TurnNotificationConfig extends FormApplication {
     getData(options) {
         return {
             object: duplicate(this.object),
-            validRound: !this.object.roundAbsolute || game.combats.get(this.object.combat).data.round <= this.object.round,
+            validRound: this.validRound,
+            topOfRound: this.object.turn === null,
             options: this.options
         }
     }
