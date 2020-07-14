@@ -1,0 +1,24 @@
+.full-height {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.message-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-area > .form-group {
+    flex-grow: 1;
+}
+
+.turn-notification-config textarea {
+    font-family: inherit;
+}
+
+.turn-notification-config .warning {
+    color: #664e01;
+}

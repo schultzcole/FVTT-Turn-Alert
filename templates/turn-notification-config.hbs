@@ -1,35 +1,43 @@
-<form autocomplete="off" onsubmit="event.preventDefault();">
-    <p>Create a new Turn Notification</p>
+<form autocomplete="off" onsubmit="event.preventDefault();" class="turn-notification-config full-height">
+    <div>
+        <p>Create a new Turn Notification</p>
 
-    <hr>
+        <hr>
 
-    <div class="form-group">
-        <label for="round">
-            {{#if object.roundAbsolute}}Trigger on round{{else}}Trigger after rounds{{/if}}
-        </label>
-        <input type="text" name="round" value="{{object.round}}" data-dtype="Number">
+        <div class="form-group">
+            <label for="round">
+                {{#if object.roundAbsolute}}Trigger on round{{else}}Trigger after rounds{{/if}}
+            </label>
+            <input type="text" name="round" value="{{object.round}}" data-dtype="Number">
+        </div>
+        {{#unless validRound}}
+            <p class="notes warning">⚠️ Warning: the round you have entered is earlier than the current round!</p>
+        {{/unless}}
+
+        <div class="form-group">
+            <label for="roundAbsolute">Absolute round number</label>
+            <input type="checkbox" name="roundAbsolute" data-dtype="Boolean" {{checked object.roundAbsolute}}>
+        </div>
+
+        
+        <div class="form-group">
+            <label for="repeating">Repeating</label>
+            {{#if object.roundAbsolute}}
+                <input type="checkbox" name="repeating" data-dtype="Boolean" disabled>
+            {{else}}
+                <input type="checkbox" name="repeating" data-dtype="Boolean" {{checked object.repeating}}>
+            {{/if}}
+        </div>
+
+        <hr>
     </div>
 
-    <div class="form-group">
-        <label for="roundAbsolute">Absolute round number</label>
-        <input type="checkbox" name="roundAbsolute" data-dtype="Boolean" {{checked object.roundAbsolute}}>
+    <div class="message-area">
+        <label for="message">Message</label>
+        <div class="form-group">
+            <textarea name="message">{{object.message}}</textarea>
+        </div>
     </div>
 
-    
-    <div class="form-group">
-        <label for="repeating">Repeating</label>
-        {{#if object.roundAbsolute}}
-            <input type="checkbox" name="repeating" data-dtype="Boolean" disabled>
-        {{else}}
-            <input type="checkbox" name="repeating" data-dtype="Boolean" {{checked object.repeating}}>
-        {{/if}}
-    </div>
-
-    <hr>
-
-    <div class="form-group">
-        <textarea name="message" style="font-family:inherit">{{object.message}}</textarea>
-    </div>
-
-    <button type="submit" name="submit">Save</button>
+    <button type="submit" name="submit" class="bottom-button">Save</button>
 </form>
