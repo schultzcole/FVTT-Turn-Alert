@@ -1,0 +1,35 @@
+<form autocomplete="off" onsubmit="event.preventDefault();">
+    <p>Create a new Turn Notification</p>
+
+    <hr>
+
+    <div class="form-group">
+        <label for="round">
+            {{#if object.roundAbsolute}}Trigger on round{{else}}Trigger after rounds{{/if}}
+        </label>
+        <input type="text" name="round" value="{{object.round}}" data-dtype="Number">
+    </div>
+
+    <div class="form-group">
+        <label for="roundAbsolute">Absolute round number</label>
+        <input type="checkbox" name="roundAbsolute" data-dtype="Boolean" {{checked object.roundAbsolute}}>
+    </div>
+
+    
+    <div class="form-group">
+        <label for="repeating">Repeating</label>
+        {{#if object.roundAbsolute}}
+            <input type="checkbox" name="repeating" data-dtype="Boolean" disabled>
+        {{else}}
+            <input type="checkbox" name="repeating" data-dtype="Boolean" {{checked object.repeating}}>
+        {{/if}}
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+        <textarea name="message" style="font-family:sans-serif">{{object.message}}</textarea>
+    </div>
+
+    <button type="submit" name="submit">Save</button>
+</form>
