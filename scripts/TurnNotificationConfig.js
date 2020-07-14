@@ -1,16 +1,18 @@
 import CONST from "./const.js";
+import TurnNotification from "./TurnNotification.js";
 
-/**
- * Notification Config Sheet
- * @extends {FormApplication}
- * 
- * 
- */
-export class TurnNotificationConfig extends FormApplication {
+export default class TurnNotificationConfig extends FormApplication {
 
     constructor(data, options) {
         super(data, options);
         this.topOfRound = data.turn == null;
+
+        if (!game.combats.has(data.combat)) {
+            ui.notifications.error("Either no combat id was provided or the id provided did not match any active combats.");
+
+            const combats = Array.from(game.combats.keys()).join(", ");
+            throw new Error(`Invalid combat id provided. Got ${data.combat}, which does not match any of [${combats}]`)
+        }
     }
 
     /** @override */
@@ -22,7 +24,8 @@ export class TurnNotificationConfig extends FormApplication {
             template: `${CONST.modulePath}/templates/turn-notification-config.hbs`,
             width: 400,
             submitOnChange: false,
-            closeOnSubmit: true
+            closeOnSubmit: true,
+            resizable: true
         });
     }
 
@@ -58,6 +61,6 @@ export class TurnNotificationConfig extends FormApplication {
 
         let finalData = mergeObject(this.object, formData);
         console.log(finalData);
-
+        TurnNotification.create(finalData);
     }
 }
