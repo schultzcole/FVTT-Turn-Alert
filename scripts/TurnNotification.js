@@ -8,6 +8,7 @@ import CONST from "./const.js";
  *     createdRound: integer                  // The combat round during which this notification was created
  *     round: integer,                        // The round that this turn notification will activate on
  *     turn: id string | null,                // The turn that this notification will activate on. If null, activates at the top of the round
+ *     endOfTurn: true,                       // Whether the notification should trigger at the end of the turn, or beginning of the turn
  *     roundAbsolute: boolean,                // Whether the round number is absolute (i.e. the notification happens on round 5) or relative to the round during which the notification was created (i.e. the notification happens 5 rounds after creation)
  *     repeating: boolean,                    // Whether this notification will repeat. If this notification triggers on an absolute round number (roundAbsolute is true), this is ignored!
  *     message: string,                       // The message to be displayed in chat when the notification is activated
