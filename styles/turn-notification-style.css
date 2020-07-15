@@ -28,16 +28,27 @@
     align-items: center;
     background: url(/ui/denim075.png) repeat;
     border: 1px black solid;
-    border-radius: 5px;
+    border-radius: 2px;
     color: #f0f0e0;
     text-shadow: 1px 1px 4px #000;
+    line-height: 48px;
 }
 
-.turn-notification-config .turn-display .text {
-    margin-left: 1rem;
+.turn-notification-config .turn-display .token-name {
+    flex: 1;
+    overflow: hidden;
+    margin-left: 5px;
+    text-shadow: 1px 1px 4px #000;
+    border-right: 1px solid #222;
+}
+
+.turn-notification-config .turn-display .token-initiative {
+    flex: 0 0 48px;
+    text-align: center;
 }
 
 .turn-notification-config .turn-display img {
+    flex: 0 0 48px;
     width: 48px;
     border: 0;
 }
