@@ -31,6 +31,7 @@ function _create(data, options) {
 
     const notificationData = {
         combat: currentCombat._id,
+        createdRound: currentCombat.round,
         round: data.roundAbsolute ? currentCombat.round + 1 : 1
     }
 

@@ -37,12 +37,11 @@ export default class TurnNotification {
         }
 
         const notificationData = mergeObject(this.prototype.constructor.defaultData, data);
-        const combat = game.combats.get(notificationData.combat);
 
         const id = randomID(16);
         notificationData.id = id;
 
-        notificationData.createdRound = combat.data.round;
+        const combat = game.combats.get(notificationData.combat);
 
         let combatNotifications = combat.getFlag(CONST.moduleName, "notifications");
         if (!combatNotifications) combatNotifications = {};
