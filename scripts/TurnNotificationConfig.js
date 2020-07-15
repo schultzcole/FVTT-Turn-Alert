@@ -19,7 +19,7 @@ export default class TurnNotificationConfig extends FormApplication {
         this.turn = this.object.turn ? this.combat.turns.find(turn => turn._id === this.object.turn) : null;
     }
 
-    get validRound() {
+    get _validRound() {
         const thisRoundLater = this.combat.data.round < this.object.round;
         const isCurrentRound = this.combat.data.round == this.object.round;
         const thisTurnIndex = this.combat.turns.findIndex(turn => turn._id === this.object.turn);
@@ -32,7 +32,7 @@ export default class TurnNotificationConfig extends FormApplication {
         }
     }
 
-    get turnData() {
+    get _turnData() {
         return !this.turn ? null: {
             imgPath: this.turn.token.img,
             name: this.turn.token.name,
@@ -58,9 +58,9 @@ export default class TurnNotificationConfig extends FormApplication {
     getData(options) {
         return {
             object: duplicate(this.object),
-            validRound: this.validRound,
+            validRound: this._validRound,
             topOfRound: !this.object.turn,
-            turnData: this.turnData,
+            turnData: this._turnData,
             options: this.options
         }
     }
