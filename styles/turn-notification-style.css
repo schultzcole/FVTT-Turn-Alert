@@ -22,3 +22,22 @@
 .turn-notification-config .warning {
     color: #664e01;
 }
+
+.turn-notification-config .turn-display {
+    display: flex;
+    align-items: center;
+    background: url(/ui/denim075.png) repeat;
+    border: 1px black solid;
+    border-radius: 5px;
+    color: #f0f0e0;
+    text-shadow: 1px 1px 4px #000;
+}
+
+.turn-notification-config .turn-display .text {
+    margin-left: 1rem;
+}
+
+.turn-notification-config .turn-display img {
+    width: 48px;
+    border: 0;
+}

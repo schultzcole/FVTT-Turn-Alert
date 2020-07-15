@@ -1,6 +1,17 @@
 <form autocomplete="off" onsubmit="event.preventDefault();" class="turn-notification-config full-height">
     <div>
-        <p>Create a new Turn Notification</p>
+        {{#if topOfRound}}
+            <p>This notification will trigger at the top of the round.</p>
+        {{else}}
+            <p>This notification will trigger on the following turn:</p>
+            <div class="turn-display">
+                <img src="{{turnData.imgPath}}">
+                <div class="text">
+                    <span>{{turnData.name}}</span><br>
+                    <span>Initiative: {{turnData.initiative}}</span>
+                </div>
+            </div>
+        {{/if}}
 
         <hr>
 
