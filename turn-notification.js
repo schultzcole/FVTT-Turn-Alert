@@ -17,7 +17,12 @@ Hooks.on("updateCombat", (combat, changed, diff, userId) => {
     for (let id in notifications) {
         const notification = notifications[id];
         if (TurnNotification.checkTrigger(notification, round, "round" in changed, turn)) {
-            console.log(`Triggered! ${notification.message}`);
+            const messageData = {
+                speaker: { alias: "TURN NOTIFICATION" },
+                content: notification.message
+            };
+            ChatMessage.create(messageData);
+
             if (!notification.repeating) {
                 delete notifications[id];
                 anyDeleted = true;
