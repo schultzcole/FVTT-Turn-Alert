@@ -13,7 +13,7 @@ import CONST from "./const.js";
  *     repeating: boolean,                    // Whether this notification will repeat. If this notification triggers on an absolute round number (roundAbsolute is true), this is ignored!
  *     message: string,                       // The message to be displayed in chat when the notification is activated
  *     user: id string,                       // The user that created this notification
- *     recipients: [actor id strings] | null  // The actors to whom the message should be whispered. If null, the message is public
+ *     recipients: [user id strings] | null   // The users to whom the message should be whispered. If null, the message is public
  * }
  */
 
