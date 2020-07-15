@@ -27,6 +27,11 @@ function createAtTopOfRound(data, options) {
 }
 
 function _create(data, options) {
+    if (!game.combat) {
+        ui.notifications.error("Cannot create a turn notification if no combats exist.");
+        return;
+    }
+
     const currentCombat = game.combat.data;
 
     const notificationData = {
