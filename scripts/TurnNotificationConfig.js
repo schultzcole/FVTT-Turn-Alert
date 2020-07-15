@@ -6,6 +6,7 @@ export default class TurnNotificationConfig extends FormApplication {
     constructor(data, options) {
         super(data, options);
 
+
         if (!game.combats.has(data.combat)) {
             ui.notifications.error("Either no combat id was provided or the id provided did not match any active combats.");
 
@@ -13,6 +14,7 @@ export default class TurnNotificationConfig extends FormApplication {
             throw new Error(`Invalid combat id provided. Got ${data.combat}, which does not match any of [${combats}]`)
         }
 
+        this.baseData = duplicate(data);
         this.combat = game.combats.get(data.combat);
         this.turn = this.object.turn ? this.combat.turns.find(turn => turn._id === this.object.turn) : null;
     }
@@ -97,7 +99,8 @@ export default class TurnNotificationConfig extends FormApplication {
             message: fd.get("message")
         }
 
-        if (this.object.roundAbsolute !== newData.roundAbsolute) {
+        const oldRoundAbsolute = this.object.roundAbsolute || false;
+        if (oldRoundAbsolute != newData.roundAbsolute) {
             newData.round = newData.roundAbsolute
                 ? this.combat.data.round + newData.round  // round number was previously relative
                 : newData.round - this.combat.data.round; // round number was previously absolute
@@ -118,7 +121,7 @@ export default class TurnNotificationConfig extends FormApplication {
 
         if (formData.roundAbsolute) delete formData.repeating;
 
-        let finalData = mergeObject(this.object, formData);
+        let finalData = mergeObject(this.baseData, formData);
         TurnNotification.create(finalData);
     }
 }
