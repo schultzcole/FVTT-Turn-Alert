@@ -31,6 +31,20 @@ export default class TurnNotification {
         };
     }
 
+    static checkTrigger(data, currentRound, newRound, currentTurn) {
+        let turnMatches = (!data.turn && newRound) || (data.turn === currentTurn._id);
+
+        let roundMatches = false;
+        if (data.roundAbsolute) {
+            roundMatches = currentRound == data.round;
+        } else {
+            const delta = currentRound - data.createdRound;
+            roundMatches = data.repeating ? delta % data.round === 0 : delta === data.round;
+        }
+
+        return turnMatches && roundMatches;
+    }
+
     static async create(data) {
         if (!data.combat) {
             throw new Error(`Invalid combat id provided, cannot add notification to combat: ${data.combat}`);
