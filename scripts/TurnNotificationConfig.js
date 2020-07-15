@@ -99,8 +99,8 @@ export default class TurnNotificationConfig extends FormApplication {
 
         if (this.object.roundAbsolute !== newData.roundAbsolute) {
             newData.round = newData.roundAbsolute
-                ? this.combat.data.round + newData.round // round number was previously relative
-                : newData.round - this.combat.data.round // round number was previously absolute
+                ? this.combat.data.round + newData.round  // round number was previously relative
+                : newData.round - this.combat.data.round; // round number was previously absolute
         }
 
         this.object = mergeObject(this.object, newData);
