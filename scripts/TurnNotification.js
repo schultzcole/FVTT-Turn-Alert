@@ -25,6 +25,7 @@ export default class TurnNotification {
             createdRound: 0,
             round: 0,
             turn: null,
+            endOfTurn: false,
             roundAbsolute: true,
             repeating: false,
             message: "",
@@ -34,7 +35,7 @@ export default class TurnNotification {
     }
 
     static checkTrigger(data, currentRound, newRound, currentTurn) {
-        let turnMatches = (!data.turn && newRound) || (data.turn === currentTurn._id);
+        let turnMatches = (!data.turn && newRound) || (data.turn === currentTurn);
 
         let roundMatches = false;
         if (data.roundAbsolute) {

@@ -19,16 +19,22 @@ export default class TurnNotificationConfig extends FormApplication {
         this.turn = this.object.turn ? this.combat.turns.find(turn => turn._id === this.object.turn) : null;
     }
 
+    get _roundLabel() {
+        return this.object.roundAbsolute ? "Trigger on round" : "Trigger after rounds";
+    }
+
     get _validRound() {
         const thisRoundLater = this.combat.data.round < this.object.round;
         const isCurrentRound = this.combat.data.round == this.object.round;
         const thisTurnIndex = this.combat.turns.findIndex(turn => turn._id === this.object.turn);
         const thisTurnLater = this.combat.data.turn < thisTurnIndex;
+        const isCurrentTurn = this.combat.data.turn == thisTurnIndex;
+        const turnValid = thisTurnLater || (this.object.endOfTurn && isCurrentTurn);
 
         if (this.object.roundAbsolute) {
-            return thisRoundLater || (isCurrentRound && thisTurnLater);
+            return thisRoundLater || (isCurrentRound && turnValid);
         } else {
-            return this.object.round > 0 || thisTurnLater;
+            return this.object.round > 0 || turnValid;
         }
     }
 
@@ -38,6 +44,10 @@ export default class TurnNotificationConfig extends FormApplication {
             name: this.turn.token.name,
             initiative: this.turn.initiative
         }
+    }
+
+    get _canRepeat() {
+        return this.object.round != 0 && !this.object.roundAbsolute;
     }
 
     /** @override */
@@ -58,9 +68,11 @@ export default class TurnNotificationConfig extends FormApplication {
     getData(options) {
         return {
             object: duplicate(this.object),
+            roundLabel: this._roundLabel,
             validRound: this._validRound,
             topOfRound: !this.object.turn,
             turnData: this._turnData,
+            canRepeat: this._canRepeat,
             options: this.options
         }
     }
@@ -96,6 +108,7 @@ export default class TurnNotificationConfig extends FormApplication {
             round: Number(fd.get("round")),
             roundAbsolute: fd.get("roundAbsolute") === "true",
             repeating: fd.get("repeating") === "true",
+            endOfTurn: fd.get("endOfTurn") === "true",
             message: fd.get("message")
         }
 
@@ -120,6 +133,7 @@ export default class TurnNotificationConfig extends FormApplication {
         }
 
         if (formData.roundAbsolute) delete formData.repeating;
+        if (this.object.topOfRound) delete formData.endOfTurn;
 
         let finalData = mergeObject(this.baseData, formData);
         TurnNotification.create(finalData);
