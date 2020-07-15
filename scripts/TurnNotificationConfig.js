@@ -28,6 +28,18 @@ export default class TurnNotificationConfig extends FormApplication {
         }
     }
 
+    get turnData() {
+        if (this.object.turn === null) return null;
+
+        const turn = game.combats.get(this.object.combat).turns.find(turn => turn._id === this.object.turn);
+
+        return !turn ? null: {
+            imgPath: turn.token.img,
+            name: turn.token.name,
+            initiative: turn.initiative
+        }
+    }
+
     /** @override */
 	static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -48,6 +60,7 @@ export default class TurnNotificationConfig extends FormApplication {
             object: duplicate(this.object),
             validRound: this.validRound,
             topOfRound: this.object.turn === null,
+            turnData: this.turnData,
             options: this.options
         }
     }
