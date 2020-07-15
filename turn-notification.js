@@ -18,7 +18,7 @@ Hooks.on("updateCombat", async (combat, changed, diff, userId) => {
     const round = combat.data.round;
     const prev = combat.getFlag(CONST.moduleName, "previousTurn");
     const prevRound = prev.prevRound || 0;
-    const prevTurn = combat.turns[prev.prevTurn || 0]._id;
+    const prevTurn = combat.turns[prev.prevTurn || 0]?._id;
 
     let anyDeleted = false;
     for (let id in notifications) {
