@@ -2,38 +2,49 @@ import TurnNotificationConfig from "./TurnNotificationConfig.js";
 import CONST from "./const.js";
 
 /**
- * Displays the dialog for creating a new Turn Notification.
+ * Displays the dialog for creating a new Turn Notification which will activate on the current turn.
+ *
  * The Turn Notification will be added to the active combat.
- * @param data    Seed data for the resulting {TurnNotification}.
- * @param options Extra options for the {TurnNotificationConfig} FormApplication.
+ * @param {Object} data Initial data for the resulting turn notification.
+ * @param {Object} options Extra options for the TurnNotificationConfig FormApplication
  */
 function createOnCurrentTurn(data, options) {
-    const turnId = game.combat.turns?.length ? game.combat.turns[currentCombat.turn]._id : null;
+    const turnId = game.combat.turns?.length ? game.combat.turns[game.combat.data.turn]._id : null;
 
-    create(mergeObject(data, { turn: turnId }), options);
+    _create(mergeObject(data, { turn: turnId }), options);
 }
 
+/**
+ * Displays the dialog for creating a new Turn Notification which will
+ * activate at the top of a round rather than a particular turn.
+ *
+ * The Turn Notification will be added to the active combat.
+ * @param {Object} data Initial data for the resulting turn notification.
+ * @param {Object} options Extra options for the TurnNotificationConfig FormApplication
+ */
 function createAtTopOfRound(data, options) {
-    create(data, options);
+    _create(data, options);
 }
 
-function create(data, options) {
+function _create(data, options) {
     const currentCombat = game.combat.data;
 
     const notificationData = {
         combat: currentCombat._id,
-        round: currentCombat.round,
-        roundAbsolute: true,
-        turn: null
+        round: currentCombat.round
     }
 
     const app = new TurnNotificationConfig(mergeObject(notificationData, data), options);
     app.render(true);
 }
 
-function clearAll(combatId) {
+/**
+ * Clears all notifications on a given combat.
+ * @param {String} combatId The id string of the combat to clear all notifications for.
+ */
+async function clearAll(combatId) {
     const combat = combatId ? game.combats.get(combatId) : game.combat;
-    combat.unsetFlag(CONST.moduleName, "notifications");
+    return combat.unsetFlag(CONST.moduleName, "notifications");
 }
 
 /**
