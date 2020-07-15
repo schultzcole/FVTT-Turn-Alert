@@ -8,7 +8,7 @@ Hooks.on("init", () => {
 
 Hooks.on("updateCombat", async (combat, changed, diff, userId) => {
     if (!("round" in changed || "turn" in changed)) {
-        await savePreviousTurn(combat);
+        await savePreviousTurn(combat, userId);
         return;
     }
 
@@ -31,7 +31,8 @@ Hooks.on("updateCombat", async (combat, changed, diff, userId) => {
             if (notification.message) {
                 const messageData = {
                     speaker: { alias: "Turn Notification" },
-                    content: notification.message
+                    content: notification.message,
+                    whisper: notification.recipients
                 };
                 ChatMessage.create(messageData);
             }
@@ -44,10 +45,12 @@ Hooks.on("updateCombat", async (combat, changed, diff, userId) => {
     }
 
     if (anyDeleted) await combat.setFlag(CONST.moduleName, "notifications", notifications);
-    await savePreviousTurn(combat);
+    await savePreviousTurn(combat, userId);
 });
 
-function savePreviousTurn(combat) {
+function savePreviousTurn(combat, userId) {
+    if (game.userId !== userId) return;
+
     const previousTurn = {
         prevRound: combat.data.round,
         prevTurn: combat.data.turn

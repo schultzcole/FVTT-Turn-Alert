@@ -73,6 +73,8 @@ export default class TurnNotificationConfig extends FormApplication {
             topOfRound: !this.object.turn,
             turnData: this._turnData,
             canRepeat: this._canRepeat,
+            users: game.users.entries.map(user => { return { id: user.data._id, name: user.data.name }}),
+            userCount: game.users.entries.length,
             options: this.options
         }
     }
@@ -161,6 +163,11 @@ export default class TurnNotificationConfig extends FormApplication {
 
         if (formData.roundAbsolute) delete formData.repeating;
         if (this.object.topOfRound) delete formData.endOfTurn;
+
+        formData.recipients = $(".turn-notification-config #recipients option")
+            .filter(function() { return this.selected })
+            .map(function() { return this.value })
+            .get()
 
         let finalData = mergeObject(this.baseData, formData);
         TurnNotification.create(finalData);

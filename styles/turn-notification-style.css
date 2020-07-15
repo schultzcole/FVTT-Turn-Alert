@@ -41,3 +41,7 @@
     width: 48px;
     border: 0;
 }
+
+.turn-notification-config .self-height {
+    height: unset;
+}
