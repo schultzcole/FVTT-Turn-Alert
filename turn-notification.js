@@ -18,7 +18,7 @@ Hooks.on("updateCombat", (combat, changed, diff, userId) => {
         const notification = notifications[id];
         if (TurnNotification.checkTrigger(notification, round, "round" in changed, turn)) {
             const messageData = {
-                speaker: { alias: "TURN NOTIFICATION" },
+                speaker: { alias: "Turn Notification" },
                 content: notification.message
             };
             ChatMessage.create(messageData);
