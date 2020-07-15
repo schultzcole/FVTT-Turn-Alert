@@ -14,6 +14,7 @@ export default class TurnNotificationConfig extends FormApplication {
         }
 
         this.combat = game.combats.get(data.combat);
+        this.turn = this.object.turn ? this.combat.turns.find(turn => turn._id === this.object.turn) : null;
     }
 
     get validRound() {
@@ -30,14 +31,10 @@ export default class TurnNotificationConfig extends FormApplication {
     }
 
     get turnData() {
-        if (this.object.turn === null) return null;
-
-        const turn = this.combat.turns.find(turn => turn._id === this.object.turn);
-
-        return !turn ? null: {
-            imgPath: turn.token.img,
-            name: turn.token.name,
-            initiative: turn.initiative
+        return !this.turn ? null: {
+            imgPath: this.turn.token.img,
+            name: this.turn.token.name,
+            initiative: this.turn.initiative
         }
     }
 
@@ -63,6 +60,29 @@ export default class TurnNotificationConfig extends FormApplication {
             topOfRound: !this.object.turn,
             turnData: this.turnData,
             options: this.options
+        }
+    }
+
+    /** @override */
+    activateListeners(html) {
+        super.activateListeners(html);
+
+        html.find('.turn-display').hover(this._onCombatantHover.bind(this), this._onCombatantHoverOut.bind(this));
+    }
+
+    _onCombatantHover(event) {
+        event.preventDefault();
+        const token = canvas.tokens.get(this.turn?.token?._id);
+        if (token && token.isVisible && !token._controlled) {
+            token._onHoverIn(event);
+        }
+    }
+
+    _onCombatantHoverOut(event) {
+        event.preventDefault();
+        const token = canvas.tokens.get(this.turn?.token?._id);
+        if (token ) {
+            token._onHoverOut(event);
         }
     }
     
