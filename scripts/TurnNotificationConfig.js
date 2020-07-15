@@ -59,7 +59,7 @@ export default class TurnNotificationConfig extends FormApplication {
         return {
             object: duplicate(this.object),
             validRound: this.validRound,
-            topOfRound: this.object.turn === null,
+            topOfRound: !this.object.turn,
             turnData: this.turnData,
             options: this.options
         }
