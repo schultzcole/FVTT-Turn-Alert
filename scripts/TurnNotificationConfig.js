@@ -57,7 +57,7 @@ export default class TurnNotificationConfig extends FormApplication {
             classes: ["sheet"],
             title: "Turn Notification Configuration",
             template: `${CONST.modulePath}/templates/turn-notification-config.hbs`,
-            width: 400,
+            width: 600,
             submitOnChange: false,
             closeOnSubmit: true,
             resizable: true
