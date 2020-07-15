@@ -12,14 +12,15 @@ export default class TurnNotificationConfig extends FormApplication {
             const combats = Array.from(game.combats.keys()).join(", ");
             throw new Error(`Invalid combat id provided. Got ${data.combat}, which does not match any of [${combats}]`)
         }
+
+        this.combat = game.combats.get(data.combat);
     }
 
     get validRound() {
-        const combat = game.combats.get(this.object.combat);
-        const thisRoundLater = combat.data.round < this.object.round;
-        const isCurrentRound = combat.data.round == this.object.round;
-        const thisTurnIndex = combat.turns.findIndex(turn => turn._id === this.object.turn);
-        const thisTurnLater = combat.data.turn < thisTurnIndex;
+        const thisRoundLater = this.combat.data.round < this.object.round;
+        const isCurrentRound = this.combat.data.round == this.object.round;
+        const thisTurnIndex = this.combat.turns.findIndex(turn => turn._id === this.object.turn);
+        const thisTurnLater = this.combat.data.turn < thisTurnIndex;
 
         if (this.object.roundAbsolute) {
             return thisRoundLater || (isCurrentRound && thisTurnLater);
@@ -31,7 +32,7 @@ export default class TurnNotificationConfig extends FormApplication {
     get turnData() {
         if (this.object.turn === null) return null;
 
-        const turn = game.combats.get(this.object.combat).turns.find(turn => turn._id === this.object.turn);
+        const turn = this.combat.turns.find(turn => turn._id === this.object.turn);
 
         return !turn ? null: {
             imgPath: turn.token.img,
@@ -77,10 +78,9 @@ export default class TurnNotificationConfig extends FormApplication {
         }
 
         if (this.object.roundAbsolute !== newData.roundAbsolute) {
-            const combat = game.combats.get(this.object.combat);
             newData.round = newData.roundAbsolute
-                ? combat.data.round + newData.round // round number was previously relative
-                : newData.round - combat.data.round // round number was previously absolute
+                ? this.combat.data.round + newData.round // round number was previously relative
+                : newData.round - this.combat.data.round // round number was previously absolute
         }
 
         this.object = mergeObject(this.object, newData);
