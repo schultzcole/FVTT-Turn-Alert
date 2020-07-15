@@ -12,6 +12,7 @@ import CONST from "./const.js";
  *     roundAbsolute: boolean,                // Whether the round number is absolute (i.e. the notification happens on round 5) or relative to the round during which the notification was created (i.e. the notification happens 5 rounds after creation)
  *     repeating: boolean,                    // Whether this notification will repeat. If this notification triggers on an absolute round number (roundAbsolute is true), this is ignored!
  *     message: string,                       // The message to be displayed in chat when the notification is activated
+ *     user: id string,                       // The user that created this notification
  *     recipients: [actor id strings] | null  // The actors to whom the message should be whispered. If null, the message is public
  * }
  */
@@ -27,6 +28,7 @@ export default class TurnNotification {
             roundAbsolute: true,
             repeating: false,
             message: "",
+            user: null,
             recipients: null
         };
     }

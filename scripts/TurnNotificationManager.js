@@ -37,7 +37,8 @@ function _create(data, options) {
     const notificationData = {
         combat: currentCombat._id,
         createdRound: currentCombat.round,
-        round: data.roundAbsolute ? currentCombat.round + 1 : 1
+        round: data.roundAbsolute ? currentCombat.round + 1 : 1,
+        user: game.userId
     }
 
     const app = new TurnNotificationConfig(mergeObject(notificationData, data), options);

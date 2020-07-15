@@ -16,6 +16,7 @@ Hooks.on("updateCombat", (combat, changed, diff, userId) => {
     let anyDeleted = false;
     for (let id in notifications) {
         const notification = notifications[id];
+        if (game.userId !== notification.user) continue;
         if (TurnNotification.checkTrigger(notification, round, "round" in changed, turn)) {
             const messageData = {
                 speaker: { alias: "Turn Notification" },
