@@ -53,7 +53,7 @@
                 <textarea name="message" placeholder="The chat message to display when the notification is triggered. Leave blank for no message.">{{object.message}}</textarea>
             </div>
             <label for="recipients">Whisper to</label>
-            <p class="notes">The above chat message will only be sent to the following selected users. If none are selected, it will default to a public message.</p>
+            <p class="notes">The above chat message will only be sent to the following selected users. If none are selected, it will default to a public message. Hold CTRL or CMD to select multiple users.</p>
             <div class="form-group">
                 <select multiple id="recipients" name="recipients" size="{{userCount}}" class="self-height">
                     {{#each users}}
