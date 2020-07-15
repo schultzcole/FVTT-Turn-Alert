@@ -76,6 +76,13 @@ export default class TurnNotificationConfig extends FormApplication {
             message: fd.get("message")
         }
 
+        if (this.object.roundAbsolute !== newData.roundAbsolute) {
+            const combat = game.combats.get(this.object.combat);
+            newData.round = newData.roundAbsolute
+                ? combat.data.round + newData.round // round number was previously relative
+                : newData.round - combat.data.round // round number was previously absolute
+        }
+
         this.object = mergeObject(this.object, newData);
 
         this.render(true);
@@ -91,6 +98,8 @@ export default class TurnNotificationConfig extends FormApplication {
         
         console.log(this.object);
         console.log(formData);
+
+        if (formData.roundAbsolute) delete formData.repeating;
 
         let finalData = mergeObject(this.object, formData);
         console.log(finalData);
