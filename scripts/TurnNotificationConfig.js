@@ -110,19 +110,15 @@ export default class TurnNotificationConfig extends FormApplication {
 
     /** @override */
     async _updateObject(event, formData) {
-        if ( this.object.id ) {
+        if (this.object.id) {
             console.log("Updating existing notification!");
         } else {
             console.log("Creating new notification!")
         }
-        
-        console.log(this.object);
-        console.log(formData);
 
         if (formData.roundAbsolute) delete formData.repeating;
 
         let finalData = mergeObject(this.object, formData);
-        console.log(finalData);
         TurnNotification.create(finalData);
     }
 }
