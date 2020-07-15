@@ -16,12 +16,10 @@
         <hr>
 
         <div class="form-group">
-            <label for="round">{{roundLabel}}</label>
-            <input type="text" name="round" value="{{object.round}}" data-dtype="Number">
+            <label id="roundLabel" for="round">{{roundLabel}}</label>
+            <input id="round" type="text" name="round" value="{{object.round}}" data-dtype="Number">
         </div>
-        {{#unless validRound}}
-            <p class="notes warning">⚠️ Warning: the trigger for this event has already occurred!</p>
-        {{/unless}}
+        <p id="validRoundWarning" style="display: none" class="notes warning">⚠️ Warning: the trigger for this event has already occurred!</p>
 
         <div class="form-group">
             <label for="roundAbsolute">Absolute round number</label>
@@ -31,16 +29,16 @@
         <div class="form-group">
             <label for="repeating">Repeating</label>
             {{#if canRepeat}}
-                <input type="checkbox" name="repeating" data-dtype="Boolean" {{checked object.repeating}}>
+                <input type="checkbox" id="repeating" name="repeating" data-dtype="Boolean" {{checked object.repeating}}>
             {{else}}
-                <input type="checkbox" name="repeating" data-dtype="Boolean" disabled>
+                <input type="checkbox" id="repeating" name="repeating" data-dtype="Boolean" disabled>
             {{/if}}
         </div>
 
         {{#unless topOfRound}}
             <div class="form-group">
                 <label for="endOfTurn">Trigger at end of turn</label>
-                <input type="checkbox" name="endOfTurn" data-dtype="Boolean" {{checked object.endOfTurn}}>
+                <input id="endOfTurn" type="checkbox" name="endOfTurn" data-dtype="Boolean" {{checked object.endOfTurn}}>
             </div>
         {{/unless}}
 

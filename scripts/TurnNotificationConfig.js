@@ -121,7 +121,34 @@ export default class TurnNotificationConfig extends FormApplication {
 
         this.object = mergeObject(this.object, newData);
 
-        this.render(true);
+        this._updateForm();
+    }
+
+    _updateForm() {
+        const form = $(".turn-notification-config");
+        
+        const roundLabel = form.find("#roundLabel");
+        roundLabel.text(this._roundLabel);
+
+        const roundTextBox = form.find("#round");
+        roundTextBox.prop("value", this.object.round);
+
+        const validRoundWarning = form.find("#validRoundWarning");
+        if (this._validRound) {
+            validRoundWarning.hide();
+        } else {
+            validRoundWarning.show();
+        }
+
+        const repeatingCheckbox = form.find("#repeating");
+        repeatingCheckbox.prop("disabled", !this._canRepeat);
+        repeatingCheckbox.prop("checked", this._canRepeat && this.object.repeating);
+
+        const endOfTurnCheckbox = form.find("#endOfTurn");
+        endOfTurnCheckbox.prop("checked", this.object.endOfTurn);
+
+        const messageBox = form.find("#message");
+        messageBox.text(this.object.message);
     }
 
     /** @override */
