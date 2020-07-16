@@ -1,6 +1,9 @@
 import CONST from "../scripts/const.js";
 import TurnNotification from "../scripts/TurnNotification.js";
 
+/**
+ * Expects data to be a TurnNotification object.
+ */
 export default class TurnNotificationConfig extends FormApplication {
     constructor(data, options) {
         super(data, options);
