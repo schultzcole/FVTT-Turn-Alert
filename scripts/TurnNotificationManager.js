@@ -1,4 +1,4 @@
-import TurnNotificationConfig from "./TurnNotificationConfig.js";
+import TurnNotificationConfig from "../apps/TurnNotificationConfig.js";
 import CONST from "./const.js";
 
 /**

@@ -1,5 +1,5 @@
-import CONST from "./const.js";
-import TurnNotification from "./TurnNotification.js";
+import CONST from "../scripts/const.js";
+import TurnNotification from "../scripts/TurnNotification.js";
 
 export default class TurnNotificationConfig extends FormApplication {
     constructor(data, options) {

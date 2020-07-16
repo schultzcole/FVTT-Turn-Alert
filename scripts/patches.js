@@ -1,4 +1,4 @@
-import TurnNotificationConfig from "./TurnNotificationConfig.js";
+import TurnNotificationConfig from "../apps/TurnNotificationConfig.js";
 
 export function patch_CombatTracker_activateListeners() {
     const old = CombatTracker.prototype.activateListeners;
