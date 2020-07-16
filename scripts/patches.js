@@ -1,10 +1,8 @@
 import TurnNotificationConfig from "./TurnNotificationConfig.js";
 
 export function patch_CombatTracker_activateListeners() {
-    console.log("patching activateListeners");
     const old = CombatTracker.prototype.activateListeners;
     CombatTracker.prototype.activateListeners = function(html) {
-        console.log("calling patched activateListeners");
         old.call(this, html);
         if (!game.user.isGM) this._contextMenu(html);
     }
