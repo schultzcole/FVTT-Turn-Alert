@@ -1,0 +1,14 @@
+<div class="turn-notification">
+    <h1>Hello World</h1>
+    {{#each turns}}
+    <div class="turn-display flexrow">
+        <img src="{{this.img}}">
+        <div class="token-name flexcol">
+            <span>{{this.name}}</span>
+        </div>
+        <div class="token-initiative">
+            <span class="initiative">{{this.initiative}}</span>
+        </div>
+    </div>
+    {{/each}}
+</div>

@@ -23,7 +23,7 @@
     color: #664e01;
 }
 
-.turn-notification-config .turn-display {
+.turn-notification .turn-display {
     display: flex;
     align-items: center;
     background: url(/ui/denim075.png) repeat;
@@ -34,7 +34,7 @@
     line-height: 48px;
 }
 
-.turn-notification-config .turn-display .token-name {
+.turn-notification .turn-display .token-name {
     flex: 1;
     overflow: hidden;
     margin-left: 5px;
@@ -42,17 +42,17 @@
     border-right: 1px solid #222;
 }
 
-.turn-notification-config .turn-display .token-initiative {
+.turn-notification .turn-display .token-initiative {
     flex: 0 0 48px;
     text-align: center;
 }
 
-.turn-notification-config .turn-display img {
+.turn-notification .turn-display img {
     flex: 0 0 48px;
     width: 48px;
     border: 0;
 }
 
-.turn-notification-config .self-height {
+.turn-notification .self-height {
     height: unset;
 }
