@@ -75,9 +75,7 @@ export default class TurnNotificationConfig extends FormApplication {
             topOfRound: !this.object.turn,
             turnData: this._turnData,
             canRepeat: this._canRepeat,
-            users: game.users.entries.map((user) => {
-                return { id: user.data._id, name: user.data.name };
-            }),
+            users: game.users.entries.map((user) => ({ id: user.data._id, name: user.data.name })),
             userCount: game.users.entries.length,
             options: this.options,
         };
