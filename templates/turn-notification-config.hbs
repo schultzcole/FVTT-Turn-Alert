@@ -2,18 +2,18 @@
     <div>
         <div>
             {{#if topOfRound}}
-                <p>This notification will trigger at the top of the round.</p>
+            <p>This notification will trigger at the top of the round.</p>
             {{else}}
-                <p>This notification will trigger on the following turn:</p>
-                <div class="turn-display flexrow">
-                    <img src="{{turnData.imgPath}}">
-                    <div class="token-name flexcol">
-                        <span>{{turnData.name}}</span>
-                    </div>
-                    <div class="token-initiative">
-                        <span class="initiative">{{turnData.initiative}}</span>
-                    </div>
+            <p>This notification will trigger on the following turn:</p>
+            <div class="turn-display flexrow">
+                <img src="{{turnData.imgPath}}">
+                <div class="token-name flexcol">
+                    <span>{{turnData.name}}</span>
                 </div>
+                <div class="token-initiative">
+                    <span class="initiative">{{turnData.initiative}}</span>
+                </div>
+            </div>
             {{/if}}
         </div>
         <hr>
@@ -22,7 +22,8 @@
                 <label id="roundLabel" for="round">{{roundLabel}}</label>
                 <input id="round" type="text" name="round" value="{{object.round}}" data-dtype="Number">
             </div>
-            <p id="validRoundWarning" style="display: none" class="notes warning">⚠️ Warning: the trigger for this event has already occurred!</p>
+            <p id="validRoundWarning" style="display: none" class="notes warning">⚠️ Warning: the trigger for this event
+                has already occurred!</p>
 
             <div class="form-group">
                 <label for="roundAbsolute">Absolute round number</label>
@@ -32,17 +33,19 @@
             <div class="form-group">
                 <label for="repeating">Repeating</label>
                 {{#if canRepeat}}
-                    <input type="checkbox" id="repeating" name="repeating" data-dtype="Boolean" {{checked object.repeating}}>
+                <input type="checkbox" id="repeating" name="repeating" data-dtype="Boolean"
+                    {{checked object.repeating}}>
                 {{else}}
-                    <input type="checkbox" id="repeating" name="repeating" data-dtype="Boolean" disabled>
+                <input type="checkbox" id="repeating" name="repeating" data-dtype="Boolean" disabled>
                 {{/if}}
             </div>
 
             {{#unless topOfRound}}
-                <div class="form-group">
-                    <label for="endOfTurn">Trigger at end of turn</label>
-                    <input id="endOfTurn" type="checkbox" name="endOfTurn" data-dtype="Boolean" {{checked object.endOfTurn}}>
-                </div>
+            <div class="form-group">
+                <label for="endOfTurn">Trigger at end of turn</label>
+                <input id="endOfTurn" type="checkbox" name="endOfTurn" data-dtype="Boolean"
+                    {{checked object.endOfTurn}}>
+            </div>
             {{/unless}}
 
         </div>
@@ -50,14 +53,19 @@
         <div class="message-area">
             <label for="message">Chat Message</label>
             <div class="form-group">
-                <textarea name="message" placeholder="The chat message to display when the notification is triggered. Leave blank for no message.">{{object.message}}</textarea>
+                <textarea name="message"
+                    placeholder="The chat message to display when the notification is triggered. Leave blank for no message.">
+                    {{object.message}}
+                </textarea>
             </div>
+
             <label for="recipients">Whisper to</label>
-            <p class="notes">The above chat message will only be sent to the following selected users. If none are selected, it will default to a public message. Hold CTRL or CMD to select multiple users.</p>
+            <p class="notes">The above chat message will only be sent to the following selected users. If none are
+                selected, it will default to a public message. Hold CTRL or CMD to select multiple users.</p>
             <div class="form-group">
                 <select multiple id="recipients" name="recipients" size="{{userCount}}" class="self-height">
                     {{#each users}}
-                        <option value="{{this.id}}">{{this.name}}</option>
+                    <option value="{{this.id}}">{{this.name}}</option>
                     {{/each}}
                 </select>
             </div>

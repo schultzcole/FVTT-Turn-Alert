@@ -26,7 +26,7 @@ export default async function handleUpdateCombat(combat, changed, diff, userId) 
                 const messageData = {
                     speaker: { alias: "Turn Notification" },
                     content: notification.message,
-                    whisper: notification.recipients
+                    whisper: notification.recipients,
                 };
                 ChatMessage.create(messageData);
             }
@@ -43,8 +43,8 @@ function _savePreviousTurn(combat, userId) {
 
     const previousTurn = {
         prevRound: combat.data.round,
-        prevTurn: combat.data.turn
-    }
+        prevTurn: combat.data.turn,
+    };
 
     return combat.setFlag(CONST.moduleName, "previousTurn", previousTurn);
 }

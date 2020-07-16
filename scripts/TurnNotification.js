@@ -30,12 +30,12 @@ export default class TurnNotification {
             repeating: false,
             message: "",
             user: null,
-            recipients: null
+            recipients: null,
         };
     }
 
     static checkTrigger(data, currentRound, newRound, currentTurn) {
-        let turnMatches = (!data.turn && newRound) || (data.turn === currentTurn);
+        let turnMatches = (!data.turn && newRound) || data.turn === currentTurn;
 
         let roundMatches = false;
         if (data.roundAbsolute) {

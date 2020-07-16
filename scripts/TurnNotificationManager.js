@@ -38,8 +38,8 @@ function _create(data, options) {
         combat: currentCombat._id,
         createdRound: currentCombat.round,
         round: data.roundAbsolute ? currentCombat.round + 1 : 1,
-        user: game.userId
-    }
+        user: game.userId,
+    };
 
     const app = new TurnNotificationConfig(mergeObject(notificationData, data), options);
     app.render(true);
@@ -60,6 +60,6 @@ async function clearAll(combatId) {
 let TurnNotificationManager = {
     createOnCurrentTurn: createOnCurrentTurn,
     createAtTopOfRound: createAtTopOfRound,
-    clearAll: clearAll
-}
+    clearAll: clearAll,
+};
 export default TurnNotificationManager;
