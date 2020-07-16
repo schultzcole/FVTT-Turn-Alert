@@ -26,7 +26,7 @@ export default class TurnNotification {
             round: 0,
             turn: null,
             endOfTurn: false,
-            roundAbsolute: true,
+            roundAbsolute: false,
             repeating: false,
             message: "",
             user: null,
@@ -46,6 +46,12 @@ export default class TurnNotification {
         }
 
         return turnMatches && roundMatches;
+    }
+
+    static checkExpired(data, currentRound) {
+        if (data.repeating) return false;
+        let expireRound = data.roundAbsolute ? data.round : data.createdRound + data.round;
+        return expireRound < currentRound;
     }
 
     static async create(data) {

@@ -1,9 +1,13 @@
 import TurnNotificationManager from "./scripts/TurnNotificationManager.js";
 import CONST from "./scripts/const.js";
 import TurnNotification from "./scripts/TurnNotification.js";
+import { patch_CombatTracker_getEntryContextOptions, patch_CombatTracker_activateListeners } from "./scripts/patches.js";
 
 Hooks.on("init", () => {
     game.TurnNotificationManager = TurnNotificationManager;
+
+    patch_CombatTracker_activateListeners();
+    patch_CombatTracker_getEntryContextOptions();
 });
 
 Hooks.on("updateCombat", async (combat, changed, diff, userId) => {
@@ -20,7 +24,6 @@ Hooks.on("updateCombat", async (combat, changed, diff, userId) => {
     const prevRound = prev.prevRound || 0;
     const prevTurn = combat.turns[prev.prevTurn || 0]?._id;
 
-    let anyDeleted = false;
     for (let id in notifications) {
         const notification = notifications[id];
         if (game.userId !== notification.user) continue;
@@ -36,15 +39,22 @@ Hooks.on("updateCombat", async (combat, changed, diff, userId) => {
                 };
                 ChatMessage.create(messageData);
             }
+        }
+    }
 
-            if (!notification.repeating) {
+    if (game.user.isGM) {
+        let anyDeleted = false;
+        for (let id in notifications) {
+            if (TurnNotification.checkExpired(notifications[id], round)) {
                 delete notifications[id];
                 anyDeleted = true;
             }
         }
+        if (anyDeleted) {
+            await combat.setFlag(CONST.moduleName, "notifications", notifications);
+        }
     }
 
-    if (anyDeleted) await combat.setFlag(CONST.moduleName, "notifications", notifications);
     await savePreviousTurn(combat, userId);
 });
 
