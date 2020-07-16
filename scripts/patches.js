@@ -12,7 +12,7 @@ export function patch_CombatTracker_getEntryContextOptions() {
     const old = CombatTracker.prototype._getEntryContextOptions;
     CombatTracker.prototype._getEntryContextOptions = function() {
         const options = game.user.isGM ? old.call(this) : [];
-        options.push({
+        options.unshift({
             name: "Add Notification",
             icon: '<i class="fas fa-bell"></i>',
             condition: li => {
