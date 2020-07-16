@@ -6,7 +6,7 @@ import {
 import handleUpdateCombat from "./scripts/handleUpdateCombat.js";
 
 Hooks.on("init", () => {
-    game.TurnNotificationManager = TurnNotificationManager;
+    game.TurnNotificationManager = new TurnNotificationManager();
 
     patch_CombatTracker_activateListeners();
     patch_CombatTracker_getEntryContextOptions();
