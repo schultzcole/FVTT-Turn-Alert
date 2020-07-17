@@ -34,6 +34,10 @@
     line-height: 48px;
 }
 
+.combat-notifications .turn-display {
+    margin-top: 3px;
+}
+
 .turn-notification .turn-display .token-name {
     flex: 1;
     overflow: hidden;

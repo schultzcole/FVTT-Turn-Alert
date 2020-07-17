@@ -67,9 +67,13 @@ export default class TurnNotification {
         const combat = game.combats.get(notificationData.combat);
 
         let combatNotifications = combat.getFlag(CONST.moduleName, "notifications");
+
         if (!combatNotifications) combatNotifications = {};
+        else combatNotifications = duplicate(combatNotifications);
+
         combatNotifications[id] = notificationData;
 
-        return combat.setFlag(CONST.moduleName, "notifications", combatNotifications);
+        const key = `flags.${CONST.moduleName}.notifications`;
+        return combat.update({ [key]: combatNotifications });
     }
 }

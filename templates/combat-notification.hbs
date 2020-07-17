@@ -1,5 +1,5 @@
-<div class="turn-notification">
-    <h1>Hello World</h1>
+<div class="turn-notification combat-notifications">
+    <h1>Hello World {{timesRendered}}</h1>
     {{#each turns}}
     <div class="turn-display flexrow">
         <img src="{{this.img}}">
@@ -10,5 +10,10 @@
             <span class="initiative">{{this.initiative}}</span>
         </div>
     </div>
+    <ul>
+        {{#each notifications}}
+        <li>{{this.message}}</li>
+        {{/each}}
+    </ul>
     {{/each}}
 </div>

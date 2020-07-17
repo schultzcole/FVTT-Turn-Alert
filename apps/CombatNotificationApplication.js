@@ -7,7 +7,22 @@ export default class CombatNotificationApplication extends Application {
     constructor(data, options) {
         super(data, options);
 
-        this.combat = game.combats.get(data.combatId);
+        this.combatId = data.combatId;
+
+        if (!this._combat) throw new Error(`The given combatID (${data.combatId}) is not valid.`);
+
+        this.timesRendered = 1;
+
+        Hooks.on("updateCombat", this._onCombatUpdate.bind(this));
+    }
+
+    get _combat() {
+        return game.combats.get(this.combatId);
+    }
+
+    _onCombatUpdate(combat, changed, diff, userId) {
+        this.render(false);
+        this.setPosition({ height: this.element.height() });
     }
 
     /** @override */
@@ -16,18 +31,39 @@ export default class CombatNotificationApplication extends Application {
             template: `${CONST.modulePath}/templates/combat-notification.hbs`,
             title: "Combat Notifications",
             width: 500,
+            height: 650,
+            resizable: true,
         });
     }
 
     /** @override */
     getData(options) {
         return {
-            turns: this.combat.turns.map((turn) => ({
-                id: turn._id,
-                img: turn.img,
-                name: turn.name,
-                initiative: turn.initiative,
-            })),
+            timesRendered: this.timesRendered,
+            turns: this._turnData,
+            currentTurn: this._combat.data.turn,
         };
+    }
+
+    get _turnData() {
+        return this._combat.turns.map((turn) => ({
+            id: turn._id,
+            img: turn.img,
+            name: turn.name,
+            initiative: turn.initiative,
+            notifications: this._notificationsForTurn(turn._id),
+        }));
+    }
+
+    _notificationsForTurn(turnId) {
+        const notifications = this._combat.getFlag(CONST.moduleName, "notifications");
+        if (!notifications) return [];
+        return Object.values(notifications).filter((notification) => notification.turn === turnId);
+    }
+
+    /** @override */
+    async close() {
+        Hooks.off("updateCombat", this._onCombatUpdate.bind(this));
+        return super.close();
     }
 }

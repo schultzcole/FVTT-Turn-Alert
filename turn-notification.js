@@ -13,3 +13,5 @@ Hooks.on("init", () => {
 });
 
 Hooks.on("updateCombat", handleUpdateCombat);
+
+Hooks.on("updateCombat", () => console.log("XXXXXX | updateCombat hook called!"));

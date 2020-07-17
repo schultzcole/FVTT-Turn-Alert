@@ -60,7 +60,11 @@ export default class TurnNotificationManager {
     }
 
     viewNotificationsForCombat(combatId) {
-        if (!combatId) combatId = game.combat.data._id;
+        if (!combatId) combatId = game.combat?.data?._id;
+        if (!combatId) {
+            ui.notifications.warn("No combat id was provided and there is no currently active combat!");
+            return;
+        }
         const app = new CombatNotificationApplication({ combatId });
         app.render(true);
     }
