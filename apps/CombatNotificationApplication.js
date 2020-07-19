@@ -2,6 +2,7 @@ import CONST from "../scripts/const.js";
 import TurnNotificationConfig from "./TurnNotificationConfig.js";
 
 /**
+ * Provides an interface to view, add, update, and delete notifications on a given combat.
  * @param {string} data.combatId The id of the combat to display.
  */
 export default class CombatNotificationApplication extends Application {
@@ -17,14 +18,23 @@ export default class CombatNotificationApplication extends Application {
         Hooks.on("updateCombat", this._updateHandler);
     }
 
+    /**
+     * Gets a reference to the combat for this instance.
+     */
     get _combat() {
         return game.combats.get(this.combatId);
     }
 
-    _onCombatUpdate(combat, changed, diff, userId) {
+    /**
+     * A handler called each time the combat associated with this instance changes.
+     */
+    _onCombatUpdate() {
         this.render(false);
     }
 
+    /**
+     * Prepares and gets the relevant data for each turn in the combat.
+     */
     get _turnData() {
         return this._combat.turns.map((turn) => ({
             id: turn._id,
@@ -35,10 +45,14 @@ export default class CombatNotificationApplication extends Application {
         }));
     }
 
+    /**
+     * Gets all of the notifications associated with a particular turn
+     * @param {string} turnId The turn id to get notifications for
+     */
     _notificationsForTurn(turnId) {
         const notifications = this._combat.getFlag(CONST.moduleName, "notifications");
         if (!notifications) return [];
-        return Object.values(notifications).filter((notification) => notification.turn === turnId);
+        return Object.values(notifications).filter((notification) => notification.turnId === turnId);
     }
 
     /** @override */
@@ -66,16 +80,18 @@ export default class CombatNotificationApplication extends Application {
     activateListeners(html) {
         super.activateListeners(html);
 
+        // Set minimum width of the containing application window.
         html.parent().parent().css("min-width", 300);
 
+        // Listen for notification add buttons to be clicked.
         const addButtons = html.find(".add-notification-button");
         addButtons.click((event) => {
             const notificationData = {
-                combat: this.combatId,
+                combatId: this.combatId,
                 createdRound: this._combat.data.round,
                 round: 1,
-                turn: event.currentTarget.dataset.turnid,
-                user: game.userId,
+                turnId: event.currentTarget.dataset.turnid,
+                userId: game.userId,
             };
             new TurnNotificationConfig(notificationData, {}).render(true);
         });
@@ -83,6 +99,7 @@ export default class CombatNotificationApplication extends Application {
 
     /** @override */
     async close() {
+        // Unregister the combat update handler.
         Hooks.off("updateCombat", this._updateHandler);
         return super.close();
     }

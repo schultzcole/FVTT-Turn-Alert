@@ -14,9 +14,13 @@ export default class TurnNotificationManager {
      * @param {Object} options Extra options for the TurnNotificationConfig FormApplication
      */
     createOnCurrentTurn(data, options) {
-        const turnId = game.combat.turns?.length ? game.combat.turns[game.combat.data.turn]._id : null;
+        if (!game.combat?.turns?.length) {
+            ui.notifications.warn("Cannot create a notification on the current turn; the active combat has no turns.");
+            return;
+        }
+        const turnId = game.combat.turns[game.combat.data.turn]._id;
 
-        this._create(mergeObject(data, { turn: turnId }), options);
+        this._create(mergeObject(data, { turnId: turnId }), options);
     }
 
     /**
@@ -31,6 +35,11 @@ export default class TurnNotificationManager {
         this._create(data, options);
     }
 
+    /**
+     * Internal method for ease of creating a new notification with some default values.
+     * @param {Object} data Initial data for the turn notification
+     * @param {Object} options Extra application options
+     */
     _create(data, options) {
         if (!game.combat) {
             ui.notifications.error("Cannot create a turn notification if no combats exist.");
@@ -43,7 +52,7 @@ export default class TurnNotificationManager {
             combat: currentCombat._id,
             createdRound: currentCombat.round,
             round: data.roundAbsolute ? currentCombat.round + 1 : 1,
-            user: game.userId,
+            userId: game.userId,
         };
 
         const app = new TurnNotificationConfig(mergeObject(notificationData, data), options);
@@ -59,6 +68,10 @@ export default class TurnNotificationManager {
         return combat.unsetFlag(CONST.moduleName, "notifications");
     }
 
+    /**
+     * Show a window which allows for viewing, editing, deleting and adding new Notifications to the current combat.
+     * @param {string} combatId The id of the combat to view notifications for.
+     */
     viewNotificationsForCombat(combatId) {
         if (!combatId) combatId = game.combat?.data?._id;
         if (!combatId) {

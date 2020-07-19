@@ -4,6 +4,8 @@ export function patch_CombatTracker_activateListeners() {
     const old = CombatTracker.prototype.activateListeners;
     CombatTracker.prototype.activateListeners = function (html) {
         old.call(this, html);
+
+        // Add context menu for non-GM users as well
         if (!game.user.isGM) this._contextMenu(html);
     };
 }
@@ -20,11 +22,11 @@ export function patch_CombatTracker_getEntryContextOptions() {
             },
             callback: (li) => {
                 const notificationData = {
-                    combat: this.combat.data._id,
+                    combatId: this.combat.data._id,
                     createdRound: this.combat.data.round,
                     round: 1,
-                    turn: li.data("combatant-id"),
-                    user: game.userId,
+                    turnId: li.data("combatant-id"),
+                    userId: game.userId,
                 };
                 new TurnNotificationConfig(notificationData, {}).render(true);
             },

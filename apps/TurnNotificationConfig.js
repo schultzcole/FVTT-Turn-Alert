@@ -2,24 +2,27 @@ import CONST from "../scripts/const.js";
 import TurnNotification from "../scripts/TurnNotification.js";
 
 /**
- * Expects data to be a TurnNotification object.
+ * A window for creating or editing a turn notification.
+ * The data object passed in to the should match the TurnNotification data schema.
  */
 export default class TurnNotificationConfig extends FormApplication {
     constructor(data, options) {
         super(data, options);
 
-        if (!game.combats.has(data.combat)) {
+        if (!game.combats.has(data.combatId)) {
             ui.notifications.error(
                 "Either no combat id was provided or the id provided did not match any active combats."
             );
 
             const combats = Array.from(game.combats.keys()).join(", ");
-            throw new Error(`Invalid combat id provided. Got ${data.combat}, which does not match any of [${combats}]`);
+            throw new Error(
+                `Invalid combat id provided. Got ${data.combatId}, which does not match any of [${combats}]`
+            );
         }
 
         this.baseData = duplicate(data);
-        this.combat = game.combats.get(data.combat);
-        this.turn = this.object.turn ? this.combat.turns.find((turn) => turn._id === this.object.turn) : null;
+        this.combatId = game.combats.get(data.combatId);
+        this.turn = this.object.turnId ? this.combatId.turns.find((turn) => turn._id === this.object.turnId) : null;
     }
 
     get _roundLabel() {
@@ -27,11 +30,11 @@ export default class TurnNotificationConfig extends FormApplication {
     }
 
     get _validRound() {
-        const thisRoundLater = this.combat.data.round < this.object.round;
-        const isCurrentRound = this.combat.data.round == this.object.round;
-        const thisTurnIndex = this.combat.turns.findIndex((turn) => turn._id === this.object.turn);
-        const thisTurnLater = this.combat.data.turn < thisTurnIndex;
-        const isCurrentTurn = this.combat.data.turn == thisTurnIndex;
+        const thisRoundLater = this.combatId.data.round < this.object.round;
+        const isCurrentRound = this.combatId.data.round == this.object.round;
+        const thisTurnIndex = this.combatId.turns.findIndex((turn) => turn._id === this.object.turnId);
+        const thisTurnLater = this.combatId.data.turn < thisTurnIndex;
+        const isCurrentTurn = this.combatId.data.turn == thisTurnIndex;
         const turnValid = thisTurnLater || (this.object.endOfTurn && isCurrentTurn);
 
         if (this.object.roundAbsolute) {
@@ -75,7 +78,7 @@ export default class TurnNotificationConfig extends FormApplication {
             object: duplicate(this.object),
             roundLabel: this._roundLabel,
             validRound: this._validRound,
-            topOfRound: !this.object.turn,
+            topOfRound: !this.object.turnId,
             turnData: this._turnData,
             canRepeat: this._canRepeat,
             users: game.users.entries.map((user) => ({ id: user.data._id, name: user.data.name })),
@@ -122,8 +125,8 @@ export default class TurnNotificationConfig extends FormApplication {
         const oldRoundAbsolute = this.object.roundAbsolute || false;
         if (oldRoundAbsolute != newData.roundAbsolute) {
             newData.round = newData.roundAbsolute
-                ? this.combat.data.round + newData.round // round number was previously relative
-                : newData.round - this.combat.data.round; // round number was previously absolute
+                ? this.combatId.data.round + newData.round // round number was previously relative
+                : newData.round - this.combatId.data.round; // round number was previously absolute
         }
 
         this.object = mergeObject(this.object, newData);
@@ -160,25 +163,25 @@ export default class TurnNotificationConfig extends FormApplication {
 
     /** @override */
     async _updateObject(event, formData) {
+        if (formData.roundAbsolute) delete formData.repeating;
+        if (this.object.topOfRound) delete formData.endOfTurn;
+
         if (this.object.id) {
             console.log("Updating existing notification!");
         } else {
             console.log("Creating new notification!");
+
+            formData.recipientIds = $(".turn-notification-config #recipients option")
+                .filter(function () {
+                    return this.selected;
+                })
+                .map(function () {
+                    return this.value;
+                })
+                .get();
+
+            let finalData = mergeObject(this.baseData, formData);
+            TurnNotification.create(finalData);
         }
-
-        if (formData.roundAbsolute) delete formData.repeating;
-        if (this.object.topOfRound) delete formData.endOfTurn;
-
-        formData.recipients = $(".turn-notification-config #recipients option")
-            .filter(function () {
-                return this.selected;
-            })
-            .map(function () {
-                return this.value;
-            })
-            .get();
-
-        let finalData = mergeObject(this.baseData, formData);
-        TurnNotification.create(finalData);
     }
 }

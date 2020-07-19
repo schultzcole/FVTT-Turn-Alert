@@ -27,7 +27,7 @@ export default async function handleUpdateCombat(combat, changed, options, userI
         const triggerTurn = notification.endOfTurn ? prevTurn : nextTurn;
         const turnId = combat.turns[triggerTurn]._id;
         if (
-            game.userId === notification.user &&
+            game.userId === notification.userId &&
             TurnNotification.checkTrigger(notification, triggerRound, "round" in changed, turnId)
         ) {
             if (notification.message) {
@@ -36,7 +36,7 @@ export default async function handleUpdateCombat(combat, changed, options, userI
                         alias: "Turn Notification",
                     },
                     content: notification.message,
-                    whisper: notification.recipients,
+                    whisper: notification.recipientIds,
                 };
                 ChatMessage.create(messageData);
             }
