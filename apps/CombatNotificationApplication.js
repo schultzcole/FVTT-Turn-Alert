@@ -11,9 +11,9 @@ export default class CombatNotificationApplication extends Application {
 
         if (!this._combat) throw new Error(`The given combatID (${data.combatId}) is not valid.`);
 
-        this.timesRendered = 1;
+        this._updateHandler = this._onCombatUpdate.bind(this);
 
-        Hooks.on("updateCombat", this._onCombatUpdate.bind(this));
+        Hooks.on("updateCombat", this._updateHandler);
     }
 
     get _combat() {
@@ -63,7 +63,7 @@ export default class CombatNotificationApplication extends Application {
 
     /** @override */
     async close() {
-        Hooks.off("updateCombat", this._onCombatUpdate.bind(this));
+        Hooks.off("updateCombat", this._updateHandler);
         return super.close();
     }
 }

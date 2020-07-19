@@ -1,60 +1,59 @@
 import CONST from "./const.js";
 import TurnNotification from "./TurnNotification.js";
+import { compareTurns } from "./utils.js";
 
-export default async function handleUpdateCombat(combat, changed, diff, userId) {
+export default async function handleUpdateCombat(combat, changed, options, userId) {
     if (!("round" in changed || "turn" in changed) || !combat.turns?.length) {
-        // await _savePreviousTurn(combat, userId);
         return;
     }
 
     let notifications = combat.getFlag(CONST.moduleName, "notifications");
-    if (!notifications) return;
+    if (!notifications) return true; // allow the update, but quit the handler early
     notifications = duplicate(notifications);
 
-    const round = combat.data.round;
-    const turn = combat.data.turn;
-    const prevRound = combat.previous.round || Math.max(round - 1, 0);
-    const prevTurn = combat.previous.turn || Math.max(turn - 1, 0);
+    const oldCombatData = game.combats.get(combat.data._id).data;
+    const prevRound = oldCombatData.round;
+    const prevTurn = oldCombatData.turn;
+    const nextRound = "round" in changed ? changed.round : prevRound;
+    const nextTurn = "turn" in changed ? changed.turn : prevTurn;
+
+    const turnCmp = compareTurns(prevRound, prevTurn, nextRound, nextTurn);
+    if (turnCmp > 0) return true; // allow the update, but quit the handler early
 
     let anyDeleted = false;
     for (let id in notifications) {
         const notification = notifications[id];
 
-        const triggerRound = notification.endOfTurn ? prevRound : round;
-        const triggerTurn = notification.endOfTurn ? prevTurn : turn;
+        const triggerRound = notification.endOfTurn ? prevRound : nextRound;
+        const triggerTurn = notification.endOfTurn ? prevTurn : nextTurn;
         const turnId = combat.turns[triggerTurn]._id;
-        if (TurnNotification.checkTrigger(notification, triggerRound, "round" in changed, turnId)) {
-            if (game.userId === notification.user && notification.message) {
+        if (
+            game.userId === notification.user &&
+            TurnNotification.checkTrigger(notification, triggerRound, "round" in changed, turnId)
+        ) {
+            if (notification.message) {
                 const messageData = {
-                    speaker: { alias: "Turn Notification" },
+                    speaker: {
+                        alias: "Turn Notification",
+                    },
                     content: notification.message,
                     whisper: notification.recipients,
                 };
                 ChatMessage.create(messageData);
             }
+        }
 
-            if (!notification.repeating) {
-                delete notifications[id];
-                anyDeleted = true;
-            }
+        if (game.user.isGM && TurnNotification.checkExpired(notification, nextRound, nextTurn)) {
+            delete notifications[id];
+            anyDeleted = true;
         }
     }
 
-    if (game.user.isGM && anyDeleted) {
+    const firstGm = game.users.find((u) => u.isGM && u.active);
+    if (firstGm && game.user === firstGm && anyDeleted) {
         await combat.unsetFlag(CONST.moduleName, "notifications");
-        return combat.setFlag(CONST.moduleName, "notifications", notifications);
+        if (Object.keys(notifications).length > 0) {
+            return combat.setFlag(CONST.moduleName, "notifications", notifications);
+        }
     }
-
-    // await _savePreviousTurn(combat, userId);
-}
-
-function _savePreviousTurn(combat, userId) {
-    if (game.userId !== userId) return;
-
-    const previousTurn = {
-        prevRound: combat.data.round,
-        prevTurn: combat.data.turn,
-    };
-
-    return combat.setFlag(CONST.moduleName, "previousTurn", previousTurn);
 }

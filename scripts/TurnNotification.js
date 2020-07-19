@@ -34,8 +34,8 @@ export default class TurnNotification {
         };
     }
 
-    static checkTrigger(data, currentRound, newRound, currentTurn) {
-        let turnMatches = (!data.turn && newRound) || data.turn === currentTurn;
+    static checkTrigger(data, currentRound, newRound, turnId) {
+        let turnMatches = (!data.turn && newRound) || data.turn === turnId;
 
         let roundMatches = false;
         if (data.roundAbsolute) {
@@ -48,10 +48,20 @@ export default class TurnNotification {
         return turnMatches && roundMatches;
     }
 
-    static checkExpired(data, currentRound) {
-        if (data.repeating) return false;
+    static checkExpired(data, currentRound, turn) {
+        if (!data.roundAbsolute && data.repeating) return false;
+
+        let turnExpired = false;
+        if (!data.turn) {
+            turnExpired = true;
+        } else {
+            let thisTurnIndex = game.combats.get(data.combat)?.turns?.findIndex((turn) => turn._id == data.turn);
+            if (data.endOfTurn) thisTurnIndex++;
+            turnExpired = thisTurnIndex <= turn;
+        }
+
         let expireRound = data.roundAbsolute ? data.round : data.createdRound + data.round;
-        return expireRound < currentRound;
+        return expireRound < currentRound || (expireRound == currentRound && turnExpired);
     }
 
     static async create(data) {

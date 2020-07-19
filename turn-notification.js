@@ -12,6 +12,4 @@ Hooks.on("init", () => {
     patch_CombatTracker_getEntryContextOptions();
 });
 
-Hooks.on("updateCombat", handleUpdateCombat);
-
-Hooks.on("updateCombat", () => console.log("XXXXXX | updateCombat hook called!"));
+Hooks.on("preUpdateCombat", handleUpdateCombat);
