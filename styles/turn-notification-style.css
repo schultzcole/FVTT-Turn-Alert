@@ -36,6 +36,7 @@
 
 .combat-notifications .turn-display {
     margin-top: 3px;
+    z-index: -1;
 }
 
 .turn-notification .turn-display .token-name {
@@ -49,6 +50,7 @@
 .turn-notification .turn-display .token-initiative {
     flex: 0 0 48px;
     text-align: center;
+    border-right: 1px solid #222;
 }
 
 .turn-notification .turn-display img {
@@ -57,6 +59,57 @@
     border: 0;
 }
 
+.turn-notification .turn-display .add-button-container {
+    flex: 0 0 48px;
+    text-align: center;
+}
+
+.turn-notification .turn-display .add-button-container .add-notification-button {
+    width: 25px;
+    height: 25px;
+    line-height: 0;
+    padding: 0;
+}
+
+.turn-notification .turn-display .add-button-container .add-notification-button > * {
+}
+
 .turn-notification .self-height {
     height: unset;
+}
+
+.notification-list {
+    margin: 0;
+}
+
+.notification-li.flexrow {
+    border: 2px groove #eeede0;
+    border-top: 0;
+    height: 30px;
+    line-height: 30px;
+    align-items: center;
+    padding-left: 5px;
+    margin: 0;
+}
+
+.notification-li .notification-message {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notification-li .icon {
+    flex: 0 0 25px;
+}
+
+.notification-li button {
+    flex: 0 0 25px;
+    height: 25px;
+    line-height: 0;
+    padding: 0;
+}
+
+.notification-li button > * {
+    margin: auto;
 }

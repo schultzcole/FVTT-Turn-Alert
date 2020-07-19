@@ -1,19 +1,52 @@
 <div class="turn-notification combat-notifications">
-    <h1>Hello World {{timesRendered}}</h1>
-    {{#each turns}}
-    <div class="turn-display flexrow">
-        <img src="{{this.img}}">
-        <div class="token-name flexcol">
-            <span>{{this.name}}</span>
+    <div class="wrapper">
+        <div>
+            <div class="turn-display flexrow">
+                <div style="flex: 0 0 12px"></div>
+                <div class="token-name flexcol">
+                    <span style="font-size: 1.2rem;">Top of Round</span>
+                </div>
+                <div class="add-button-container">
+                    <button class="add-notification-button"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <ul>
+                {{#each topOfRoundNotifications}}
+                <li>{{this.message}}</li>
+                {{/each}}
+            </ul>
         </div>
-        <div class="token-initiative">
-            <span class="initiative">{{this.initiative}}</span>
+        {{#each turns}}
+        <div>
+            <div class="turn-display flexrow">
+                <img src="{{this.img}}">
+                <div class="token-name flexcol">
+                    <span>{{this.name}}</span>
+                </div>
+                <div class="token-initiative">
+                    <span class="initiative">{{this.initiative}}</span>
+                </div>
+                <div class="add-button-container">
+                    <button class="add-notification-button" data-turnid="{{this.id}}">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <ul class="notification-list">
+                {{#each notifications}}
+                <li class="notification-li flexrow">
+                    <i class="icon far fa-bell"></i>
+                    <span class="notification-message">{{this.message}}</span>
+                    <button>
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button>
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </li>
+                {{/each}}
+            </ul>
         </div>
-    </div>
-    <ul>
-        {{#each notifications}}
-        <li>{{this.message}}</li>
         {{/each}}
-    </ul>
-    {{/each}}
+    </div>
 </div>
