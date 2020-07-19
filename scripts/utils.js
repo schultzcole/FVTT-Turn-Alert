@@ -10,6 +10,5 @@
  * @param {Number} turnB
  */
 export function compareTurns(roundA, turnA, roundB, turnB) {
-    const roundDelta = roundA - roundB;
-    return roundDelta !== 0 ? roundDelta : turnA - turnB;
+    return roundA - roundB || turnA - turnB;
 }
