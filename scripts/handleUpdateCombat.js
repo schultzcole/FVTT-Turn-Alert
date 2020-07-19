@@ -17,8 +17,7 @@ export default async function handleUpdateCombat(combat, changed, options, userI
     const nextRound = "round" in changed ? changed.round : prevRound;
     const nextTurn = "turn" in changed ? changed.turn : prevTurn;
 
-    const turnCmp = compareTurns(prevRound, prevTurn, nextRound, nextTurn);
-    if (turnCmp > 0) return true; // allow the update, but quit the handler early
+    if (compareTurns(prevRound, prevTurn, nextRound, nextTurn) > 0) return true; // allow the update, but quit the handler early
 
     let anyDeleted = false;
     for (let id in notifications) {
