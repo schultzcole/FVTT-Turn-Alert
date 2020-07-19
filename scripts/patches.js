@@ -1,20 +1,28 @@
 import TurnNotificationConfig from "../apps/TurnNotificationConfig.js";
 
+/**
+ * Patches CombatTracker#activateListeners to allow players to access
+ * the context menu for combatants.
+ */
 export function patch_CombatTracker_activateListeners() {
     const old = CombatTracker.prototype.activateListeners;
     CombatTracker.prototype.activateListeners = function (html) {
         old.call(this, html);
 
-        // Add context menu for non-GM users as well
+        // The existing activateListeners already adds the context menu
+        // for GMs so we only need to add it for non-GMs here.
         if (!game.user.isGM) this._contextMenu(html);
     };
 }
 
+/**
+ * Adds the "Add Notification" element to the combatant context menu.
+ */
 export function patch_CombatTracker_getEntryContextOptions() {
     const old = CombatTracker.prototype._getEntryContextOptions;
     CombatTracker.prototype._getEntryContextOptions = function () {
-        const options = game.user.isGM ? old.call(this) : [];
-        options.unshift({
+        const entries = game.user.isGM ? old.call(this) : [];
+        entries.unshift({
             name: "Add Notification",
             icon: '<i class="fas fa-bell"></i>',
             condition: (li) => {
@@ -31,6 +39,6 @@ export function patch_CombatTracker_getEntryContextOptions() {
                 new TurnNotificationConfig(notificationData, {}).render(true);
             },
         });
-        return options;
+        return entries;
     };
 }
