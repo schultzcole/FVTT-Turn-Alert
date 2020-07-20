@@ -123,6 +123,11 @@ export default class CombatNotificationApplication extends Application {
             }
             new TurnNotificationConfig(notificationData, {}).render(true);
         });
+
+        // Listen for notification delete buttons to be clicked.
+        html.find(".delete-notification-button").click((event) => {
+            TurnNotification.delete(this.combatId, event.currentTarget.dataset.id);
+        });
     }
 
     /** @override */

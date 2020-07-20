@@ -110,6 +110,10 @@ export default class TurnNotification {
 
         const combat = game.combats.get(data.combatId);
 
+        if (!combat) {
+            throw new Error(`The combat "${data.combatID}" does not exist.`);
+        }
+
         const notifications = combat.getFlag(CONST.moduleName, "notifications");
         const existingData = getProperty(notifications, data.id);
 
@@ -120,6 +124,25 @@ export default class TurnNotification {
         }
 
         notifications[data.id] = mergeObject(existingData, data);
+
+        await combat.unsetFlag(CONST.moduleName, "notifications");
+        combat.setFlag(CONST.moduleName, "notifications", notifications);
+    }
+
+    static async delete(combatId, notificationId) {
+        const combat = game.combats.get(combatId);
+
+        if (!combat) {
+            throw new Error(`The combat "${data.combatID}" does not exist.`);
+        }
+
+        const notifications = combat.getFlag(CONST.moduleName, "notifications") || {};
+
+        if (!(notificationId in notifications)) {
+            throw new Error(`The notification "${notificationId}" does not exist in combat "${combatId}".`);
+        }
+
+        delete notifications[notificationId];
 
         await combat.unsetFlag(CONST.moduleName, "notifications");
         combat.setFlag(CONST.moduleName, "notifications", notifications);

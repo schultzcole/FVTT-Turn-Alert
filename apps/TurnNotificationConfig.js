@@ -21,8 +21,8 @@ export default class TurnNotificationConfig extends FormApplication {
         }
 
         this.baseData = duplicate(data);
-        this.combatId = game.combats.get(data.combatId);
-        this.turn = this.object.turnId ? this.combatId.turns.find((turn) => turn._id === this.object.turnId) : null;
+        this.combat = game.combats.get(data.combatId);
+        this.turn = this.object.turnId ? this.combat.turns.find((turn) => turn._id === this.object.turnId) : null;
     }
 
     get _roundLabel() {
@@ -30,11 +30,11 @@ export default class TurnNotificationConfig extends FormApplication {
     }
 
     get _validRound() {
-        const thisRoundLater = this.combatId.data.round < this.object.round;
-        const isCurrentRound = this.combatId.data.round == this.object.round;
-        const thisTurnIndex = this.combatId.turns.findIndex((turn) => turn._id === this.object.turnId);
-        const thisTurnLater = this.combatId.data.turn < thisTurnIndex;
-        const isCurrentTurn = this.combatId.data.turn == thisTurnIndex;
+        const thisRoundLater = this.combat.data.round < this.object.round;
+        const isCurrentRound = this.combat.data.round == this.object.round;
+        const thisTurnIndex = this.combat.turns.findIndex((turn) => turn._id === this.object.turnId);
+        const thisTurnLater = this.combat.data.turn < thisTurnIndex;
+        const isCurrentTurn = this.combat.data.turn == thisTurnIndex;
         const turnValid = thisTurnLater || (this.object.endOfTurn && isCurrentTurn);
 
         if (this.object.roundAbsolute) {
@@ -125,8 +125,8 @@ export default class TurnNotificationConfig extends FormApplication {
         const oldRoundAbsolute = this.object.roundAbsolute || false;
         if (oldRoundAbsolute != newData.roundAbsolute) {
             newData.round = newData.roundAbsolute
-                ? this.combatId.data.round + newData.round // round number was previously relative
-                : newData.round - this.combatId.data.round; // round number was previously absolute
+                ? this.combat.data.round + newData.round // round number was previously relative
+                : newData.round - this.combat.data.round; // round number was previously absolute
         }
 
         this.object = mergeObject(this.object, newData);
