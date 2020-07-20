@@ -36,7 +36,14 @@
                 {{#each notifications}}
                 <li class="notification-li flexrow">
                     <i class="icon far fa-bell"></i>
-                    <span class="notification-message">{{this.message}}</span>
+                    <span class="separator"></span>
+                    <span class="round-number">{{this.roundString}} <i class="fas fa-{{this.roundIcon}}"></i></span>
+                    {{#if this.repeating}}
+                    <span class="repeating">{{this.repeatString}}</span>
+                    {{/if}}
+                    <span class="separator"></span>
+                    <span class="notification-message">{{{this.message}}}</span>
+                    <span class="separator"></span>
                     <button class="edit-notification-button" data-id="{{this.id}}">
                         <i class="fas fa-edit"></i>
                     </button>

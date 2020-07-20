@@ -64,6 +64,16 @@ export default class TurnNotification {
         return expireRound < currentRound || (expireRound == currentRound && turnExpired);
     }
 
+    static nextTrigger(data, currentRound) {
+        if (data.roundAbsolute) {
+            return data.round;
+        } else if (data.repeating && data.round > 0) {
+            return Math.ceil((currentRound - data.createdRound) / data.round) * data.round + data.createdRound + 1;
+        } else {
+            return data.createdRound + data.round;
+        }
+    }
+
     static async create(data) {
         if (!data.combatId) {
             throw new Error(`Invalid combat id provided, cannot add notification to combat: ${data.combatId}`);

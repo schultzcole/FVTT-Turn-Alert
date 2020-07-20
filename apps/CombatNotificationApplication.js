@@ -1,5 +1,6 @@
 import CONST from "../scripts/const.js";
 import TurnNotificationConfig from "./TurnNotificationConfig.js";
+import TurnNotification from "../scripts/TurnNotification.js";
 
 /**
  * Provides an interface to view, add, update, and delete notifications on a given combat.
@@ -41,7 +42,20 @@ export default class CombatNotificationApplication extends Application {
             img: turn.img,
             name: turn.name,
             initiative: turn.initiative,
-            notifications: this._notificationsForTurn(turn._id),
+            notifications: this._notificationsForTurn(turn._id).map((n) => {
+                const nextTrigger = TurnNotification.nextTrigger(n, this._combat.data.round);
+                const roundGt1 = n.round > 1;
+                const repeatString = roundGt1 ? `Repeats every ${n.round} rounds` : `Repeats every round`;
+                const startEndIcon = n.endOfTurn ? "hourglass-end" : "hourglass-start";
+                return {
+                    id: n.id,
+                    message: n.message,
+                    repeating: n.repeating,
+                    repeatString: repeatString,
+                    roundString: `Round ${nextTrigger}`,
+                    roundIcon: startEndIcon,
+                };
+            }),
         }));
     }
 
