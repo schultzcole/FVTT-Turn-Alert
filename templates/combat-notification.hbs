@@ -4,13 +4,13 @@
             <div class="turn-display flexrow">
                 <div style="flex: 0 0 12px"></div>
                 <div class="token-name flexcol">
-                    <span style="font-size: 1.2rem;">Top of Round</span>
+                    <span style="font-size: 1rem;">Top of Round</span>
                 </div>
                 <div class="add-button-container">
                     <button class="add-notification-button"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
-            <ul>
+            <ul class="notification-list">
                 {{#each topOfRoundNotifications}}
                 <li>{{this.message}}</li>
                 {{/each}}

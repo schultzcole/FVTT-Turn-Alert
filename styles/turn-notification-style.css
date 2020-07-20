@@ -68,10 +68,6 @@
     width: 25px;
     height: 25px;
     line-height: 0;
-    padding: 0;
-}
-
-.turn-notification .turn-display .add-button-container .add-notification-button > * {
 }
 
 .turn-notification .self-height {
