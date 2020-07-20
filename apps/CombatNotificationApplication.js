@@ -74,7 +74,7 @@ export default class CombatNotificationApplication extends Application {
         return mergeObject(super.defaultOptions, {
             template: `${CONST.modulePath}/templates/combat-notification.hbs`,
             title: "Combat Notifications",
-            width: 500,
+            width: 650,
             height: 650,
             resizable: true,
         });
