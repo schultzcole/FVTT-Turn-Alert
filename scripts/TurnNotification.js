@@ -68,7 +68,7 @@ export default class TurnNotification {
         if (data.roundAbsolute) {
             return data.round;
         } else if (data.repeating && data.round > 0) {
-            return Math.ceil((currentRound - data.createdRound) / data.round) * data.round + data.createdRound + 1;
+            return Math.ceil((currentRound - data.createdRound) / data.round) * data.round + data.createdRound;
         } else {
             return data.createdRound + data.round;
         }
