@@ -85,4 +85,33 @@ export default class TurnNotification {
 
         return combat.update({ [`flags.${CONST.moduleName}.notifications`]: combatNotifications });
     }
+
+    /**
+     * Updates a given turn notification. REQUIRES the given notification data to contain an ID and combat ID.
+     * @param {object} data The TurnNotification data to update.
+     */
+    static async update(data) {
+        if (!data.id) {
+            throw new Error("Cannot update a notification that doesn't contain a notification ID.");
+        }
+        if (!data.combatId) {
+            throw new Error("Cannot update a notification that doesn't contain a combat ID.");
+        }
+
+        const combat = game.combats.get(data.combatId);
+
+        const notifications = combat.getFlag(CONST.moduleName, "notifications");
+        const existingData = getProperty(notifications, data.id);
+
+        if (!existingData) {
+            throw new Error(
+                `Cannot update notification ${data.id} in combat ${data.combatId} because that notification doesn't already exist in that combat.`
+            );
+        }
+
+        notifications[data.id] = mergeObject(existingData, data);
+
+        await combat.unsetFlag(CONST.moduleName, "notifications");
+        combat.setFlag(CONST.moduleName, "notifications", notifications);
+    }
 }

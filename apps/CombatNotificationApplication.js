@@ -84,8 +84,7 @@ export default class CombatNotificationApplication extends Application {
         html.parent().parent().css("min-width", 300);
 
         // Listen for notification add buttons to be clicked.
-        const addButtons = html.find(".add-notification-button");
-        addButtons.click((event) => {
+        html.find(".add-notification-button").click((event) => {
             const notificationData = {
                 combatId: this.combatId,
                 createdRound: this._combat.data.round,
@@ -93,6 +92,21 @@ export default class CombatNotificationApplication extends Application {
                 turnId: event.currentTarget.dataset.turnid,
                 userId: game.userId,
             };
+            new TurnNotificationConfig(notificationData, {}).render(true);
+        });
+
+        // Listen for notification edit buttons to be clicked.
+        html.find(".edit-notification-button").click((event) => {
+            const notificationId = event.currentTarget.dataset.id;
+            const notificationData = getProperty(
+                this._combat.data,
+                `flags.${CONST.moduleName}.notifications.${notificationId}`
+            );
+            if (!notificationData) {
+                throw new Error(
+                    `Trying to edit a non-existent turn notification! ID "${notificationId}" does not exist on combat "${this.combatId}"`
+                );
+            }
             new TurnNotificationConfig(notificationData, {}).render(true);
         });
     }

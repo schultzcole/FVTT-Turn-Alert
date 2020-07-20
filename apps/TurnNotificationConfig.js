@@ -166,21 +166,22 @@ export default class TurnNotificationConfig extends FormApplication {
         if (formData.roundAbsolute) delete formData.repeating;
         if (this.object.topOfRound) delete formData.endOfTurn;
 
+        formData.recipientIds = $(".turn-notification-config #recipients option")
+            .filter(function () {
+                return this.selected;
+            })
+            .map(function () {
+                return this.value;
+            })
+            .get();
+
+        let finalData = mergeObject(this.baseData, formData);
+
         if (this.object.id) {
             console.log("Updating existing notification!");
+            TurnNotification.update(finalData);
         } else {
             console.log("Creating new notification!");
-
-            formData.recipientIds = $(".turn-notification-config #recipients option")
-                .filter(function () {
-                    return this.selected;
-                })
-                .map(function () {
-                    return this.value;
-                })
-                .get();
-
-            let finalData = mergeObject(this.baseData, formData);
             TurnNotification.create(finalData);
         }
     }
