@@ -22,14 +22,7 @@ export default async function handleUpdateCombat(combat, changed, options, userI
     let anyDeleted = false;
     for (let id in notifications) {
         const notification = notifications[id];
-
-        const triggerRound = notification.endOfTurn ? prevRound : nextRound;
-        const triggerTurn = notification.endOfTurn ? prevTurn : nextTurn;
-        const turnId = combat.turns[triggerTurn]._id;
-        if (
-            game.userId === notification.userId &&
-            TurnNotification.checkTrigger(notification, triggerRound, triggerTurn)
-        ) {
+        if (game.userId === notification.userId && TurnNotification.checkTrigger(notification, nextRound, nextTurn)) {
             if (notification.message) {
                 const messageData = {
                     speaker: {

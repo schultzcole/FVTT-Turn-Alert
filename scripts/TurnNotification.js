@@ -36,25 +36,13 @@ export default class TurnNotification {
     }
 
     static getCombat = (data) => game.combats.get(data.combatId);
-
     static getTurnIndex = (data) => TurnNotification.getCombat(data).turns.findIndex((t) => t._id === data.turnId);
+    static nextTriggerTurn = (data, currentRound) => ({
+        round: TurnNotification.nextTriggerRound(data, currentRound),
+        turn: data.endOfTurn ? TurnNotification.getTurnIndex(data) + 1 : TurnNotification.getTurnIndex(data),
+    });
 
-    static checkTrigger(data, currentRound, currentTurn) {
-        const nextTriggerRound = TurnNotification.nextTrigger(data, currentRound);
-        const turnIndex = TurnNotification.getTurnIndex(data);
-
-        return compareTurns(nextTriggerRound, turnIndex, currentRound, currentTurn) === 0;
-    }
-
-    static checkExpired(data, currentRound, currentTurn) {
-        const nextTriggerRound = TurnNotification.nextTrigger(data, currentRound);
-        let turnIndex = TurnNotification.getTurnIndex(data);
-        if (data.endOfTurn) turnIndex++;
-
-        return compareTurns(nextTriggerRound, turnIndex, currentRound, currentTurn) <= 0;
-    }
-
-    static nextTrigger(data, currentRound) {
+    static nextTriggerRound(data, currentRound) {
         if (data.roundAbsolute) {
             return data.round;
         } else if (data.repeating && data.round > 0) {
@@ -62,6 +50,16 @@ export default class TurnNotification {
         } else {
             return data.createdRound + data.round;
         }
+    }
+
+    static checkTrigger = (data, currentRound, currentTurn) =>
+        TurnNotification.checkTurn((a, b) => a === b, data, currentRound, currentTurn);
+    static checkExpired = (data, currentRound, currentTurn) =>
+        TurnNotification.checkTurn((a, b) => a <= b, data, currentRound, currentTurn);
+
+    static checkTurn(cmp, data, currentRound, currentTurn) {
+        const { round, turn } = TurnNotification.nextTriggerTurn(data, currentRound);
+        return cmp(compareTurns(round, turn, currentRound, currentTurn), 0);
     }
 
     static async create(data) {

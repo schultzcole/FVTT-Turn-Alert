@@ -48,7 +48,7 @@ export default class CombatNotificationApplication extends Application {
             name: turn.name,
             initiative: turn.initiative,
             notifications: this._notificationsForTurn(turn._id).map((n) => {
-                const nextTrigger = TurnNotification.nextTrigger(n, this._combat.data.round);
+                const nextTrigger = TurnNotification.nextTriggerRound(n, this._combat.data.round);
                 const roundGt1 = n.round > 1;
                 const repeatString = roundGt1 ? `Repeats every ${n.round} rounds` : `Repeats every round`;
                 const startEndIcon = n.endOfTurn ? "hourglass-end" : "hourglass-start";
