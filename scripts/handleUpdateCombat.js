@@ -28,7 +28,7 @@ export default async function handleUpdateCombat(combat, changed, options, userI
         const turnId = combat.turns[triggerTurn]._id;
         if (
             game.userId === notification.userId &&
-            TurnNotification.checkTrigger(notification, triggerRound, "round" in changed, turnId)
+            TurnNotification.checkTrigger(notification, triggerRound, triggerTurn)
         ) {
             if (notification.message) {
                 const messageData = {
@@ -55,4 +55,6 @@ export default async function handleUpdateCombat(combat, changed, options, userI
             return combat.setFlag(CONST.moduleName, "notifications", notifications);
         }
     }
+
+    return true;
 }

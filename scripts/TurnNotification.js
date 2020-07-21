@@ -1,4 +1,5 @@
 import CONST from "./const.js";
+import { compareTurns } from "./utils.js";
 
 /**
  * Data structure schema:
@@ -34,34 +35,23 @@ export default class TurnNotification {
         };
     }
 
-    static checkTrigger(data, currentRound, newRound, turnId) {
-        let turnMatches = (!data.turnId && newRound) || data.turnId === turnId;
+    static getCombat = (data) => game.combats.get(data.combatId);
 
-        let roundMatches = false;
-        if (data.roundAbsolute) {
-            roundMatches = currentRound == data.round;
-        } else {
-            const delta = currentRound - data.createdRound;
-            roundMatches = data.repeating ? delta % data.round === 0 : delta === data.round;
-        }
+    static getTurnIndex = (data) => TurnNotification.getCombat(data).turns.findIndex((t) => t._id === data.turnId);
 
-        return turnMatches && roundMatches;
+    static checkTrigger(data, currentRound, currentTurn) {
+        const nextTriggerRound = TurnNotification.nextTrigger(data, currentRound);
+        const turnIndex = TurnNotification.getTurnIndex(data);
+
+        return compareTurns(nextTriggerRound, turnIndex, currentRound, currentTurn) === 0;
     }
 
-    static checkExpired(data, currentRound, turn) {
-        if (!data.roundAbsolute && data.repeating) return false;
+    static checkExpired(data, currentRound, currentTurn) {
+        const nextTriggerRound = TurnNotification.nextTrigger(data, currentRound);
+        let turnIndex = TurnNotification.getTurnIndex(data);
+        if (data.endOfTurn) turnIndex++;
 
-        let turnExpired = false;
-        if (!data.turnId) {
-            turnExpired = true;
-        } else {
-            let thisTurnIndex = game.combats.get(data.combatId)?.turns?.findIndex((turn) => turn._id == data.turnId);
-            if (data.endOfTurn) thisTurnIndex++;
-            turnExpired = thisTurnIndex <= turn;
-        }
-
-        let expireRound = data.roundAbsolute ? data.round : data.createdRound + data.round;
-        return expireRound < currentRound || (expireRound == currentRound && turnExpired);
+        return compareTurns(nextTriggerRound, turnIndex, currentRound, currentTurn) <= 0;
     }
 
     static nextTrigger(data, currentRound) {
