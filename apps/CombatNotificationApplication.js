@@ -17,6 +17,7 @@ export default class CombatNotificationApplication extends Application {
         this._updateHandler = this._onCombatUpdate.bind(this);
 
         Hooks.on("updateCombat", this._updateHandler);
+        Hooks.on("deleteCombat", this.close.bind(this));
     }
 
     /**
@@ -29,8 +30,12 @@ export default class CombatNotificationApplication extends Application {
     /**
      * A handler called each time the combat associated with this instance changes.
      */
-    _onCombatUpdate() {
-        this.render(false);
+    _onCombatUpdate(combat, changed, options, userId) {
+        if (combat.data._id === this.combatId && changed.active === false) {
+            this.close();
+        } else {
+            this.render(false);
+        }
     }
 
     /**
