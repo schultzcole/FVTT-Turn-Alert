@@ -107,6 +107,12 @@ export default class TurnNotification {
 
         const combat = game.combats.get(notificationData.combatId);
 
+        if (data.turnId !== null && combat.turns.findIndex((turn) => turn._id === data.turnId) === -1) {
+            throw new Error(
+                `The provided turnId ("${data.turnId}") does not match any combatants in combat ${data.combatId}`
+            );
+        }
+
         let combatNotifications = combat.getFlag(CONST.moduleName, "notifications");
 
         if (!combatNotifications) combatNotifications = {};

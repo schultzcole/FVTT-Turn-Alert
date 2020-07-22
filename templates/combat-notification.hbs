@@ -15,58 +15,20 @@
 
         <hr>
 
-        <div>
-            <div class="turn-display flexrow">
-                <div style="flex: 0 0 12px"></div>
-                <div class="token-name flexcol">
-                    <span style="font-size: 1rem;">{{localize 'turnNotification.APP.TopOfRound'}}</span>
-                </div>
-                <div class="add-button-container">
-                    <button class="add-notification-button"
-                        title="{{localize 'turnNotification.APP.AddNotification'}}"><i class="fas fa-plus"></i></button>
-                </div>
-            </div>
-            <ul class="notification-list">
-                {{#each topOfRoundNotifications}}
-                <li class="notification-li flexrow">
-                    <i class="icon far fa-bell"></i>
-                    <span class="separator"></span>
-                    <span class="round-number"
-                        title="{{localize 'turnNotification.APP.TriggerAtTopOfRoundNum' num=this.round}}">
-                        {{localize 'turnNotification.APP.RoundNum' num=this.round}}
-                        <i class="fas fa-{{this.roundIcon}}"></i>
-                    </span>
-
-                    {{#if this.repeating}}
-                    <span class="repeating">{{this.repeatString}}</span>
-                    {{/if}}
-
-                    <span class="separator"></span>
-                    <span class="notification-message" title="{{this.message}}">{{{this.message}}}</span>
-                    <span class="separator"></span>
-                    <button class="edit-notification-button"
-                        title="{{localize 'turnNotification.APP.EditNotification'}}" data-id="{{this.id}}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="delete-notification-button"
-                        title="{{localize 'turnNotification.APP.DeleteNotification'}}" data-id="{{this.id}}">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </li>
-                {{/each}}
-            </ul>
-        </div>
-
         {{#each turns}}
         <div>
             <div class="turn-display flexrow">
+                {{#if this.img}}
                 <img src="{{this.img}}">
+                {{/if}}
                 <div class="token-name flexcol">
                     <span>{{this.name}}</span>
                 </div>
+                {{#if this.initiative}}
                 <div class="token-initiative">
                     <span class="initiative">{{this.initiative}}</span>
                 </div>
+                {{/if}}
                 <div class="add-button-container">
                     <button class="add-notification-button" title="{{localize 'turnNotification.APP.AddNotification'}}"
                         data-turnid="{{this.id}}">

@@ -98,7 +98,16 @@ export default class CombatNotificationApplication extends Application {
     getData(options) {
         return {
             timesRendered: this.timesRendered,
-            turns: this._turnData,
+            turns: [
+                {
+                    index: -1,
+                    id: null,
+                    img: null,
+                    name: game.i18n.localize(`${CONST.moduleName}.APP.TopOfRound`),
+                    initiative: null,
+                    notifications: this._notificationsForTurn(null).map(this._createNotificationDisplayData.bind(this)),
+                },
+            ].concat(this._turnData),
             topOfRoundNotifications: this._notificationsForTurn(null).map(
                 this._createNotificationDisplayData.bind(this)
             ),
@@ -120,7 +129,7 @@ export default class CombatNotificationApplication extends Application {
                 combatId: this.combatId,
                 createdRound: this._combat.data.round,
                 round: 1,
-                turnId: event.currentTarget.dataset.turnid,
+                turnId: event.currentTarget.dataset.turnid || null,
                 userId: game.userId,
             };
             new TurnNotificationConfig(notificationData, {}).render(true);
