@@ -39,6 +39,33 @@
     z-index: -1;
 }
 
+.combat-notifications .cn-header.flexrow {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.combat-notifications .cn-header.flexrow > * {
+    flex-grow: 0;
+}
+
+.combat-notifications .cn-header.flexrow > .cn-current-turn {
+    display: inline-grid;
+    grid-template-columns: auto 25px;
+    gap: 2px;
+    align-items: center;
+    font-weight: bold;
+}
+
+.combat-notifications .cn-current-turn > label {
+    white-space: nowrap;
+}
+
+.combat-notifications .cn-current-turn > input[type="text"] {
+    width: unset;
+    height: unset;
+    text-align: right;
+}
+
 .turn-notification .turn-display .token-name {
     flex: 1;
     overflow: hidden;

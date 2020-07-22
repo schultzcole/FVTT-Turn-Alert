@@ -1,5 +1,20 @@
 <div class="turn-notification combat-notifications">
     <div class="wrapper">
+
+        <div class="cn-header flexrow">
+            <div class="cn-current-turn">
+                <label for="currentRound">{{localize 'turnNotification.APP.CurrentRound'}}:</label>
+                <input name="currentRound" type="text" value="{{currentRound}}" disabled>
+                <label for="currentTurn">{{localize 'turnNotification.APP.CurrentTurn'}}:</label>
+                <input name="currentTurn" type="text" value="{{currentTurn}}" disabled>
+            </div>
+            <div>
+                <button style="white-space: nowrap;"><i class="fas fa-trash"></i> Delete All</button>
+            </div>
+        </div>
+
+        <hr>
+
         <div>
             <div class="turn-display flexrow">
                 <div style="flex: 0 0 12px"></div>
@@ -13,10 +28,35 @@
             </div>
             <ul class="notification-list">
                 {{#each topOfRoundNotifications}}
-                <li>{{this.message}}</li>
+                <li class="notification-li flexrow">
+                    <i class="icon far fa-bell"></i>
+                    <span class="separator"></span>
+                    <span class="round-number"
+                        title="{{localize 'turnNotification.APP.TriggerAtTopOfRoundNum' num=this.round}}">
+                        {{localize 'turnNotification.APP.RoundNum' num=this.round}}
+                        <i class="fas fa-{{this.roundIcon}}"></i>
+                    </span>
+
+                    {{#if this.repeating}}
+                    <span class="repeating">{{this.repeatString}}</span>
+                    {{/if}}
+
+                    <span class="separator"></span>
+                    <span class="notification-message" title="{{this.message}}">{{{this.message}}}</span>
+                    <span class="separator"></span>
+                    <button class="edit-notification-button"
+                        title="{{localize 'turnNotification.APP.EditNotification'}}" data-id="{{this.id}}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="delete-notification-button"
+                        title="{{localize 'turnNotification.APP.DeleteNotification'}}" data-id="{{this.id}}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </li>
                 {{/each}}
             </ul>
         </div>
+
         {{#each turns}}
         <div>
             <div class="turn-display flexrow">
@@ -34,17 +74,23 @@
                     </button>
                 </div>
             </div>
+
             <ul class="notification-list">
                 {{#each notifications}}
                 <li class="notification-li flexrow">
                     <i class="icon far fa-bell"></i>
                     <span class="separator"></span>
-                    <span class="round-number">{{this.roundString}} <i class="fas fa-{{this.roundIcon}}"></i></span>
+                    <span class="round-number" title="{{localize this.roundTitle num=this.round}}">
+                        {{localize 'turnNotification.APP.RoundNum' num=this.round}}
+                        <i class=" fas fa-{{this.roundIcon}}"></i>
+                    </span>
+
                     {{#if this.repeating}}
                     <span class="repeating">{{this.repeatString}}</span>
                     {{/if}}
+
                     <span class="separator"></span>
-                    <span class="notification-message">{{{this.message}}}</span>
+                    <span class="notification-message" title="{{this.message}}">{{{this.message}}}</span>
                     <span class="separator"></span>
                     <button class="edit-notification-button"
                         title="{{localize 'turnNotification.APP.EditNotification'}}" data-id="{{this.id}}">
@@ -59,5 +105,6 @@
             </ul>
         </div>
         {{/each}}
+
     </div>
 </div>

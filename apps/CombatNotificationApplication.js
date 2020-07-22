@@ -42,28 +42,35 @@ export default class CombatNotificationApplication extends Application {
      * Prepares and gets the relevant data for each turn in the combat.
      */
     get _turnData() {
-        return this._combat.turns.map((turn) => ({
+        return this._combat.turns.map((turn, index) => ({
+            index,
             id: turn._id,
             img: turn.img,
             name: turn.name,
             initiative: turn.initiative,
-            notifications: this._notificationsForTurn(turn._id).map((n) => {
-                const nextTrigger = TurnNotification.nextTriggerRound(n, this._combat.data.round);
-                const roundGt1 = n.round > 1;
-                const repeatString = roundGt1
-                    ? game.i18n.format(`${CONST.moduleName}.APP.RepeatEveryNRounds`, { num: n.rounds })
-                    : game.i18n.localize(`${CONST.moduleName}.APP.RepeatEverOneRound`);
-                const startEndIcon = n.endOfTurn ? "hourglass-end" : "hourglass-start";
-                return {
-                    id: n.id,
-                    message: n.message,
-                    repeating: n.repeating,
-                    repeatString: repeatString,
-                    roundString: game.i18n.format(`${CONST.moduleName}.APP.RoundNum`, { num: nextTrigger }),
-                    roundIcon: startEndIcon,
-                };
-            }),
+            notifications: this._notificationsForTurn(turn._id).map(this._createNotificationDisplayData.bind(this)),
         }));
+    }
+
+    _createNotificationDisplayData(notification) {
+        const nextTrigger = TurnNotification.nextTriggerRound(notification, this._combat.data.round);
+        const roundGt1 = notification.round > 1;
+        const repeatString = roundGt1
+            ? game.i18n.format(`${CONST.moduleName}.APP.RepeatEveryNRounds`, { num: notification.rounds })
+            : game.i18n.localize(`${CONST.moduleName}.APP.RepeatEverOneRound`);
+        const startEndIcon = notification.endOfTurn ? "hourglass-end" : "hourglass-start";
+        const roundTitle = notification.endOfTurn
+            ? `${CONST.moduleName}.APP.TriggerAtEndOfTurnNum`
+            : `${CONST.moduleName}.APP.TriggerAtStartOfTurnNum`;
+        return {
+            id: notification.id,
+            message: notification.message,
+            repeating: notification.repeating,
+            repeatString: repeatString,
+            roundTitle,
+            round: nextTrigger,
+            roundIcon: startEndIcon,
+        };
     }
 
     /**
@@ -92,7 +99,10 @@ export default class CombatNotificationApplication extends Application {
         return {
             timesRendered: this.timesRendered,
             turns: this._turnData,
-            topOfRoundNotifications: this._notificationsForTurn(null),
+            topOfRoundNotifications: this._notificationsForTurn(null).map(
+                this._createNotificationDisplayData.bind(this)
+            ),
+            currentRound: this._combat.data.round,
             currentTurn: this._combat.data.turn,
         };
     }
