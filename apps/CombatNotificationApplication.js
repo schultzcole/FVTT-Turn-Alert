@@ -123,6 +123,11 @@ export default class CombatNotificationApplication extends Application {
         // Set minimum width of the containing application window.
         html.parent().parent().css("min-width", 300);
 
+        // Listen for "delete all" button to be clicked.
+        html.find("#cn-delete-all").click((event) => {
+            this._combat.unsetFlag(CONST.moduleName, "notifications");
+        });
+
         // Listen for notification add buttons to be clicked.
         html.find(".add-notification-button").click((event) => {
             const notificationData = {

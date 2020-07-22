@@ -9,6 +9,7 @@
             "CombatNotificationsTitle": "Combat Notifications",
             "CurrentRound": "Current Round",
             "CurrentTurn": "Current Turn",
+            "DeleteAll": "Delete All Notifications",
             "DeleteNotification": "Delete Notification",
             "EditNotification": "Edit Notification",
             "RepeatEveryNRounds": "Repeats every {num} rounds",
