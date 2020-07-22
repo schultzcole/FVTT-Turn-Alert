@@ -50,14 +50,16 @@ export default class CombatNotificationApplication extends Application {
             notifications: this._notificationsForTurn(turn._id).map((n) => {
                 const nextTrigger = TurnNotification.nextTriggerRound(n, this._combat.data.round);
                 const roundGt1 = n.round > 1;
-                const repeatString = roundGt1 ? `Repeats every ${n.round} rounds` : `Repeats every round`;
+                const repeatString = roundGt1
+                    ? game.i18n.format(`${CONST.moduleName}.APP.RepeatEveryNRounds`, { num: n.rounds })
+                    : game.i18n.localize(`${CONST.moduleName}.APP.RepeatEverOneRound`);
                 const startEndIcon = n.endOfTurn ? "hourglass-end" : "hourglass-start";
                 return {
                     id: n.id,
                     message: n.message,
                     repeating: n.repeating,
                     repeatString: repeatString,
-                    roundString: `Round ${nextTrigger}`,
+                    roundString: game.i18n.format(`${CONST.moduleName}.APP.RoundNum`, { num: nextTrigger }),
                     roundIcon: startEndIcon,
                 };
             }),
@@ -78,7 +80,7 @@ export default class CombatNotificationApplication extends Application {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
             template: `${CONST.modulePath}/templates/combat-notification.hbs`,
-            title: "Combat Notifications",
+            title: game.i18n.localize(`${CONST.moduleName}.APP.CombatNotificationsTitle`),
             width: 650,
             height: 650,
             resizable: true,

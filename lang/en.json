@@ -1,0 +1,42 @@
+{
+    "turnNotification": {
+        "APP": {
+            "AbsoluteRound": "Absolute round number",
+            "AddNotification": "Add Notification",
+            "CreateNotification": "Create Notification",
+            "ChatMessage": "Chat Message",
+            "ChatMessagePlaceholder": "The chat message to display when the notification is triggered. Leave blank for no message.",
+            "CombatNotificationsTitle": "Combat Notifications",
+            "DeleteNotification": "Delete Notification",
+            "EditNotification": "Edit Notification",
+            "RepeatEveryNRounds": "Repeats every {num} rounds",
+            "RepeatEveryOneRound": "Repeats every round",
+            "Repeating": "Repeating",
+            "RoundNum": "Round {num}",
+            "TopOfRound": "Top of Round",
+            "TriggerAfterRounds": "Trigger after rounds",
+            "TriggerEndOfTurn": "Trigger at end of turn",
+            "TriggerOnRound": "Trigger on round",
+            "TriggerOnTopOfRound": "This notification will trigger at the top of the round.",
+            "TriggerOnTurn": "This notification will trigger on the following turn:",
+            "TurnNotification": "Turn Notification",
+            "TurnNotificationConfigTitle": "Turn Notification Configuration",
+            "UpdateNotification": "Update Notification",
+            "ValidRoundWarning": "⚠️ Warning: the trigger for this event has already occurred!",
+            "WhisperToHint": "The above chat message will only be sent to the following selected users. If none are selected, it will default to a public message. Hold CTRL or CMD to select multiple users.",
+            "WhisperTo": "Whisper to"
+        },
+        "ERROR": {
+            "CannotCreateNoti": {
+                "NoCombatants": "Cannot create a notification on the current turn; the active combat has no combatants.",
+                "NoCombats": "Cannot create a turn notification if no combats exist."
+            },
+            "CannotShowNotiConfig": {
+                "NoCombatId": "Either no combat id was provided or the id provided did not match any active combats."
+            },
+            "CannotViewCombatNoti": {
+                "NoCombat": "Cannot view notifications for combat because no combat id was provided and there is no currently active combat!"
+            }
+        }
+    }
+}

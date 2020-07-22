@@ -15,7 +15,7 @@ export default class TurnNotificationManager {
      */
     createOnCurrentTurn(data, options) {
         if (!game.combat?.turns?.length) {
-            ui.notifications.warn("Cannot create a notification on the current turn; the active combat has no turns.");
+            ui.notifications.warn(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotCreateNoti.NoCombatants`));
             return;
         }
         const turnId = game.combat.turns[game.combat.data.turn]._id;
@@ -42,14 +42,14 @@ export default class TurnNotificationManager {
      */
     _create(data, options) {
         if (!game.combat) {
-            ui.notifications.error("Cannot create a turn notification if no combats exist.");
+            ui.notifications.error(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotCreateNoti.NoCombats`));
             return;
         }
 
         const currentCombat = game.combat.data;
 
         const notificationData = {
-            combat: currentCombat._id,
+            combatId: currentCombat._id,
             createdRound: currentCombat.round,
             round: data.roundAbsolute ? currentCombat.round + 1 : 1,
             userId: game.userId,
@@ -75,7 +75,7 @@ export default class TurnNotificationManager {
     viewNotificationsForCombat(combatId) {
         if (!combatId) combatId = game.combat?.data?._id;
         if (!combatId) {
-            ui.notifications.warn("No combat id was provided and there is no currently active combat!");
+            ui.notifications.warn(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotViewCombat.NoCombat`));
             return;
         }
         const app = new CombatNotificationApplication({ combatId });

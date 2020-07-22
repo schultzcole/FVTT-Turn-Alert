@@ -26,7 +26,7 @@ export default async function handleUpdateCombat(combat, changed, options, userI
             if (notification.message) {
                 const messageData = {
                     speaker: {
-                        alias: "Turn Notification",
+                        alias: game.i18n.localize(`${CONST.moduleName}.APP.TurnNotification`),
                     },
                     content: notification.message,
                     whisper: notification.recipientIds,

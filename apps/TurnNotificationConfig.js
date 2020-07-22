@@ -10,9 +10,7 @@ export default class TurnNotificationConfig extends FormApplication {
         super(data, options);
 
         if (!game.combats.has(data.combatId)) {
-            ui.notifications.error(
-                "Either no combat id was provided or the id provided did not match any active combats."
-            );
+            ui.notifications.error(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotShowNotiConfig.NoCombatId`));
 
             const combats = Array.from(game.combats.keys()).join(", ");
             throw new Error(
@@ -26,7 +24,9 @@ export default class TurnNotificationConfig extends FormApplication {
     }
 
     get _roundLabel() {
-        return this.object.roundAbsolute ? "Trigger on round" : "Trigger after rounds";
+        return this.object.roundAbsolute
+            ? game.i18n.localize(`${CONST.moduleName}.APP.TriggerOnRound`)
+            : game.i18n.localize(`${CONST.moduleName}.APP.TriggerAfterRounds`);
     }
 
     get _validRound() {
@@ -63,7 +63,7 @@ export default class TurnNotificationConfig extends FormApplication {
         return mergeObject(super.defaultOptions, {
             id: "turn-notification-config",
             classes: ["sheet"],
-            title: "Turn Notification Configuration",
+            title: game.i18n.localize(`${CONST.moduleName}.APP.TurnNotificationConfigTitle`),
             template: `${CONST.modulePath}/templates/turn-notification-config.hbs`,
             width: 600,
             submitOnChange: false,
@@ -84,6 +84,9 @@ export default class TurnNotificationConfig extends FormApplication {
             users: game.users.entries.map((user) => ({ id: user.data._id, name: user.data.name })),
             userCount: game.users.entries.length,
             options: this.options,
+            submitButton: this.baseData.id
+                ? game.i18n.localize(`${CONST.moduleName}.APP.UpdateNotification`)
+                : game.i18n.localize(`${CONST.moduleName}.APP.CreateNotification`),
         };
     }
 

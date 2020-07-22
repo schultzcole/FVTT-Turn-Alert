@@ -2,9 +2,9 @@
     <div>
         <div>
             {{#if topOfRound}}
-            <p>This notification will trigger at the top of the round.</p>
+            <p>{{localize 'turnNotification.APP.TriggerOnTopOfRound'}}</p>
             {{else}}
-            <p>This notification will trigger on the following turn:</p>
+            <p>{{localize 'turnNotification.APP.TriggerOnTurn'}}</p>
             <div class="turn-display flexrow">
                 <img src="{{turnData.imgPath}}">
                 <div class="token-name flexcol">
@@ -22,16 +22,17 @@
                 <label id="roundLabel" for="round">{{roundLabel}}</label>
                 <input id="round" type="text" name="round" value="{{object.round}}" data-dtype="Number">
             </div>
-            <p id="validRoundWarning" style="display: none" class="notes warning">⚠️ Warning: the trigger for this event
-                has already occurred!</p>
+            <p id="validRoundWarning" style="display: none" class="notes warning">
+                {{localize 'turnNotification.APP.ValidRoundWarning'}}
+            </p>
 
             <div class="form-group">
-                <label for="roundAbsolute">Absolute round number</label>
+                <label for="roundAbsolute">{{localize 'turnNotification.APP.AbsoluteRound'}}</label>
                 <input type="checkbox" name="roundAbsolute" data-dtype="Boolean" {{checked object.roundAbsolute}}>
             </div>
 
             <div class="form-group">
-                <label for="repeating">Repeating</label>
+                <label for="repeating">{{localize 'turnNotification.APP.Repeating'}}</label>
                 {{#if canRepeat}}
                 <input type="checkbox" id="repeating" name="repeating" data-dtype="Boolean"
                     {{checked object.repeating}}>
@@ -42,7 +43,7 @@
 
             {{#unless topOfRound}}
             <div class="form-group">
-                <label for="endOfTurn">Trigger at end of turn</label>
+                <label for="endOfTurn">{{localize 'turnNotification.APP.TriggerEndOfTurn'}}</label>
                 <input id="endOfTurn" type="checkbox" name="endOfTurn" data-dtype="Boolean"
                     {{checked object.endOfTurn}}>
             </div>
@@ -51,15 +52,14 @@
         </div>
         <hr>
         <div class="message-area">
-            <label for="message">Chat Message</label>
+            <label for="message">{{localize 'turnNotification.APP.ChatMessage'}}</label>
             <div class="form-group">
                 <textarea name="message"
-                    placeholder="The chat message to display when the notification is triggered. Leave blank for no message.">{{object.message}}</textarea>
+                    placeholder="{{localize 'turnNotification.APP.ChatMessagePlaceholder'}}">{{object.message}}</textarea>
             </div>
 
-            <label for="recipients">Whisper to</label>
-            <p class="notes">The above chat message will only be sent to the following selected users. If none are
-                selected, it will default to a public message. Hold CTRL or CMD to select multiple users.</p>
+            <label for="recipients">{{localize 'turnNotification.APP.WhisperTo'}}</label>
+            <p class="notes">{{localize 'turnNotification.APP.WhisperToHint'}}</p>
             <div class="form-group">
                 <select multiple id="recipients" name="recipients" size="{{userCount}}" class="self-height">
                     {{#each users}}
@@ -69,6 +69,6 @@
             </div>
         </div>
 
-        <button type="submit" name="submit" class="bottom-button">Save</button>
+        <button type="submit" name="submit" class="bottom-button"><i class="fas fa-save"></i>{{submitButton}}</button>
     </div>
 </form>

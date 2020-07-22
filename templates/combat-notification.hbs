@@ -4,10 +4,11 @@
             <div class="turn-display flexrow">
                 <div style="flex: 0 0 12px"></div>
                 <div class="token-name flexcol">
-                    <span style="font-size: 1rem;">Top of Round</span>
+                    <span style="font-size: 1rem;">{{localize 'turnNotification.APP.TopOfRound'}}</span>
                 </div>
                 <div class="add-button-container">
-                    <button class="add-notification-button"><i class="fas fa-plus"></i></button>
+                    <button class="add-notification-button"
+                        title="{{localize 'turnNotification.APP.AddNotification'}}"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
             <ul class="notification-list">
@@ -27,7 +28,8 @@
                     <span class="initiative">{{this.initiative}}</span>
                 </div>
                 <div class="add-button-container">
-                    <button class="add-notification-button" title="Add Notification" data-turnid="{{this.id}}">
+                    <button class="add-notification-button" title="{{localize 'turnNotification.APP.AddNotification'}}"
+                        data-turnid="{{this.id}}">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -44,10 +46,12 @@
                     <span class="separator"></span>
                     <span class="notification-message">{{{this.message}}}</span>
                     <span class="separator"></span>
-                    <button class="edit-notification-button" title="Edit Notification" data-id="{{this.id}}">
+                    <button class="edit-notification-button"
+                        title="{{localize 'turnNotification.APP.EditNotification'}}" data-id="{{this.id}}">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="delete-notification-button" title="Delete Notification" data-id="{{this.id}}">
+                    <button class="delete-notification-button"
+                        title="{{localize 'turnNotification.APP.DeleteNotification'}}" data-id="{{this.id}}">
                         <i class="fas fa-trash"></i>
                     </button>
                 </li>

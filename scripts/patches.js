@@ -1,4 +1,5 @@
 import TurnNotificationConfig from "../apps/TurnNotificationConfig.js";
+import CONST from "./const.js";
 
 /**
  * Patches CombatTracker#activateListeners to allow players to access
@@ -23,7 +24,7 @@ export function patch_CombatTracker_getEntryContextOptions() {
     CombatTracker.prototype._getEntryContextOptions = function () {
         const entries = game.user.isGM ? old.call(this) : [];
         entries.unshift({
-            name: "Add Notification",
+            name: game.i18n.localize(`${CONST.moduleName}.APP.AddNotification`),
             icon: '<i class="fas fa-bell"></i>',
             condition: (li) => {
                 return canvas.tokens.get(li.data("token-id")).owner;
