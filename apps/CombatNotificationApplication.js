@@ -11,20 +11,13 @@ export default class CombatNotificationApplication extends Application {
         super(options);
 
         this.combatId = data.combatId;
-
+        this._combat = game.combats.get(this.combatId);
         if (!this._combat) throw new Error(`The given combatID (${data.combatId}) is not valid.`);
 
         this._updateHandler = this._onCombatUpdate.bind(this);
 
         Hooks.on("updateCombat", this._updateHandler);
         Hooks.on("deleteCombat", this.close.bind(this));
-    }
-
-    /**
-     * Gets a reference to the combat for this instance.
-     */
-    get _combat() {
-        return game.combats.get(this.combatId);
     }
 
     /**
@@ -51,7 +44,6 @@ export default class CombatNotificationApplication extends Application {
 
     /** @override */
     getData(options) {
-        const combatCache = this._combat;
         return {
             turns: [
                 {
@@ -63,9 +55,9 @@ export default class CombatNotificationApplication extends Application {
                     notifications: this._notificationsForTurn(null).map(this._createNotificationDisplayData.bind(this)),
                 },
             ].concat(this._turnData()),
-            currentRound: combatCache.data.round,
-            currentTurn: combatCache.data.turn,
-            currentInitiative: combatCache.turns[combatCache.data.turn].initiative,
+            currentRound: this._combat.data.round,
+            currentTurn: this._combat.data.turn,
+            currentInitiative: this._combat.turns[this._combat.data.turn].initiative,
         };
     }
 
