@@ -27,7 +27,7 @@ export function patch_CombatTracker_getEntryContextOptions() {
             name: game.i18n.localize(`${CONST.moduleName}.APP.AddNotification`),
             icon: '<i class="fas fa-bell"></i>',
             condition: (li) => {
-                return canvas.tokens.get(li.data("token-id")).owner;
+                return canvas.tokens.get(li.data("token-id"))?.owner;
             },
             callback: (li) => {
                 const notificationData = {
