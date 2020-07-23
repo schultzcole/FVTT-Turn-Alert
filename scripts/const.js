@@ -1,5 +1,5 @@
 let CONST = {
-    moduleName: "turnNotification",
-    modulePath: "modules/turnNotification",
+    moduleName: "turnAlert",
+    modulePath: "modules/turnAlert",
 };
 export default CONST;

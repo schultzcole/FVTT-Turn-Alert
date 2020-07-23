@@ -1,18 +1,18 @@
-<div class="turn-notification combat-notifications">
+<div class="turn-alert combat-alerts">
     <div class="wrapper">
 
         <div class="cn-header flexrow">
             <div class="cn-current-turn">
-                <label for="currentRound">{{localize 'turnNotification.APP.CurrentRound'}}:</label>
+                <label for="currentRound">{{localize 'turnAlert.APP.CurrentRound'}}:</label>
                 <input name="currentRound" type="text" value="{{currentRound}}" disabled>
-                <label for="currentTurn">{{localize 'turnNotification.APP.CurrentTurn'}}:</label>
+                <label for="currentTurn">{{localize 'turnAlert.APP.CurrentTurn'}}:</label>
                 <input name="currentTurn" type="text" value="{{currentTurn}}" disabled>
-                <label for="currentInitiative">{{localize 'turnNotification.APP.CurrentInitiative'}}:</label>
+                <label for="currentInitiative">{{localize 'turnAlert.APP.CurrentInitiative'}}:</label>
                 <input name="currentInitiative" type="text" value="{{currentInitiative}}" disabled>
             </div>
             <div>
                 <button id="cn-delete-all" style="white-space: nowrap;"><i class="fas fa-trash"></i>
-                    {{localize 'turnNotification.APP.DeleteAll'}}</button>
+                    {{localize 'turnAlert.APP.DeleteAll'}}</button>
             </div>
         </div>
 
@@ -33,20 +33,20 @@
                 </div>
                 {{/if}}
                 <div class="add-button-container">
-                    <button class="add-notification-button" title="{{localize 'turnNotification.APP.AddNotification'}}"
+                    <button class="add-alert-button" title="{{localize 'turnAlert.APP.AddAlert'}}"
                         data-turnid="{{this.id}}">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
             </div>
 
-            <ul class="notification-list">
-                {{#each notifications}}
-                <li class="notification-li flexrow">
+            <ul class="alert-list">
+                {{#each alerts}}
+                <li class="alert-li flexrow">
                     <i class="icon far fa-bell"></i>
                     <span class="separator"></span>
                     <span class="round-number" title="{{localize this.roundTitle num=this.round}}">
-                        {{localize 'turnNotification.APP.RoundNum' num=this.round}}
+                        {{localize 'turnAlert.APP.RoundNum' num=this.round}}
                         <i class=" fas fa-{{this.roundIcon}}"></i>
                     </span>
 
@@ -55,14 +55,14 @@
                     {{/if}}
 
                     <span class="separator"></span>
-                    <span class="notification-message" title="{{this.message}}">{{{this.message}}}</span>
+                    <span class="alert-message" title="{{this.message}}">{{{this.message}}}</span>
                     <span class="separator"></span>
-                    <button class="edit-notification-button"
-                        title="{{localize 'turnNotification.APP.EditNotification'}}" data-id="{{this.id}}">
+                    <button class="edit-alert-button" title="{{localize 'turnAlert.APP.EditAlert'}}"
+                        data-id="{{this.id}}">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="delete-notification-button"
-                        title="{{localize 'turnNotification.APP.DeleteNotification'}}" data-id="{{this.id}}">
+                    <button class="delete-alert-button" title="{{localize 'turnAlert.APP.DeleteAlert'}}"
+                        data-id="{{this.id}}">
                         <i class="fas fa-trash"></i>
                     </button>
                 </li>

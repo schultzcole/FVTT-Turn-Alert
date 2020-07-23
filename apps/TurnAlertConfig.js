@@ -1,16 +1,16 @@
 import CONST from "../scripts/const.js";
-import TurnNotification from "../scripts/TurnNotification.js";
+import TurnAlert from "../scripts/TurnAlert.js";
 
 /**
- * A window for creating or editing a turn notification.
- * The data object passed in to the should match the TurnNotification data schema.
+ * A window for creating or editing a turn alert.
+ * The data object passed in to the should match the TurnAlert data schema.
  */
-export default class TurnNotificationConfig extends FormApplication {
+export default class TurnAlertConfig extends FormApplication {
     constructor(data, options) {
         super(data, options);
 
         if (!game.combats.has(data.combatId)) {
-            ui.notifications.error(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotShowNotiConfig.NoCombatId`));
+            ui.alerts.error(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotShowAlertConfig.NoCombatId`));
 
             const combats = Array.from(game.combats.keys()).join(", ");
             throw new Error(
@@ -61,10 +61,10 @@ export default class TurnNotificationConfig extends FormApplication {
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
-            id: "turn-notification-config",
+            id: "turn-alert-config",
             classes: ["sheet"],
-            title: game.i18n.localize(`${CONST.moduleName}.APP.TurnNotificationConfigTitle`),
-            template: `${CONST.modulePath}/templates/turn-notification-config.hbs`,
+            title: game.i18n.localize(`${CONST.moduleName}.APP.TurnAlertConfigTitle`),
+            template: `${CONST.modulePath}/templates/turn-alert-config.hbs`,
             width: 600,
             submitOnChange: false,
             closeOnSubmit: true,
@@ -85,8 +85,8 @@ export default class TurnNotificationConfig extends FormApplication {
             userCount: game.users.entries.length,
             options: this.options,
             submitButton: this.baseData.id
-                ? game.i18n.localize(`${CONST.moduleName}.APP.UpdateNotification`)
-                : game.i18n.localize(`${CONST.moduleName}.APP.CreateNotification`),
+                ? game.i18n.localize(`${CONST.moduleName}.APP.UpdateAlert`)
+                : game.i18n.localize(`${CONST.moduleName}.APP.CreateAlert`),
         };
     }
 
@@ -138,7 +138,7 @@ export default class TurnNotificationConfig extends FormApplication {
     }
 
     _updateForm() {
-        const form = $(".turn-notification-config");
+        const form = $(".turn-alert-config");
 
         const roundLabel = form.find("#roundLabel");
         roundLabel.text(this._roundLabel);
@@ -169,7 +169,7 @@ export default class TurnNotificationConfig extends FormApplication {
         if (formData.roundAbsolute) delete formData.repeating;
         if (this.object.topOfRound) delete formData.endOfTurn;
 
-        formData.recipientIds = $(".turn-notification-config #recipients option")
+        formData.recipientIds = $(".turn-alert-config #recipients option")
             .filter(function () {
                 return this.selected;
             })
@@ -181,11 +181,11 @@ export default class TurnNotificationConfig extends FormApplication {
         let finalData = mergeObject(this.baseData, formData);
 
         if (this.object.id) {
-            console.log("Updating existing notification!");
-            TurnNotification.update(finalData);
+            console.log("Updating existing alert!");
+            TurnAlert.update(finalData);
         } else {
-            console.log("Creating new notification!");
-            TurnNotification.create(finalData);
+            console.log("Creating new alert!");
+            TurnAlert.create(finalData);
         }
     }
 }

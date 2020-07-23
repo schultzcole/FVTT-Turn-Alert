@@ -1,5 +1,5 @@
 import CONST from "./const.js";
-import TurnNotification from "./TurnNotification.js";
+import TurnAlert from "./TurnAlert.js";
 import { compareTurns } from "./utils.js";
 
 export default async function handleUpdateCombat(combat, changed, options, userId) {
@@ -7,9 +7,9 @@ export default async function handleUpdateCombat(combat, changed, options, userI
         return;
     }
 
-    let notifications = combat.getFlag(CONST.moduleName, "notifications");
-    if (!notifications) return true; // allow the update, but quit the handler early
-    notifications = duplicate(notifications);
+    let alerts = combat.getFlag(CONST.moduleName, "alerts");
+    if (!alerts) return true; // allow the update, but quit the handler early
+    alerts = duplicate(alerts);
 
     const oldCombatData = game.combats.get(combat.data._id).data;
     const prevRound = oldCombatData.round;
@@ -20,32 +20,32 @@ export default async function handleUpdateCombat(combat, changed, options, userI
     if (compareTurns(prevRound, prevTurn, nextRound, nextTurn) > 0) return true; // allow the update, but quit the handler early
 
     let anyDeleted = false;
-    for (let id in notifications) {
-        const notification = notifications[id];
-        if (game.userId === notification.userId && TurnNotification.checkTrigger(notification, nextRound, nextTurn)) {
-            if (notification.message) {
+    for (let id in alerts) {
+        const alert = alerts[id];
+        if (game.userId === alert.userId && TurnAlert.checkTrigger(alert, nextRound, nextTurn)) {
+            if (alert.message) {
                 const messageData = {
                     speaker: {
-                        alias: game.i18n.localize(`${CONST.moduleName}.APP.TurnNotification`),
+                        alias: game.i18n.localize(`${CONST.moduleName}.APP.TurnAlert`),
                     },
-                    content: notification.message,
-                    whisper: notification.recipientIds,
+                    content: alert.message,
+                    whisper: alert.recipientIds,
                 };
                 ChatMessage.create(messageData);
             }
         }
 
-        if (game.user.isGM && TurnNotification.checkExpired(notification, nextRound, nextTurn)) {
-            delete notifications[id];
+        if (game.user.isGM && TurnAlert.checkExpired(alert, nextRound, nextTurn)) {
+            delete alerts[id];
             anyDeleted = true;
         }
     }
 
     const firstGm = game.users.find((u) => u.isGM && u.active);
     if (firstGm && game.user === firstGm && anyDeleted) {
-        await combat.unsetFlag(CONST.moduleName, "notifications");
-        if (Object.keys(notifications).length > 0) {
-            return combat.setFlag(CONST.moduleName, "notifications", notifications);
+        await combat.unsetFlag(CONST.moduleName, "alerts");
+        if (Object.keys(alerts).length > 0) {
+            return combat.setFlag(CONST.moduleName, "alerts", alerts);
         }
     }
 

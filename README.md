@@ -1,6 +1,6 @@
-# FVTT Module Template Repo
+# Turn Alert
 
-A template repository for easy creation of new modules.
+Set alerts to trigger on a particular round of combat or on a particular token's turn. Alerts can create a chat message or execute a macro, for endless possibilities.
 
 ## License
 

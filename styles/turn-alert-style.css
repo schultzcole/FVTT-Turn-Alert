@@ -1,4 +1,4 @@
-.turn-notification-config {
+.turn-alert-config {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -15,15 +15,15 @@
     flex-grow: 1;
 }
 
-.turn-notification-config textarea {
+.turn-alert-config textarea {
     font-family: inherit;
 }
 
-.turn-notification-config .warning {
+.turn-alert-config .warning {
     color: #664e01;
 }
 
-.turn-notification .turn-display {
+.turn-alert .turn-display {
     display: flex;
     align-items: center;
     background: url(/ui/denim075.png) repeat;
@@ -34,21 +34,21 @@
     line-height: 48px;
 }
 
-.combat-notifications .turn-display {
+.combat-alerts .turn-display {
     margin-top: 3px;
     z-index: -1;
 }
 
-.combat-notifications .cn-header.flexrow {
+.combat-alerts .cn-header.flexrow {
     justify-content: space-between;
     align-items: center;
 }
 
-.combat-notifications .cn-header.flexrow > * {
+.combat-alerts .cn-header.flexrow > * {
     flex-grow: 0;
 }
 
-.combat-notifications .cn-header.flexrow > .cn-current-turn {
+.combat-alerts .cn-header.flexrow > .cn-current-turn {
     display: inline-grid;
     grid-template-columns: auto 35px;
     row-gap: 2px;
@@ -57,18 +57,18 @@
     font-weight: bold;
 }
 
-.combat-notifications .cn-current-turn > label {
+.combat-alerts .cn-current-turn > label {
     white-space: nowrap;
 }
 
-.combat-notifications .cn-current-turn > input[type="text"] {
+.combat-alerts .cn-current-turn > input[type="text"] {
     width: unset;
     height: unset;
     text-align: right;
     border: 1px #999 solid;
 }
 
-.turn-notification .turn-display .token-name {
+.turn-alert .turn-display .token-name {
     flex: 1;
     overflow: hidden;
     margin-left: 5px;
@@ -76,38 +76,38 @@
     border-right: 1px solid #222;
 }
 
-.turn-notification .turn-display .token-initiative {
+.turn-alert .turn-display .token-initiative {
     flex: 0 0 48px;
     text-align: center;
     border-right: 1px solid #222;
 }
 
-.turn-notification .turn-display img {
+.turn-alert .turn-display img {
     flex: 0 0 48px;
     width: 48px;
     border: 0;
 }
 
-.turn-notification .turn-display .add-button-container {
+.turn-alert .turn-display .add-button-container {
     flex: 0 0 48px;
     text-align: center;
 }
 
-.turn-notification .turn-display .add-button-container .add-notification-button {
+.turn-alert .turn-display .add-button-container .add-alert-button {
     width: 25px;
     height: 25px;
     line-height: 0;
 }
 
-.turn-notification .self-height {
+.turn-alert .self-height {
     height: unset;
 }
 
-.notification-list {
+.alert-list {
     margin: 0;
 }
 
-.notification-li.flexrow {
+.alert-li.flexrow {
     border: 2px groove #eeede0;
     border-top: 0;
     height: 30px;
@@ -116,15 +116,15 @@
     margin: 0;
 }
 
-.notification-li .notification-message {
+.alert-li .alert-message {
     flex-grow: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.notification-li .round-number,
-.notification-li .repeating {
+.alert-li .round-number,
+.alert-li .repeating {
     flex: 0 0 0px;
     white-space: nowrap;
     display: inline-block;
@@ -136,27 +136,27 @@
     background: rgba(0, 0, 0, 0.05);
 }
 
-.notification-li > * {
+.alert-li > * {
     margin-left: 5px;
 }
 
-.notification-li .icon {
+.alert-li .icon {
     flex: 0 0 0px;
     margin-right: 2px;
 }
 
-.notification-li button {
+.alert-li button {
     flex: 0 0 25px;
     height: 25px;
     line-height: 0;
     padding: 0;
 }
 
-.notification-li button > i {
+.alert-li button > i {
     margin: auto;
 }
 
-.notification-li .separator {
+.alert-li .separator {
     flex: 0 0 1px;
     height: 80%;
     border-left: 1px solid #999;

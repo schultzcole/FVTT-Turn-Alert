@@ -1,4 +1,4 @@
-import TurnNotificationConfig from "../apps/TurnNotificationConfig.js";
+import TurnAlertConfig from "../apps/TurnAlertConfig.js";
 import CONST from "./const.js";
 
 /**
@@ -17,27 +17,27 @@ export function patch_CombatTracker_activateListeners() {
 }
 
 /**
- * Adds the "Add Notification" element to the combatant context menu.
+ * Adds the "Add Alert" element to the combatant context menu.
  */
 export function patch_CombatTracker_getEntryContextOptions() {
     const old = CombatTracker.prototype._getEntryContextOptions;
     CombatTracker.prototype._getEntryContextOptions = function () {
         const entries = game.user.isGM ? old.call(this) : [];
         entries.unshift({
-            name: game.i18n.localize(`${CONST.moduleName}.APP.AddNotification`),
+            name: game.i18n.localize(`${CONST.moduleName}.APP.AddAlert`),
             icon: '<i class="fas fa-bell"></i>',
             condition: (li) => {
                 return canvas.tokens.get(li.data("token-id"))?.owner;
             },
             callback: (li) => {
-                const notificationData = {
+                const alertData = {
                     combatId: this.combat.data._id,
                     createdRound: this.combat.data.round,
                     round: 1,
                     turnId: li.data("combatant-id"),
                     userId: game.userId,
                 };
-                new TurnNotificationConfig(notificationData, {}).render(true);
+                new TurnAlertConfig(alertData, {}).render(true);
             },
         });
         return entries;
