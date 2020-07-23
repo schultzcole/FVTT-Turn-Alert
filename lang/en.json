@@ -7,6 +7,7 @@
             "ChatMessage": "Chat Message",
             "ChatMessagePlaceholder": "The chat message to display when the notification is triggered. Leave blank for no message.",
             "CombatNotificationsTitle": "Combat Notifications",
+            "CurrentInitiative": "Current Initiative",
             "CurrentRound": "Current Round",
             "CurrentTurn": "Current Turn",
             "DeleteAll": "Delete All Notifications",

@@ -38,51 +38,6 @@ export default class CombatNotificationApplication extends Application {
         }
     }
 
-    /**
-     * Prepares and gets the relevant data for each turn in the combat.
-     */
-    get _turnData() {
-        return this._combat.turns.map((turn, index) => ({
-            index,
-            id: turn._id,
-            img: turn.img,
-            name: turn.name,
-            initiative: turn.initiative,
-            notifications: this._notificationsForTurn(turn._id).map(this._createNotificationDisplayData.bind(this)),
-        }));
-    }
-
-    _createNotificationDisplayData(notification) {
-        const nextTrigger = TurnNotification.nextTriggerRound(notification, this._combat.data.round);
-        const roundGt1 = notification.round > 1;
-        const repeatString = roundGt1
-            ? game.i18n.format(`${CONST.moduleName}.APP.RepeatEveryNRounds`, { num: notification.rounds })
-            : game.i18n.localize(`${CONST.moduleName}.APP.RepeatEverOneRound`);
-        const startEndIcon = notification.endOfTurn ? "hourglass-end" : "hourglass-start";
-        const roundTitle = notification.endOfTurn
-            ? `${CONST.moduleName}.APP.TriggerAtEndOfTurnNum`
-            : `${CONST.moduleName}.APP.TriggerAtStartOfTurnNum`;
-        return {
-            id: notification.id,
-            message: notification.message,
-            repeating: notification.repeating,
-            repeatString: repeatString,
-            roundTitle,
-            round: nextTrigger,
-            roundIcon: startEndIcon,
-        };
-    }
-
-    /**
-     * Gets all of the notifications associated with a particular turn
-     * @param {string} turnId The turn id to get notifications for
-     */
-    _notificationsForTurn(turnId) {
-        const notifications = this._combat.getFlag(CONST.moduleName, "notifications");
-        if (!notifications) return [];
-        return Object.values(notifications).filter((notification) => notification.turnId === turnId);
-    }
-
     /** @override */
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -96,8 +51,8 @@ export default class CombatNotificationApplication extends Application {
 
     /** @override */
     getData(options) {
+        const combatCache = this._combat;
         return {
-            timesRendered: this.timesRendered,
             turns: [
                 {
                     index: -1,
@@ -107,13 +62,58 @@ export default class CombatNotificationApplication extends Application {
                     initiative: null,
                     notifications: this._notificationsForTurn(null).map(this._createNotificationDisplayData.bind(this)),
                 },
-            ].concat(this._turnData),
-            topOfRoundNotifications: this._notificationsForTurn(null).map(
-                this._createNotificationDisplayData.bind(this)
-            ),
-            currentRound: this._combat.data.round,
-            currentTurn: this._combat.data.turn,
+            ].concat(this._turnData()),
+            currentRound: combatCache.data.round,
+            currentTurn: combatCache.data.turn,
+            currentInitiative: combatCache.turns[combatCache.data.turn].initiative,
         };
+    }
+
+    /** Prepares and gets the relevant data for each turn in the combat. */
+    _turnData() {
+        return this._combat.turns.map((turn, index) => ({
+            index,
+            id: turn._id,
+            img: turn.img,
+            name: turn.name,
+            initiative: turn.initiative,
+            notifications: this._notificationsForTurn(turn._id).map(this._createNotificationDisplayData.bind(this)),
+        }));
+    }
+
+    /** Produces the data required by the view for the given notification */
+    _createNotificationDisplayData(notification) {
+        const nextTrigger = TurnNotification.nextTriggerRound(notification, this._combat.data.round);
+        const roundGt1 = notification.round > 1;
+        const repeatString = roundGt1
+            ? game.i18n.format(`${CONST.moduleName}.APP.RepeatEveryNRounds`, {
+                  num: notification.rounds,
+              })
+            : game.i18n.localize(`${CONST.moduleName}.APP.RepeatEverOneRound`);
+        const roundIcon = notification.endOfTurn ? "hourglass-end" : "hourglass-start";
+        const roundTitle = notification.endOfTurn
+            ? `${CONST.moduleName}.APP.TriggerAtEndOfTurnNum`
+            : `${CONST.moduleName}.APP.TriggerAtStartOfTurnNum`;
+
+        return {
+            id: notification.id,
+            message: notification.message,
+            repeating: notification.repeating,
+            round: nextTrigger,
+            repeatString,
+            roundTitle,
+            roundIcon,
+        };
+    }
+
+    /**
+     * Gets all of the notifications associated with a particular turn
+     * @param {string} turnId The turn id to get notifications for
+     */
+    _notificationsForTurn(turnId) {
+        const notifications = this._combat.getFlag(CONST.moduleName, "notifications");
+        if (!notifications) return [];
+        return Object.values(notifications).filter((notification) => notification.turnId === turnId);
     }
 
     /** @override */

@@ -50,8 +50,9 @@
 
 .combat-notifications .cn-header.flexrow > .cn-current-turn {
     display: inline-grid;
-    grid-template-columns: auto 25px;
-    gap: 2px;
+    grid-template-columns: auto 35px;
+    row-gap: 2px;
+    column-gap: 5px;
     align-items: center;
     font-weight: bold;
 }
@@ -64,6 +65,7 @@
     width: unset;
     height: unset;
     text-align: right;
+    border: 1px #999 solid;
 }
 
 .turn-notification .turn-display .token-name {
