@@ -18,7 +18,7 @@ Hooks.on("preUpdateCombat", handleUpdateCombat);
 
 Hooks.on("renderCombatTracker", (tracker, html, data) => {
     if (!data.combat.data.round) return;
-    if (!game.user.isGm) return;
+    if (!game.user.isGM) return;
 
     const alertButton = $(document.createElement("a"));
     alertButton.addClass(["combat-control", "combat-alerts"]);
