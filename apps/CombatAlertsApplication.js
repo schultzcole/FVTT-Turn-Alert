@@ -58,7 +58,7 @@ export default class CombatAlertsApplication extends Application {
             ].concat(this._turnData()),
             currentRound: this._combat.data.round,
             currentTurn: this._combat.data.turn,
-            currentInitiative: this._combat.turns[this._combat.data.turn].initiative,
+            currentInitiative: this._combat.turns[this._combat.data.turn]?.initiative,
         };
     }
 
