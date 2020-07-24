@@ -13,6 +13,8 @@
             "DeleteAll": "Delete All Alerts",
             "DeleteAlert": "Delete Alert",
             "EditAlert": "Edit Alert",
+            "MacroLabel": "Macro",
+            "MacroHint": "The id or name of the macro to run on trigger.",
             "RepeatEveryNRounds": "Repeats every {num} rounds",
             "RepeatEveryOneRound": "Repeats every round",
             "Repeating": "Repeating",
@@ -29,7 +31,7 @@
             "TurnAlert": "Turn Alert",
             "TurnAlertConfigTitle": "Turn Alert Configuration",
             "UpdateAlert": "Update Alert",
-            "ValidRoundWarning": "⚠️ Warning: the trigger for this alert has already occurred!",
+            "ValidRoundWarning": "Warning: the trigger for this alert has already occurred!",
             "WhisperToHint": "The above chat message will only be sent to the following selected users. If none are selected, it will default to a public message. Hold CTRL or CMD to select multiple users.",
             "WhisperTo": "Whisper to"
         },

@@ -23,6 +23,10 @@
     color: #664e01;
 }
 
+.turn-alert-config .warning:before {
+    content: "⚠️";
+}
+
 .turn-alert .turn-display {
     display: flex;
     align-items: center;
