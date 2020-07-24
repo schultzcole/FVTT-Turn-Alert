@@ -89,7 +89,8 @@ export default class TurnAlert {
      * @param {Array(id string)} data.recipientIds    The users to whom the message should be whispered. If empty, the message is public
      */
     static async create(data) {
-        if (!data.combatId) {
+        const combat = game.combats.get(data.combatId);
+        if (!combat) {
             throw new Error(`Invalid combat id provided, cannot add alert to combat: ${data.combatId}`);
         }
 
@@ -97,8 +98,6 @@ export default class TurnAlert {
 
         const id = randomID(16);
         alertData.id = id;
-
-        const combat = game.combats.get(alertData.combatId);
 
         if (data.turnId !== null && TurnAlert.getNextTriggerTurn(data) === -1) {
             throw new Error(
