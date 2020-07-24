@@ -56,7 +56,8 @@ export default class TurnAlert {
         } else if (alert.repeating && alert.round > 0) {
             const round =
                 Math.ceil((currentRound - alert.createdRound) / alert.round) * alert.round + alert.createdRound;
-            if (TurnAlert.getTurnIndex(alert) < currentTurn) {
+            const turnIndex = TurnAlert.getTurnIndex(alert);
+            if (turnIndex >= 0 && turnIndex < currentTurn) {
                 return round + 1;
             } else {
                 return round;

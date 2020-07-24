@@ -10,5 +10,5 @@
  * @param {Number} turnB
  */
 export function compareTurns(roundA, turnA, roundB, turnB) {
-    return roundA - roundB || turnA - turnB;
+    return Math.max(roundA, 0) - Math.max(roundB, 0) || Math.max(turnA, 0) - Math.max(turnB, 0);
 }
