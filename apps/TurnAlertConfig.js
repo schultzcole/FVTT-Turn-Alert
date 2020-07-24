@@ -18,30 +18,8 @@ export default class TurnAlertConfig extends FormApplication {
             );
         }
 
-        this.baseData = duplicate(data);
         this.combat = game.combats.get(data.combatId);
         this.turn = this.object.turnId ? this.combat.turns.find((turn) => turn._id === this.object.turnId) : null;
-    }
-
-    get _roundLabel() {
-        return this.object.roundAbsolute
-            ? game.i18n.localize(`${CONST.moduleName}.APP.TriggerOnRound`)
-            : game.i18n.localize(`${CONST.moduleName}.APP.TriggerAfterRounds`);
-    }
-
-    get _validRound() {
-        const thisRoundLater = this.combat.data.round < this.object.round;
-        const isCurrentRound = this.combat.data.round == this.object.round;
-        const thisTurnIndex = this.combat.turns.findIndex((turn) => turn._id === this.object.turnId);
-        const thisTurnLater = this.combat.data.turn < thisTurnIndex;
-        const isCurrentTurn = this.combat.data.turn == thisTurnIndex;
-        const turnValid = thisTurnLater || (this.object.endOfTurn && isCurrentTurn);
-
-        if (this.object.roundAbsolute) {
-            return thisRoundLater || (isCurrentRound && turnValid);
-        } else {
-            return this.object.round > 0 || turnValid;
-        }
     }
 
     get _turnData() {
@@ -52,10 +30,6 @@ export default class TurnAlertConfig extends FormApplication {
                   name: this.turn.token.name,
                   initiative: this.turn.initiative,
               };
-    }
-
-    get _canRepeat() {
-        return this.object.round != 0 && !this.object.roundAbsolute;
     }
 
     /** @override */
@@ -74,17 +48,18 @@ export default class TurnAlertConfig extends FormApplication {
 
     /** @override */
     getData(options) {
+        const { round, roundAbsolute, endOfTurn } = this.object;
         return {
             object: duplicate(this.object),
-            roundLabel: this._roundLabel,
-            validRound: this._validRound,
+            roundLabel: this._getRoundLabel(roundAbsolute),
+            validRound: this._validRound(round, roundAbsolute, endOfTurn),
             topOfRound: !this.object.turnId,
             turnData: this._turnData,
-            canRepeat: this._canRepeat,
+            canRepeat: this._canRepeat(round, roundAbsolute),
             users: game.users.entries.map((user) => ({ id: user.data._id, name: user.data.name })),
             userCount: game.users.entries.length,
             options: this.options,
-            submitButton: this.baseData.id
+            submitButton: this.object.id
                 ? game.i18n.localize(`${CONST.moduleName}.APP.UpdateAlert`)
                 : game.i18n.localize(`${CONST.moduleName}.APP.CreateAlert`),
         };
@@ -117,51 +92,80 @@ export default class TurnAlertConfig extends FormApplication {
     _onChangeInput(event) {
         const fd = this._getFormData(event.currentTarget.form);
 
-        const newData = {
-            round: Number(fd.get("round")),
-            roundAbsolute: fd.get("roundAbsolute") === "true",
-            repeating: fd.get("repeating") === "true",
-            endOfTurn: fd.get("endOfTurn") === "true",
-            message: fd.get("message"),
-        };
+        let newRound = Number(fd.get("round"));
+        const newRoundAbsolute = fd.get("roundAbsolute") === "true";
+        const newRepeating = fd.get("repeating") === "true";
+        const newEndOfTurn = fd.get("endOfTurn") === "true";
+        const newMacroString = fd.get("macro");
 
-        const oldRoundAbsolute = this.object.roundAbsolute || false;
-        if (oldRoundAbsolute != newData.roundAbsolute) {
-            newData.round = newData.roundAbsolute
-                ? this.combat.data.round + newData.round // round number was previously relative
-                : newData.round - this.combat.data.round; // round number was previously absolute
+        const oldRoundAbsolute = this._roundAbsolute || false;
+        if (oldRoundAbsolute != newRoundAbsolute) {
+            newRound = newRoundAbsolute
+                ? this.combat.data.round + newRound // round number was previously relative
+                : newRound - this.combat.data.round; // round number was previously absolute
         }
 
-        this.object = mergeObject(this.object, newData);
+        this._roundAbsolute = newRoundAbsolute;
 
-        this._updateForm();
+        this._updateForm(newRound, newRoundAbsolute, newRepeating, newEndOfTurn, newMacroString);
     }
 
-    _updateForm() {
+    _updateForm(round, roundAbsolute, repeating, endOfTurn, macroString) {
         const form = $(".turn-alert-config");
 
         const roundLabel = form.find("#roundLabel");
-        roundLabel.text(this._roundLabel);
+        roundLabel.text(this._getRoundLabel(roundAbsolute));
 
         const roundTextBox = form.find("#round");
-        roundTextBox.prop("value", this.object.round);
+        roundTextBox.prop("value", round);
+
+        const repeatingCheckbox = form.find("#repeating");
+        const canRepeat = this._canRepeat(round, roundAbsolute);
+        repeatingCheckbox.prop("disabled", !canRepeat);
+        repeatingCheckbox.prop("checked", canRepeat && repeating);
 
         const validRoundWarning = form.find("#validRoundWarning");
-        if (this._validRound) {
+        if (this._validRound(round, roundAbsolute, endOfTurn)) {
             validRoundWarning.hide();
         } else {
             validRoundWarning.show();
         }
 
-        const repeatingCheckbox = form.find("#repeating");
-        repeatingCheckbox.prop("disabled", !this._canRepeat);
-        repeatingCheckbox.prop("checked", this._canRepeat && this.object.repeating);
+        const validMacroWarning = form.find("#macroWarning");
+        if (this._validMacro(macroString)) {
+            validMacroWarning.hide();
+        } else {
+            validMacroWarning.show();
+        }
+    }
 
-        const endOfTurnCheckbox = form.find("#endOfTurn");
-        endOfTurnCheckbox.prop("checked", this.object.endOfTurn);
+    _getRoundLabel(roundAbsolute) {
+        return roundAbsolute
+            ? game.i18n.localize(`${CONST.moduleName}.APP.TriggerOnRound`)
+            : game.i18n.localize(`${CONST.moduleName}.APP.TriggerAfterRounds`);
+    }
 
-        const messageBox = form.find("#message");
-        messageBox.text(this.object.message);
+    _canRepeat(round, roundAbsolute) {
+        return round > 0 && !roundAbsolute;
+    }
+
+    _validRound(round, roundAbsolute, endOfTurn) {
+        const thisRoundLater = this.combat.data.round < round;
+        const isCurrentRound = this.combat.data.round == round;
+        const thisTurnIndex = this.combat.turns.findIndex((turn) => turn._id === this.object.turnId);
+        const thisTurnLater = this.combat.data.turn < thisTurnIndex;
+        const isCurrentTurn = this.combat.data.turn == thisTurnIndex;
+        const turnValid = thisTurnLater || (endOfTurn && isCurrentTurn);
+
+        if (roundAbsolute) {
+            return thisRoundLater || (isCurrentRound && turnValid);
+        } else {
+            return round > 0 || turnValid;
+        }
+    }
+
+    _validMacro(macroString) {
+        return Boolean(!macroString || game.macros.get(macroString) || game.macros.getName(macroString));
     }
 
     /** @override */
@@ -178,13 +182,11 @@ export default class TurnAlertConfig extends FormApplication {
             })
             .get();
 
-        let finalData = mergeObject(this.baseData, formData);
+        let finalData = mergeObject(this.object, formData);
 
         if (this.object.id) {
-            console.log("Updating existing alert!");
             TurnAlert.update(finalData);
         } else {
-            console.log("Creating new alert!");
             TurnAlert.create(finalData);
         }
     }

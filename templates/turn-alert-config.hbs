@@ -52,7 +52,7 @@
         </div>
         <hr>
         <div class="message-area">
-            <label for="message">{{localize 'turnAlert.APP.ChatMessage'}}</label>
+            <label for="message"><i class="fas fa-comments"></i> {{localize 'turnAlert.APP.ChatMessage'}}</label>
             <div class="form-group">
                 <textarea name="message"
                     placeholder="{{localize 'turnAlert.APP.ChatMessagePlaceholder'}}">{{object.message}}</textarea>
@@ -67,6 +67,16 @@
                     {{/each}}
                 </select>
             </div>
+        </div>
+
+        <hr>
+        <div class="form-group">
+            <label for="macro"><i class="fas fa-terminal"></i> {{localize 'turnAlert.APP.MacroLabel'}}</label>
+            <input type="text" name="macro">
+            <p class="notes">{{localize 'turnAlert.APP.MacroHint'}}</p>
+            <p id="macroWarning" class="notes warning" style="display: none;">
+                {{localize 'turnAlert.APP.MacroInvalid'}}
+            </p>
         </div>
 
         <button type="submit" name="submit" class="bottom-button"><i class="fas fa-save"></i>{{submitButton}}</button>

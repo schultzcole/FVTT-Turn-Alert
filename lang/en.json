@@ -15,6 +15,7 @@
             "EditAlert": "Edit Alert",
             "MacroLabel": "Macro",
             "MacroHint": "The id or name of the macro to run on trigger.",
+            "MacroInvalid": "The macro id or name does not match any world macros.",
             "RepeatEveryNRounds": "Repeats every {num} rounds",
             "RepeatEveryOneRound": "Repeats every round",
             "Repeating": "Repeating",

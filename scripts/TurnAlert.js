@@ -13,6 +13,7 @@ import { compareTurns } from "./utils.js";
  *     roundAbsolute: boolean,          // Whether the round number is absolute (i.e. the alert happens on round 5) or relative to the round during which the alert was created (i.e. the alert happens 5 rounds after creation)
  *     repeating: boolean,              // Whether this alert will repeat. If this alert triggers on an absolute round number (roundAbsolute is true), this is ignored!
  *     message: string,                 // The message to be displayed in chat when the alert is activated
+ *     macro: string                    // The macro id or name to trigger when this alert is triggered
  *     userId: id string,               // The user that created this alert
  *     recipientIds: [user id strings]  // The users to whom the message should be whispered. If empty, the message is public
  * }
@@ -30,6 +31,7 @@ export default class TurnAlert {
             roundAbsolute: false,
             repeating: false,
             message: "",
+            macro: null,
             userId: null,
             recipientIds: null,
         };
@@ -85,6 +87,7 @@ export default class TurnAlert {
      * @param {boolean} data.roundAbsolute            Whether the round number is absolute (i.e. the alert happens on round 5) or relative to the round during which the alert was created (i.e. the alert happens 5 rounds after creation)
      * @param {boolean} data.repeating                Whether this alert will repeat. If this alert triggers on an absolute round number (roundAbsolute is true), this is ignored!
      * @param {string} data.message                   The message to be displayed in chat when the alert is activated
+     * @param {string} data.macro                     The macro id or name to trigger when this alert is triggered
      * @param {id string} data.userId                 The user that created this alert
      * @param {Array(id string)} data.recipientIds    The users to whom the message should be whispered. If empty, the message is public
      */
