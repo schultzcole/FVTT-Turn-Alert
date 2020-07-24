@@ -15,7 +15,7 @@ export default class TurnAlertManager {
      */
     createOnCurrentTurn(data, options) {
         if (!game.combat?.turns?.length) {
-            ui.alerts.warn(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotCreateAlert.NoCombatants`));
+            ui.notifications.warn(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotCreateAlert.NoCombatants`));
             return;
         }
         const turnId = game.combat.turns[game.combat.data.turn]._id;
@@ -42,7 +42,7 @@ export default class TurnAlertManager {
      */
     _create(data, options) {
         if (!game.combat) {
-            ui.alerts.error(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotCreateAlert.NoCombats`));
+            ui.notifications.error(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotCreateAlert.NoCombats`));
             return;
         }
 
@@ -75,7 +75,7 @@ export default class TurnAlertManager {
     viewAlertsForCombat(combatId) {
         if (!combatId) combatId = game.combat?.data?._id;
         if (!combatId) {
-            ui.alerts.warn(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotViewCombat.NoCombat`));
+            ui.notifications.warn(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotViewCombat.NoCombat`));
             return;
         }
         const app = new CombatAlertsApplication({ combatId });

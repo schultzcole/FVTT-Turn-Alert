@@ -10,7 +10,7 @@ export default class TurnAlertConfig extends FormApplication {
         super(data, options);
 
         if (!game.combats.has(data.combatId)) {
-            ui.alerts.error(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotShowAlertConfig.NoCombatId`));
+            ui.notifications.error(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotShowAlertConfig.NoCombatId`));
 
             const combats = Array.from(game.combats.keys()).join(", ");
             throw new Error(

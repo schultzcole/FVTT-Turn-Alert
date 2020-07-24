@@ -77,7 +77,6 @@ export default class TurnAlert {
      * This function creates the alert in the database by attaching the alert data
      * to the combat with the id provided as the combatId in the alert data.
      * @param {Object} data                           The alert data to add.
-     * @param {id string} data.id                     The 16 char (allegedly) unique ID for this alert.
      * @param {id string} data.combatId               The id of the combat that this turn alert belongs to
      * @param {integer} data.createdRound             The combat round during which this alert was created
      * @param {integer} data.round                    The round that this turn alert will activate on
@@ -101,7 +100,7 @@ export default class TurnAlert {
 
         const combat = game.combats.get(alertData.combatId);
 
-        if (data.turnId !== null && combat.turns.findIndex((turn) => turn._id === data.turnId) === -1) {
+        if (data.turnId !== null && TurnAlert.getNextTriggerTurn(data) === -1) {
             throw new Error(
                 `The provided turnId ("${data.turnId}") does not match any combatants in combat ${data.combatId}`
             );
@@ -123,10 +122,10 @@ export default class TurnAlert {
      */
     static async update(data) {
         if (!data.id) {
-            throw new Error("Cannot update a alert that doesn't contain a alert ID.");
+            throw new Error("Cannot update an alert that doesn't contain an alert ID.");
         }
         if (!data.combatId) {
-            throw new Error("Cannot update a alert that doesn't contain a combat ID.");
+            throw new Error("Cannot update an alert that doesn't contain a combat ID.");
         }
 
         const combat = game.combats.get(data.combatId);
@@ -151,8 +150,8 @@ export default class TurnAlert {
     }
 
     /**
-     * Deletes a alert from a given combat.
-     * @param {id string} combatId The id of the combat to delete a alert from.
+     * Deletes an alert from a given combat.
+     * @param {id string} combatId The id of the combat to delete an alert from.
      * @param {id string} alertId The id of the alert to delete.
      */
     static async delete(combatId, alertId) {

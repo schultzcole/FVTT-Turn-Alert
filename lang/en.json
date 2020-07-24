@@ -35,7 +35,7 @@
         },
         "ERROR": {
             "CannotCreateAlert": {
-                "NoCombatants": "Cannot create a alert on the current turn; the active combat has no combatants.",
+                "NoCombatants": "Cannot create an alert on the current turn; the active combat has no combatants.",
                 "NoCombats": "Cannot create a turn alert if no combats exist."
             },
             "CannotShowAlertConfig": {
