@@ -23,16 +23,7 @@ export default async function handleUpdateCombat(combat, changed, options, userI
     for (let id in alerts) {
         const alert = alerts[id];
         if (game.userId === alert.userId && TurnAlert.checkTrigger(alert, nextRound, nextTurn)) {
-            if (alert.message) {
-                const messageData = {
-                    speaker: {
-                        alias: game.i18n.localize(`${CONST.moduleName}.APP.TurnAlert`),
-                    },
-                    content: alert.message,
-                    whisper: alert.recipientIds,
-                };
-                ChatMessage.create(messageData);
-            }
+            TurnAlert.execute(alert);
         }
 
         if (game.user.isGM && TurnAlert.checkExpired(alert, nextRound, nextTurn)) {

@@ -69,9 +69,57 @@ export default class TurnAlert {
         TurnAlert._checkTurn((a, b) => a <= b, alert, currentRound, currentTurn);
 
     /** checks how a given alert's trigger compares to the current round and turn based on a given comparison function */
-    static _checkTurn(cmp, data, currentRound, currentTurn) {
-        const { round, turn } = TurnAlert.getNextTriggerTurn(data, currentRound);
+    static _checkTurn(cmp, alert, currentRound, currentTurn) {
+        const { round, turn } = TurnAlert.getNextTriggerTurn(alert, currentRound);
         return cmp(compareTurns(round, turn, currentRound, currentTurn), 0);
+    }
+
+    static execute(alert) {
+        if (alert.message) {
+            const messageData = {
+                speaker: {
+                    alias: game.i18n.localize(`${CONST.moduleName}.APP.TurnAlert`),
+                },
+                content: alert.message,
+                whisper: alert.recipientIds,
+            };
+            ChatMessage.create(messageData);
+        }
+
+        const macro = game.macros.get(alert.macro) || game.macros.getName(alert.macro);
+        if (macro) {
+            this._customExecute(alert, macro);
+        } else {
+            throw new Error(`Tried to execute macro "${alert.macro}" but it did not exist.`);
+        }
+    }
+
+    static _customExecute(alert, macro) {
+        // Chat macros
+        if (macro.data.type === "chat") {
+            ui.chat.processMessage(macro.data.command).catch((err) => {
+                ui.notifications.error("There was an error in your chat message syntax.");
+                console.error(err);
+            });
+        }
+
+        // Script macros
+        else if (macro.data.type === "script") {
+            if (!Macros.canUseScripts(game.user)) {
+                return ui.notifications.warn(`You are not allowed to use JavaScript macros.`);
+            }
+            const turn = this.getCombat(alert).turns.find((t) => t._id === alert.turnId);
+            const token = canvas.tokens.get(turn.tokenId);
+            const speaker = ChatMessage.getSpeaker({ token });
+            const actor = game.actors.get(speaker.actor);
+            const character = game.user.character;
+            try {
+                eval(macro.data.command);
+            } catch (err) {
+                ui.notifications.error(`There was an error in your macro syntax. See the console (F12) for details`);
+                console.error(err);
+            }
+        }
     }
 
     /**
