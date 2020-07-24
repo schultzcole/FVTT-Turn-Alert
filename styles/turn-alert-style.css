@@ -127,8 +127,7 @@
     text-overflow: ellipsis;
 }
 
-.alert-li .round-number,
-.alert-li .repeating {
+.alert-li .tag {
     flex: 0 0 0px;
     white-space: nowrap;
     display: inline-block;

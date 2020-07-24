@@ -83,10 +83,13 @@ export default class CombatAlertsApplication extends Application {
                   num: alert.rounds,
               })
             : game.i18n.localize(`${CONST.moduleName}.APP.RepeatEverOneRound`);
-        const roundIcon = alert.endOfTurn ? "hourglass-end" : "hourglass-start";
+
         const roundTitle = alert.endOfTurn
             ? `${CONST.moduleName}.APP.TriggerAtEndOfTurnNum`
             : `${CONST.moduleName}.APP.TriggerAtStartOfTurnNum`;
+        const roundIcon = alert.endOfTurn ? "hourglass-end" : "hourglass-start";
+
+        const macroName = (game.macros.get(alert.macro) || game.macros.getName(alert.macro))?.data?.name;
 
         return {
             id: alert.id,
@@ -96,6 +99,7 @@ export default class CombatAlertsApplication extends Application {
             repeatString,
             roundTitle,
             roundIcon,
+            macroName,
         };
     }
 

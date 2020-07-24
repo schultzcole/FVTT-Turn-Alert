@@ -45,13 +45,17 @@
                 <li class="alert-li flexrow">
                     <i class="icon far fa-bell"></i>
                     <span class="separator"></span>
-                    <span class="round-number" title="{{localize this.roundTitle num=this.round}}">
+                    <span class="tag round-number" title="{{localize this.roundTitle num=this.round}}">
                         {{localize 'turnAlert.APP.RoundNum' num=this.round}}
-                        <i class=" fas fa-{{this.roundIcon}}"></i>
+                        <i class="fas fa-{{this.roundIcon}}"></i>
                     </span>
 
                     {{#if this.repeating}}
-                    <span class="repeating">{{this.repeatString}}</span>
+                    <span class="tag repeating">{{this.repeatString}}</span>
+                    {{/if}}
+
+                    {{#if this.macroName}}
+                    <span class="tag macroName" title="{{this.macroName}}"><i class="fas fa-terminal"></i></span>
                     {{/if}}
 
                     <span class="separator"></span>
