@@ -76,13 +76,13 @@ export default class CombatAlertsApplication extends Application {
 
     /** Produces the data required by the view for the given alert */
     _createAlertDisplayData(alert) {
-        const nextTrigger = TurnAlert.nextTriggerRound(alert, this._combat.data.round);
+        const nextTrigger = TurnAlert.nextTriggerRound(alert, this._combat.data.round, this._combat.data.turn);
         const roundGt1 = alert.round > 1;
         const repeatString = roundGt1
             ? game.i18n.format(`${CONST.moduleName}.APP.RepeatEveryNRounds`, {
                   num: alert.rounds,
               })
-            : game.i18n.localize(`${CONST.moduleName}.APP.RepeatEverOneRound`);
+            : game.i18n.localize(`${CONST.moduleName}.APP.RepeatEveryOneRound`);
 
         const roundTitle = alert.endOfTurn
             ? `${CONST.moduleName}.APP.TriggerAtEndOfTurnNum`

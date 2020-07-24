@@ -44,17 +44,23 @@ export default class TurnAlert {
     static getTurnIndex = (alert) => TurnAlert.getCombat(alert).turns.findIndex((t) => t._id === alert.turnId);
 
     /** gets the next upcoming round and turn that this alert will trigger on. */
-    static getNextTriggerTurn = (alert, currentRound) => ({
-        round: TurnAlert.nextTriggerRound(alert, currentRound),
+    static getNextTriggerTurn = (alert, currentRound, currentTurn) => ({
+        round: TurnAlert.nextTriggerRound(alert, currentRound, currentTurn),
         turn: alert.endOfTurn ? TurnAlert.getTurnIndex(alert) + 1 : TurnAlert.getTurnIndex(alert),
     });
 
     /** gets the next round that this alert will trigger on. */
-    static nextTriggerRound(alert, currentRound) {
+    static nextTriggerRound(alert, currentRound, currentTurn) {
         if (alert.roundAbsolute) {
             return alert.round;
         } else if (alert.repeating && alert.round > 0) {
-            return Math.ceil((currentRound - alert.createdRound) / alert.round) * alert.round + alert.createdRound;
+            const round =
+                Math.ceil((currentRound - alert.createdRound) / alert.round) * alert.round + alert.createdRound;
+            if (TurnAlert.getTurnIndex(alert) < currentTurn) {
+                return round + 1;
+            } else {
+                return round;
+            }
         } else {
             return alert.createdRound + alert.round;
         }
@@ -70,11 +76,11 @@ export default class TurnAlert {
 
     /** checks how a given alert's trigger compares to the current round and turn based on a given comparison function */
     static _checkTurn(cmp, alert, currentRound, currentTurn) {
-        const { round, turn } = TurnAlert.getNextTriggerTurn(alert, currentRound);
+        const { round, turn } = TurnAlert.getNextTriggerTurn(alert, currentRound, currentTurn);
         return cmp(compareTurns(round, turn, currentRound, currentTurn), 0);
     }
 
-    static execute(alert) {
+    static async execute(alert) {
         if (alert.message) {
             const messageData = {
                 speaker: {
@@ -83,14 +89,16 @@ export default class TurnAlert {
                 content: alert.message,
                 whisper: alert.recipientIds,
             };
-            ChatMessage.create(messageData);
+            await ChatMessage.create(messageData);
         }
 
-        const macro = game.macros.get(alert.macro) || game.macros.getName(alert.macro);
-        if (macro) {
-            this._customExecute(alert, macro);
-        } else {
-            throw new Error(`Tried to execute macro "${alert.macro}" but it did not exist.`);
+        if (alert.macro) {
+            const macro = game.macros.get(alert.macro) || game.macros.getName(alert.macro);
+            if (macro) {
+                this._customExecute(alert, macro);
+            } else {
+                throw new Error(`Tried to execute macro "${alert.macro}" but it did not exist.`);
+            }
         }
     }
 
@@ -150,7 +158,7 @@ export default class TurnAlert {
         const id = randomID(16);
         alertData.id = id;
 
-        if (data.turnId !== null && TurnAlert.getNextTriggerTurn(data) === -1) {
+        if (data.turnId !== null && TurnAlert.getTurnIndex(data) === -1) {
             throw new Error(
                 `The provided turnId ("${data.turnId}") does not match any combatants in combat ${data.combatId}`
             );
