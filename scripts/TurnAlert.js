@@ -46,7 +46,7 @@ export default class TurnAlert {
     /** gets the next upcoming round and turn that this alert will trigger on. */
     static getNextTriggerTurn = (alert, currentRound, currentTurn) => ({
         round: TurnAlert.nextTriggerRound(alert, currentRound, currentTurn),
-        turn: alert.endOfTurn ? TurnAlert.getTurnIndex(alert) + 1 : TurnAlert.getTurnIndex(alert),
+        turn: TurnAlert.getTurnIndex(alert),
     });
 
     /** gets the next round that this alert will trigger on. */

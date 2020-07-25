@@ -22,11 +22,15 @@ export default async function handleUpdateCombat(combat, changed, options, userI
     let anyDeleted = false;
     for (let id in alerts) {
         const alert = alerts[id];
-        if (game.userId === alert.userId && TurnAlert.checkTrigger(alert, nextRound, nextTurn)) {
+
+        const triggerRound = alert.endOfTurn ? prevRound : nextRound;
+        const triggerTurn = alert.endOfTurn ? prevTurn : nextTurn;
+
+        if (game.userId === alert.userId && TurnAlert.checkTrigger(alert, triggerRound, triggerTurn)) {
             TurnAlert.execute(alert);
         }
 
-        if (game.user.isGM && !alert.repeating && TurnAlert.checkExpired(alert, nextRound, nextTurn)) {
+        if (game.user.isGM && !alert.repeating && TurnAlert.checkExpired(alert, triggerRound, triggerTurn)) {
             delete alerts[id];
             anyDeleted = true;
         }
