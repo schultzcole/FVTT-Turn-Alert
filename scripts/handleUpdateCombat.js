@@ -30,7 +30,7 @@ export default async function handleUpdateCombat(combat, changed, options, userI
             TurnAlert.execute(alert);
         }
 
-        if (game.user.isGM && !alert.repeating && TurnAlert.checkExpired(alert, triggerRound, triggerTurn)) {
+        if (game.user.isGM && TurnAlert.checkExpired(alert, triggerRound, triggerTurn)) {
             delete alerts[id];
             anyDeleted = true;
         }

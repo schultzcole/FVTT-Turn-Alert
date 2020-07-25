@@ -18,6 +18,9 @@ export default class TurnAlertConfig extends FormApplication {
             );
         }
 
+        this._roundAbsolute = data.roundAbsolute;
+        this._expireAbsolute = data.repeating?.expireAbsolute;
+
         this.combat = game.combats.get(data.combatId);
         this.turn = this.object.turnId ? this.combat.turns.find((turn) => turn._id === this.object.turnId) : null;
     }
@@ -39,7 +42,7 @@ export default class TurnAlertConfig extends FormApplication {
             classes: ["sheet"],
             title: game.i18n.localize(`${CONST.moduleName}.APP.TurnAlertConfigTitle`),
             template: `${CONST.modulePath}/templates/turn-alert-config.hbs`,
-            width: 600,
+            width: 450,
             submitOnChange: false,
             closeOnSubmit: true,
             resizable: true,
@@ -48,14 +51,15 @@ export default class TurnAlertConfig extends FormApplication {
 
     /** @override */
     getData(options) {
-        const { round, roundAbsolute, endOfTurn } = this.object;
+        const { round, roundAbsolute, endOfTurn, turnId, repeating } = this.object;
         return {
             object: duplicate(this.object),
             roundLabel: this._getRoundLabel(roundAbsolute),
+            expireLabel: this._getExpireLabel(repeating?.expireAbsolute),
             validRound: this._validRound(round, roundAbsolute, endOfTurn),
-            topOfRound: !this.object.turnId,
+            topOfRound: !turnId,
             turnData: this._turnData,
-            canRepeat: this._canRepeat(round, roundAbsolute),
+            repeating: Boolean(repeating),
             users: game.users.entries.map((user) => ({ id: user.data._id, name: user.data.name })),
             userCount: game.users.entries.length,
             options: this.options,
@@ -92,25 +96,50 @@ export default class TurnAlertConfig extends FormApplication {
     _onChangeInput(event) {
         const fd = this._getFormData(event.currentTarget.form);
 
-        let newRound = Number(fd.get("round"));
-        const newRoundAbsolute = fd.get("roundAbsolute") === "true";
-        const newRepeating = fd.get("repeating") === "true";
-        const newEndOfTurn = fd.get("endOfTurn") === "true";
-        const newMacroString = fd.get("macro");
+        let formRound = Number(fd.get("round"));
+        const formRoundAbsolute = fd.get("roundAbsolute") === "true";
+        const formRepeating = fd.get("repeatingToggle") === "true";
+        const formEndOfTurn = fd.get("endOfTurn") === "true";
+        const formMacroString = fd.get("macro");
 
-        const oldRoundAbsolute = this._roundAbsolute || false;
-        if (oldRoundAbsolute != newRoundAbsolute) {
-            newRound = newRoundAbsolute
-                ? this.combat.data.round + newRound // round number was previously relative
-                : newRound - this.combat.data.round; // round number was previously absolute
+        // Convert between absolute and relative round number
+        const prevRoundAbsolute = this._roundAbsolute || false;
+        if (prevRoundAbsolute != formRoundAbsolute) {
+            formRound = formRoundAbsolute
+                ? this.combat.data.round + formRound // round number was previously relative
+                : formRound - this.combat.data.round; // round number was previously absolute
         }
 
-        this._roundAbsolute = newRoundAbsolute;
+        this._roundAbsolute = formRoundAbsolute;
 
-        this._updateForm(newRound, newRoundAbsolute, newRepeating, newEndOfTurn, newMacroString);
+        // Get repeating parameters if necessary
+        let formRepeatParams = {};
+        if (formRepeating) {
+            formRepeatParams = {
+                frequency: Number(fd.get("repeatFrequency")),
+                expire: Number(fd.get("repeatExpire")),
+                expireAbsolute: fd.get("repeatExpireAbsolute") === "true",
+            };
+        }
+
+        // Update repeating expiration round based on absolute/relative and initial trigger round.
+        const triggerRoundAbs = formRoundAbsolute ? formRound : this.combat.data.round + formRound;
+        const prevExpireAbsolute = this._expireAbsolute || false;
+        if (prevExpireAbsolute != formRepeatParams.expireAbsolute) {
+            formRepeatParams.expire = formRepeatParams.expireAbsolute
+                ? triggerRoundAbs + formRepeatParams.expire // expire round was previously relative
+                : formRepeatParams.expire - triggerRoundAbs; // expire round was previously absolute
+        } else if (formRepeatParams.expireAbsolute) {
+            const prevDelta = prevExpireAbsolute - prevRoundAbsolute;
+            formRepeatParams.expire = formRound + prevDelta;
+        }
+
+        this._expireAbsolute = formRepeatParams.expireAbsolute;
+
+        this._updateForm(formRound, formRoundAbsolute, formRepeating, formEndOfTurn, formMacroString, formRepeatParams);
     }
 
-    _updateForm(round, roundAbsolute, repeating, endOfTurn, macroString) {
+    _updateForm(round, roundAbsolute, repeating, endOfTurn, macroString, repeatParams) {
         const form = $(".turn-alert-config");
 
         const roundLabel = form.find("#roundLabel");
@@ -119,16 +148,27 @@ export default class TurnAlertConfig extends FormApplication {
         const roundTextBox = form.find("#round");
         roundTextBox.prop("value", round);
 
-        const repeatingCheckbox = form.find("#repeating");
-        const canRepeat = this._canRepeat(round, roundAbsolute);
-        repeatingCheckbox.prop("disabled", !canRepeat);
-        repeatingCheckbox.prop("checked", canRepeat && repeating);
-
         const validRoundWarning = form.find("#validRoundWarning");
         if (this._validRound(round, roundAbsolute, endOfTurn)) {
             validRoundWarning.hide();
         } else {
             validRoundWarning.show();
+        }
+
+        const repeatingParams = form.find("#repeatingParams");
+        if (repeating) {
+            repeatingParams.show();
+
+            const frequencyTextBox = repeatingParams.find("#frequency");
+            frequencyTextBox.prop("value", Math.max(repeatParams.frequency, 1));
+
+            const expireLabel = repeatingParams.find("#expireLabel");
+            expireLabel.text(this._getExpireLabel(repeatParams.expireAbsolute));
+
+            const expireTextBox = repeatingParams.find("#expire");
+            expireTextBox.prop("value", repeatParams.expire);
+        } else {
+            repeatingParams.hide();
         }
 
         const validMacroWarning = form.find("#macroWarning");
@@ -145,8 +185,10 @@ export default class TurnAlertConfig extends FormApplication {
             : game.i18n.localize(`${CONST.moduleName}.APP.TriggerAfterRounds`);
     }
 
-    _canRepeat(round, roundAbsolute) {
-        return round > 0 && !roundAbsolute;
+    _getExpireLabel(expireAbsolute) {
+        return expireAbsolute
+            ? game.i18n.localize(`${CONST.moduleName}.APP.RepeatExpireOn`)
+            : game.i18n.localize(`${CONST.moduleName}.APP.RepeatExpireAfter`);
     }
 
     _validRound(round, roundAbsolute, endOfTurn) {
@@ -170,19 +212,29 @@ export default class TurnAlertConfig extends FormApplication {
 
     /** @override */
     async _updateObject(event, formData) {
-        if (formData.roundAbsolute) delete formData.repeating;
-        if (this.object.topOfRound) delete formData.endOfTurn;
+        const whisperRecipients = $(".turn-alert-config #recipients option")
+            .get()
+            .map((option) => ({ selected: option.selected, id: option.value }));
 
-        formData.recipientIds = $(".turn-alert-config #recipients option")
-            .filter(function () {
-                return this.selected;
-            })
-            .map(function () {
-                return this.value;
-            })
-            .get();
+        const newData = {
+            round: formData.round,
+            roundAbsolute: formData.roundAbsolute,
+            repeating: formData.repeatingToggle
+                ? {
+                      frequency: formData.repeatFrequency,
+                      expire: formData.repeatExpire,
+                      expireAbsolute: formData.repeatExpireAbsolute,
+                  }
+                : null,
+            endOfTurn: !this.object.topOfRound && formData.endOfTurn,
+            message: formData.message,
+            recipientIds: whisperRecipients.every((r) => r.selected)
+                ? []
+                : whisperRecipients.filter((r) => r.selected).map((r) => r.id),
+            macro: formData.macro,
+        };
 
-        let finalData = mergeObject(this.object, formData);
+        let finalData = mergeObject(this.object, newData, { inplace: false });
 
         if (this.object.id) {
             TurnAlert.update(finalData);

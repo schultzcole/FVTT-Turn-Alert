@@ -31,14 +31,29 @@
                 <input type="checkbox" name="roundAbsolute" data-dtype="Boolean" {{checked object.roundAbsolute}}>
             </div>
 
+            {{log repeating}}
             <div class="form-group">
-                <label for="repeating">{{localize 'turnAlert.APP.Repeating'}}</label>
-                {{#if canRepeat}}
-                <input type="checkbox" id="repeating" name="repeating" data-dtype="Boolean"
-                    {{checked object.repeating}}>
-                {{else}}
-                <input type="checkbox" id="repeating" name="repeating" data-dtype="Boolean" disabled>
-                {{/if}}
+                <label for="repeatingToggle">{{localize 'turnAlert.APP.Repeating'}}</label>
+                <input type="checkbox" id="repeatingToggle" name="repeatingToggle" data-dtype="Boolean"
+                    {{checked repeating}}>
+            </div>
+
+            <div id="repeatingParams" class="indented" style="{{#unless repeating}}display:none{{/unless}}">
+                <div class="form-group">
+                    <label for="repeatFrequency">{{localize 'turnAlert.APP.RepeatFrequency'}}</label>
+                    <input id="frequency" type="text" name="repeatFrequency" value="{{object.repeating.frequency}}"
+                        data-dtype="Number">
+                </div>
+                <div class="form-group">
+                    <label id="expireLabel" for="repeatExpire">{{expireLabel}}</label>
+                    <input id="expire" type="text" name="repeatExpire" value="{{object.repeating.expire}}"
+                        data-dtype="Number">
+                </div>
+                <div class="form-group">
+                    <label for="repeatExpireAbsolute">{{localize 'turnAlert.APP.RepeatExpireAbsolute'}}</label>
+                    <input type="checkbox" name="repeatExpireAbsolute" value="{{object.repeating.expireAbsolute}}"
+                        data-dtype="Boolean">
+                </div>
             </div>
 
             {{#unless topOfRound}}
@@ -57,15 +72,17 @@
                 <textarea name="message"
                     placeholder="{{localize 'turnAlert.APP.ChatMessagePlaceholder'}}">{{object.message}}</textarea>
             </div>
-
-            <label for="recipients">{{localize 'turnAlert.APP.WhisperTo'}}</label>
-            <p class="notes">{{localize 'turnAlert.APP.WhisperToHint'}}</p>
-            <div class="form-group">
-                <select multiple id="recipients" name="recipients" size="{{userCount}}" class="self-height">
-                    {{#each users}}
-                    <option value="{{this.id}}">{{this.name}}</option>
-                    {{/each}}
-                </select>
+            <div style="margin-top: 5px;">
+                <label for="recipients"><i class="fas fa-user-secret"></i>
+                    {{localize 'turnAlert.APP.WhisperTo'}}</label>
+                <p class="notes">{{localize 'turnAlert.APP.WhisperToHint'}}</p>
+                <div class="form-group">
+                    <select multiple id="recipients" name="recipients" size="{{userCount}}" class="self-height">
+                        {{#each users}}
+                        <option value="{{this.id}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
             </div>
         </div>
 
