@@ -4,18 +4,21 @@ import { compareTurns } from "./utils.js";
 /**
  * Data structure schema:
  * {
- *     id: id string,                   // The 16 char (allegedly) unique ID for this alert.
- *     combatId: id string,             // The id of the combat that this turn alert belongs to
- *     createdRound: integer            // The combat round during which this alert was created
- *     round: integer,                  // The round that this turn alert will activate on
- *     turnId: id string | null,        // The id of the turn that this alert will activate on. If null, activates at the top of the round
- *     endOfTurn: true,                 // Whether the alert should trigger at the end of the turn, or beginning of the turn. Only used if turnId is not null.
- *     roundAbsolute: boolean,          // Whether the round number is absolute (i.e. the alert happens on round 5) or relative to the round during which the alert was created (i.e. the alert happens 5 rounds after creation)
- *     repeating: boolean,              // Whether this alert will repeat. If this alert triggers on an absolute round number (roundAbsolute is true), this is ignored!
- *     message: string,                 // The message to be displayed in chat when the alert is activated
- *     macro: string                    // The macro id or name to trigger when this alert is triggered
- *     userId: id string,               // The user that created this alert
- *     recipientIds: [user id strings]  // The users to whom the message should be whispered. If empty, the message is public
+ *     id: id string,                        // The 16 char (allegedly) unique ID for this alert
+ *     combatId: id string,                  // The id of the combat that this turn alert belongs to
+ *     createdRound: integer                 // The combat round during which this alert was created
+ *     round: integer,                       // The round that this turn alert will activate on
+ *     turnId: id string | null,             // The id of the turn that this alert will activate on. If null, activates at the top of the round
+ *     endOfTurn: true,                      // Whether the alert should trigger at the end of the turn, or beginning of the turn. Only used if turnId is not null
+ *     roundAbsolute: boolean,               // Whether the round number is absolute (i.e. the alert happens on round 5) or relative to the round during which the alert was created (i.e. the alert happens 5 rounds after creation)
+ *     repeating: object,                    // If null, the alert will not repeat
+ *     repeating.frequency: integer          // The number of rounds in a period before the alert triggers again
+ *     repeating.expire: integer             // The round number on which this repeating alert expires. If expireAbsolute is *false*, this will be relative to the initial trigger round of the alert. If zero or null, will not expire.
+ *     repeating.expireAbsolute: boolean     // Whether the expire round is absolute or not
+ *     message: string,                      // The message to be displayed in chat when the alert is activated
+ *     macro: string                         // The macro id or name to trigger when this alert is triggered
+ *     userId: id string,                    // The user that created this alert
+ *     recipientIds: [user id strings]       // The users to whom the message should be whispered. If empty, the message is public
  * }
  */
 
@@ -29,11 +32,19 @@ export default class TurnAlert {
             turnId: null,
             endOfTurn: false,
             roundAbsolute: false,
-            repeating: false,
+            repeating: null,
             message: "",
             macro: null,
             userId: null,
             recipientIds: null,
+        };
+    }
+
+    static get defaultRepeatingData() {
+        return {
+            frequency: 1,
+            expire: null,
+            expireAbsolute: false,
         };
     }
 
@@ -135,18 +146,21 @@ export default class TurnAlert {
      * Creates a new turn alert with the given data.
      * This function creates the alert in the database by attaching the alert data
      * to the combat with the id provided as the combatId in the alert data.
-     * @param {Object} data                           The alert data to add.
-     * @param {id string} data.combatId               The id of the combat that this turn alert belongs to
-     * @param {integer} data.createdRound             The combat round during which this alert was created
-     * @param {integer} data.round                    The round that this turn alert will activate on
-     * @param {id string} data.turnId                 The id of the turn that this alert will activate on. If null, activates at the top of the round
-     * @param {boolean} data.endOfTurn                Whether the alert should trigger at the end of the turn, or beginning of the turn. Only used if turnId is not null.
-     * @param {boolean} data.roundAbsolute            Whether the round number is absolute (i.e. the alert happens on round 5) or relative to the round during which the alert was created (i.e. the alert happens 5 rounds after creation)
-     * @param {boolean} data.repeating                Whether this alert will repeat. If this alert triggers on an absolute round number (roundAbsolute is true), this is ignored!
-     * @param {string} data.message                   The message to be displayed in chat when the alert is activated
-     * @param {string} data.macro                     The macro id or name to trigger when this alert is triggered
-     * @param {id string} data.userId                 The user that created this alert
-     * @param {Array(id string)} data.recipientIds    The users to whom the message should be whispered. If empty, the message is public
+     * @param {Object} data                             The alert data to add.
+     * @param {id string} data.combatId                 The id of the combat that this turn alert belongs to
+     * @param {integer} data.createdRound               The combat round during which this alert was created
+     * @param {integer} data.round                      The round that this turn alert will activate on
+     * @param {id string} data.turnId                   The id of the turn that this alert will activate on. If null, activates at the top of the round
+     * @param {boolean} data.endOfTurn                  Whether the alert should trigger at the end of the turn, or beginning of the turn. Only used if turnId is not null.
+     * @param {boolean} data.roundAbsolute              Whether the round number is absolute (i.e. the alert happens on round 5) or relative to the round during which the alert was created (i.e. the alert happens 5 rounds after creation)
+     * @param {Object} data.repeating                   If null, the alert will not repeat
+     * @param {integer} data.repeating.frequency        The number of rounds in a period before the alert triggers again
+     * @param {integer} data.repeating.expire           The round number on which this repeating alert expires. If expireAbsolute is *false*, this will be relative to the initial trigger round of the alert.
+     * @param {boolean} data.repeating.expireAbsolute   Whether the expire round is absolute or relative
+     * @param {string} data.message                     The message to be displayed in chat when the alert is activated
+     * @param {string} data.macro                       The macro id or name to trigger when this alert is triggered
+     * @param {id string} data.userId                   The user that created this alert
+     * @param {Array(id string)} data.recipientIds      The users to whom the message should be whispered. If empty, the message is public
      */
     static async create(data) {
         const combat = game.combats.get(data.combatId);
@@ -155,6 +169,9 @@ export default class TurnAlert {
         }
 
         const alertData = mergeObject(this.prototype.constructor.defaultData, data);
+        if (alertData.repeating) {
+            alertData.repeating = mergeObject(this.prototype.constructor.defaultRepeatingData, alertData.repeating);
+        }
 
         const id = randomID(16);
         alertData.id = id;
@@ -200,6 +217,10 @@ export default class TurnAlert {
             throw new Error(
                 `Cannot update alert ${data.id} in combat ${data.combatId} because that alert doesn't already exist in that combat.`
             );
+        }
+
+        if (data.repeating) {
+            data.repeating = mergeObject(this.prototype.constructor.defaultRepeatingData, data.repeating);
         }
 
         alerts[data.id] = mergeObject(existingData, data);
