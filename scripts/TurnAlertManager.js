@@ -75,7 +75,7 @@ export default class TurnAlertManager {
     viewAlertsForCombat(combatId) {
         if (!combatId) combatId = game.combat?.data?._id;
         if (!combatId) {
-            ui.notifications.warn(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotViewCombat.NoCombat`));
+            ui.notifications.warn(game.i18n.localize(`${CONST.moduleName}.ERROR.CannotViewCombatAlert.NoCombat`));
             return;
         }
         const app = new CombatAlertsApplication({ combatId });
