@@ -98,12 +98,32 @@ export default class TurnAlert {
     }
 
     /** checks whether a given alert is expired given the current round and turn */
-    static checkExpired = (alert, currentRound, currentTurn) => false;
+    static checkExpired(alert, currentRound, currentTurn, previousRound, previousTurn) {
+        let triggerRound,
+            triggerTurn = 0;
 
-    /** checks how a given alert's trigger compares to the current round and turn based on a given comparison function */
-    static _checkTurn(cmp, alert, currentRound, currentTurn) {
-        const { round, turn } = TurnAlert.getNextTriggerTurn(alert, currentRound, currentTurn);
-        return cmp(compareTurns(round, turn, currentRound, currentTurn), 0);
+        if (alert.endOfTurn) {
+            triggerRound = previousRound;
+            triggerTurn = previousTurn;
+        } else {
+            triggerRound = currentRound;
+            triggerTurn = currentTurn;
+        }
+
+        let round,
+            turn = 0;
+        if (alert.repeating) {
+            const initialRound = alert.roundAbsolute ? alert.round : alert.createdRound + alert.round;
+            round = alert.repeating.expireAbsolute
+                ? alert.repeating.expire
+                : initialRound + (alert.repeating.expire || Infinity);
+            turn = TurnAlert.getTurnIndex(alert);
+        } else {
+            const nextTrigger = TurnAlert.getNextTriggerTurn(alert, triggerRound, triggerTurn);
+            round = nextTrigger.round;
+            turn = nextTrigger.turn;
+        }
+        return compareTurns(round, turn, triggerRound, triggerTurn) <= 0;
     }
 
     static async execute(alert) {

@@ -133,9 +133,6 @@ export default class TurnAlertConfig extends FormApplication {
             formRepeatParams.expire = formRepeatParams.expireAbsolute
                 ? triggerRoundAbs + formRepeatParams.expire // expire round was previously relative
                 : formRepeatParams.expire - triggerRoundAbs; // expire round was previously absolute
-        } else if (formRepeatParams.expireAbsolute) {
-            const prevDelta = prevExpireAbsolute - prevRoundAbsolute;
-            formRepeatParams.expire = formRound + prevDelta;
         }
 
         this._expireAbsolute = formRepeatParams.expireAbsolute;
