@@ -51,7 +51,8 @@
                     </span>
 
                     {{#if this.repeating}}
-                    <span class="tag repeating">{{this.repeatString}}</span>
+                    <span class="tag repeating" title="{{this.repeatString}}"><i class="fas fa-redo-alt"></i>
+                        {{this.repeating.frequency}}</span>
                     {{/if}}
 
                     {{#if this.macroName}}
