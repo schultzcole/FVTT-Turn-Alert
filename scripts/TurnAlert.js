@@ -72,7 +72,8 @@ export default class TurnAlert {
             } else {
                 const roundDelta = currentRound - initialRound;
                 const cyclesBeyondInitial = Math.ceil(roundDelta / alert.repeating.frequency);
-                return cyclesBeyondInitial * alert.repeating.frequency + initialRound;
+                const round = cyclesBeyondInitial * alert.repeating.frequency + initialRound;
+                return currentRound == round && alertTurn < currentTurn ? round + alert.repeating.frequency : round;
             }
         } else {
             return initialRound;
