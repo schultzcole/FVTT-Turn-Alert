@@ -1,15 +1,5 @@
 # CHANGELOG
 
-## [VERSION] ISO DATE
+## [1.0.0] 2020-07-26
 
-### ADDED
-
-### REMOVED
-
-### CHANGED
-
-### FIXED
-
-### DEPRECATED
-
-### SECURITY
+The initial release of Turn Alert!
