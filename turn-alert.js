@@ -17,7 +17,7 @@ Hooks.on("init", () => {
 Hooks.on("preUpdateCombat", handleUpdateCombat);
 
 Hooks.on("renderCombatTracker", (tracker, html, data) => {
-    if (!data.combat.data.round) return;
+    if (!data.combat?.data?.round) return;
     if (!game.user.isGM) return;
 
     const alertButton = $(document.createElement("a"));
