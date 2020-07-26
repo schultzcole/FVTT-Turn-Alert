@@ -46,17 +46,20 @@ This button is available to GMs only.
 The Turn Alert Configuration dialog is where you will create new alerts and update existing ones.
 It provides mechanisms to specify what round of combat an alert should trigger on, as well as what should happen when it is triggered.
 
-![Turn Alert Configuration dialog for a turn](https://f002.backblazeb2.com/file/cws-images/FVTT-Turn-Alert/turn_alert.webp)
+![Turn Alert Configuration dialog for a turn](https://f002.backblazeb2.com/file/cws-images/FVTT-Turn-Alert/turn_alert_2.webp)
 
-- **Trigger on round:** here you can specify what round the alert will trigger on.
-If **Absolute round number** is *unchecked*, this box will specify the number of rounds after the current one before the alert will be triggered.  
+- **Trigger round:** here you can specify what round the alert will trigger on.
+If **Absolute round number** is *unchecked*, the alert will trigger this many rounds after the current round.  
 For instance, when **Absolute round number** is *checked*, entering "5" will cause the alert to be triggered *on round 5*.
 However when **Absolute round number** is *unchecked*, entering "5" will cause the alert to be triggered *5 rounds after the current round*.
 - **Absolute round number:** determines whether the round number entered above is considered *absolute*, or *relative* to the current round.
 - **Repeating:** determines whether the alert should repeat even after being triggered.
-This option is only available when using a *relative* round number, and that round number is greater than zero.
-The alert will trigger on a cycle determined by the round number explained above.
-If "1" is entered, it will trigger every round starting next round, whereas if "3" is entered, it will trigger every 3 rounds, starting 3 rounds after the current round.
+  - **Repeat frequency:** determines how often the repeating alert should trigger, in rounds.
+  - **Expiration round:** determines what round a repeating alert will expire on, if any.
+  When this is zero, the repeating alert will never expire.
+  If **Absolute expiration round number** is *checked*, the alert will expire on exactly the round number entered here.
+  If it is *unchecked*, the alert will expire this many rounds after the initial **Trigger round**, specified above.
+  - **Absolute expiration round number:** specifies whether the expiration round is *absolute*, or *relative* to the initial trigger round of the alert.
 - **Trigger at end of turn:** determines whether the alert triggers at the start of this combatant's turn or the end of this combatant's turn.
 
 ---
