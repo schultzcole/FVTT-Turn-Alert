@@ -223,7 +223,9 @@ export default class TurnAlert {
 
         combatAlerts[id] = alertData;
 
-        return combat.update({ [`flags.${CONST.moduleName}.alerts`]: combatAlerts });
+        return combat
+            .update({ [`flags.${CONST.moduleName}.alerts`]: combatAlerts })
+            .then(() => console.log(`Turn Alert | Created Alert ${id} on combat ${data.combatId}`));
     }
 
     /**
@@ -260,7 +262,9 @@ export default class TurnAlert {
         alerts[data.id] = mergeObject(existingData, data);
 
         await combat.unsetFlag(CONST.moduleName, "alerts");
-        combat.setFlag(CONST.moduleName, "alerts", alerts);
+        return combat
+            .setFlag(CONST.moduleName, "alerts", alerts)
+            .then(() => console.log(`Turn Alert | Updated Alert ${data.id} on combat ${data.combatId}`));
     }
 
     /**
@@ -284,6 +288,8 @@ export default class TurnAlert {
         delete alerts[alertId];
 
         await combat.unsetFlag(CONST.moduleName, "alerts");
-        combat.setFlag(CONST.moduleName, "alerts", alerts);
+        return combat
+            .setFlag(CONST.moduleName, "alerts", alerts)
+            .then(() => console.log(`Turn Alert | Deleted Alert ${alertId} on combat ${combatId}`));
     }
 }

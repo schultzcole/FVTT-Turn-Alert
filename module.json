@@ -17,6 +17,7 @@
     "styles": [
         "styles/turn-alert-style.css"
     ],
+    "socket": true,
     "minimumCoreVersion": "0.6.4",
     "compatibleCoreVersion": "0.6.5",
     "url": "https://github.com/schultzcole/FVTT-Turn-Alert",

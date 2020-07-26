@@ -238,9 +238,23 @@ export default class TurnAlertConfig extends FormApplication {
         let finalData = mergeObject(this.object, newData, { inplace: false });
 
         if (this.object.id) {
-            TurnAlert.update(finalData);
+            if (this.combat.can(game.user, "update")) {
+                await TurnAlert.update(finalData);
+            } else {
+                console.log(
+                    `Turn Alert | User ${game.userId} does not have permission to edit combat ${finalData.combatId}; sending updateAlert request...`
+                );
+                game.socket.emit(`module.${CONST.moduleName}`, { type: "updateAlert", alertData: finalData });
+            }
         } else {
-            TurnAlert.create(finalData);
+            if (this.combat.can(game.user, "create")) {
+                await TurnAlert.create(finalData);
+            } else {
+                console.log(
+                    `Turn Alert | User ${game.userId} does not have permission to edit combat ${finalData.combatId}; sending createAlert request...`
+                );
+                game.socket.emit(`module.${CONST.moduleName}`, { type: "createAlert", alertData: finalData });
+            }
         }
     }
 }

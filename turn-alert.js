@@ -6,12 +6,32 @@ import {
 import handleUpdateCombat from "./scripts/handleUpdateCombat.js";
 import CONST from "./scripts/const.js";
 import CombatAlertsApplication from "./apps/CombatAlertsApplication.js";
+import TurnAlert from "./scripts/TurnAlert.js";
 
 Hooks.on("init", () => {
     game.TurnAlertManager = new TurnAlertManager();
 
     patch_CombatTracker_activateListeners();
     patch_CombatTracker_getEntryContextOptions();
+
+    game.socket.on(`module.${CONST.moduleName}`, async (payload) => {
+        const firstGm = game.users.find((u) => u.isGM && u.active);
+        switch (payload.type) {
+            case "createAlert":
+                if (firstGm && game.user !== firstGm) break;
+                await TurnAlert.create(payload.alertData);
+                break;
+            case "updateAlert":
+                if (firstGm && game.user !== firstGm) break;
+                await TurnAlert.update(payload.alertData);
+                break;
+            default:
+                throw new Error(
+                    `Unknown socket payload type: ${payload.type} | payload contents:\n${JSON.stringify(payload)}`
+                );
+                break;
+        }
+    });
 });
 
 Hooks.on("preUpdateCombat", handleUpdateCombat);
