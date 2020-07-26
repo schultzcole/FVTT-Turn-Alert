@@ -91,7 +91,7 @@ Other than that, it should behave the same way.
 
 The combat alerts window is where you can view, add, edit, or delete alerts for the current combat.
 
-![The Combat Alerts window](https://f002.backblazeb2.com/file/cws-images/FVTT-Turn-Alert/combat_alerts.webp)
+![The Combat Alerts window](https://f002.backblazeb2.com/file/cws-images/FVTT-Turn-Alert/combat_alerts_2.webp)
 
 - **Current Turn Information:** for convenience, the current round, turn, and initiative are displayed in the top left corner of this window.
 - **Delete All Alerts:** this button deletes all alerts in the current combat.
@@ -104,12 +104,12 @@ The "+" button opens the Turn Alert Configuration dialog to create an alert for 
     - **Round indicator:** displays the round that this alert will trigger on, as well as an hourglass icon which indicates whether the alert will trigger at the start or end of the turn.
     Hovering your cursor over this indicator will give a more verbose explanation of alert's trigger.  
     For repeating alerts, this will display the next round that the alert will trigger on.  
-    An example of the hourglass icon indicating the end of the round can be seen on Olive's turn in the image above.
+    An example of the hourglass icon indicating the end of the round can be seen on the Dire Wolf's turn in the image above.
     - **Repeating indicator:** indicates that this alert repeats, as well as how frequently it repeats.  
-    An example of this indicator can be seen on the Dire Wolf's turn in the image above.
+    An example of this indicator can be seen on the Wolf's and Dire Wolf's turns in the image above.
     - **Macro indicator:** indicates that a macro is set to execute when this alert triggers.
     Hovering your cursor over this tag will give the name of the macro that will execute.  
-    An example of this indicator can be seen on Renee's turn in the image above.
+    An example of this indicator can be seen on the Wolf's turn in the image above.
   - **Chat Message:** shows a truncated version of the chat message that will be sent when the alert is triggered.
   If the chat message is too long to be displayed here, you can edit the alert to read the full message.
   - **Edit Alert Button:** pulls up the Turn Alert Configuration dialog so that you can view the full details, edit, and save the alert.
