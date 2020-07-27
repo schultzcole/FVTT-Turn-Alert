@@ -171,6 +171,7 @@ export default class TurnAlert {
                 eval(macro.data.command);
             } catch (err) {
                 ui.notifications.error(`There was an error in your macro syntax. See the console (F12) for details`);
+                console.error(`Encountered an error while evaluating the macro for alert "${alert.id}:"`);
                 console.error(err);
             }
         }
