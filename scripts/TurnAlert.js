@@ -229,9 +229,9 @@ export default class TurnAlert {
                 .then(() => console.log(`Turn Alert | Created Alert ${id} on combat ${data.combatId}`));
         } else {
             console.log(
-                `Turn Alert | User ${game.userId} does not have permission to edit combat ${finalData.combatId}; sending updateAlert request...`
+                `Turn Alert | User ${game.userId} does not have permission to edit combat ${data.combatId}; sending createAlert request...`
             );
-            game.socket.emit(`module.${CONST.moduleName}`, { type: "updateAlert", alertData: finalData });
+            game.socket.emit(`module.${CONST.moduleName}`, { type: "createAlert", alertData: data });
         }
     }
 
@@ -275,9 +275,9 @@ export default class TurnAlert {
                 .then(() => console.log(`Turn Alert | Updated Alert ${data.id} on combat ${data.combatId}`));
         } else {
             console.log(
-                `Turn Alert | User ${game.userId} does not have permission to edit combat ${finalData.combatId}; sending updateAlert request...`
+                `Turn Alert | User ${game.userId} does not have permission to edit combat ${data.combatId}; sending updateAlert request...`
             );
-            game.socket.emit(`module.${CONST.moduleName}`, { type: "updateAlert", alertData: finalData });
+            game.socket.emit(`module.${CONST.moduleName}`, { type: "updateAlert", alertData: data });
         }
     }
 
@@ -310,7 +310,7 @@ export default class TurnAlert {
             console.log(
                 `Turn Alert | User ${game.userId} does not have permission to edit combat ${finalData.combatId}; sending updateAlert request...`
             );
-            game.socket.emit(`module.${CONST.moduleName}`, { type: "updateAlert", alertData: finalData });
+            game.socket.emit(`module.${CONST.moduleName}`, { type: "deleteAlert", combatId, alertId });
         }
     }
 }
