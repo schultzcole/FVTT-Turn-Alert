@@ -2,7 +2,7 @@ import {
     patch_CombatTracker_getEntryContextOptions,
     patch_CombatTracker_activateListeners,
 } from "./scripts/patches.js";
-import handleUpdateCombat from "./scripts/handleUpdateCombat.js";
+import { handlePreUpdateCombat, handleUpdateCombat } from "./scripts/handleUpdateCombat.js";
 import CONST from "./scripts/const.js";
 import CombatAlertsApplication from "./apps/CombatAlertsApplication.js";
 import TurnAlert from "./scripts/TurnAlert.js";
@@ -35,7 +35,8 @@ Hooks.on("init", () => {
     });
 });
 
-Hooks.on("preUpdateCombat", handleUpdateCombat);
+Hooks.on("preUpdateCombat", handlePreUpdateCombat);
+Hooks.on("updateCombat", handleUpdateCombat);
 
 Hooks.on("renderCombatTracker", (tracker, html, data) => {
     if (!data.combat?.data?.round) return;

@@ -2,22 +2,30 @@ import CONST from "./const.js";
 import TurnAlert from "./TurnAlert.js";
 import { compareTurns } from "./utils.js";
 
-export default async function handleUpdateCombat(combat, changed, options, userId) {
+export async function handlePreUpdateCombat(combat, changed, options, userId) {
+    if (!("round" in changed || "turn" in changed) || !combat.turns?.length) {
+        return true;
+    }
+
+    options.prevRound = combat.data.round;
+    options.prevTurn = combat.data.turn;
+}
+
+export async function handleUpdateCombat(combat, changed, options, userId) {
     if (!("round" in changed || "turn" in changed) || !combat.turns?.length) {
         return;
     }
 
     let alerts = combat.getFlag(CONST.moduleName, "alerts");
-    if (!alerts) return true; // allow the update, but quit the handler early
+    if (!alerts) return; // allow the update, but quit the handler early
     alerts = duplicate(alerts);
 
-    const oldCombatData = game.combats.get(combat.data._id).data;
-    const prevRound = oldCombatData.round;
-    const prevTurn = oldCombatData.turn;
+    const prevRound = options.prevRound;
+    const prevTurn = options.prevTurn;
     const nextRound = "round" in changed ? changed.round : prevRound;
     const nextTurn = "turn" in changed ? changed.turn : prevTurn;
 
-    if (compareTurns(prevRound, prevTurn, nextRound, nextTurn) > 0) return true; // allow the update, but quit the handler early
+    if (compareTurns(prevRound, prevTurn, nextRound, nextTurn) > 0) return; // allow the update, but quit the handler early
 
     let anyDeleted = false;
     for (let id in alerts) {
@@ -37,9 +45,7 @@ export default async function handleUpdateCombat(combat, changed, options, userI
     if (firstGm && game.user === firstGm && anyDeleted) {
         await combat.unsetFlag(CONST.moduleName, "alerts");
         if (Object.keys(alerts).length > 0) {
-            return combat.setFlag(CONST.moduleName, "alerts", alerts);
+            combat.setFlag(CONST.moduleName, "alerts", alerts);
         }
     }
-
-    return true;
 }
