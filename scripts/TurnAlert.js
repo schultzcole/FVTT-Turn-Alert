@@ -223,9 +223,16 @@ export default class TurnAlert {
 
         combatAlerts[id] = alertData;
 
-        return combat
-            .update({ [`flags.${CONST.moduleName}.alerts`]: combatAlerts })
-            .then(() => console.log(`Turn Alert | Created Alert ${id} on combat ${data.combatId}`));
+        if (combat.can(game.user, "update")) {
+            return combat
+                .update({ [`flags.${CONST.moduleName}.alerts`]: combatAlerts })
+                .then(() => console.log(`Turn Alert | Created Alert ${id} on combat ${data.combatId}`));
+        } else {
+            console.log(
+                `Turn Alert | User ${game.userId} does not have permission to edit combat ${finalData.combatId}; sending updateAlert request...`
+            );
+            game.socket.emit(`module.${CONST.moduleName}`, { type: "updateAlert", alertData: finalData });
+        }
     }
 
     /**
@@ -261,10 +268,17 @@ export default class TurnAlert {
 
         alerts[data.id] = mergeObject(existingData, data);
 
-        await combat.unsetFlag(CONST.moduleName, "alerts");
-        return combat
-            .setFlag(CONST.moduleName, "alerts", alerts)
-            .then(() => console.log(`Turn Alert | Updated Alert ${data.id} on combat ${data.combatId}`));
+        if (combat.can(game.user, "update")) {
+            await combat.unsetFlag(CONST.moduleName, "alerts");
+            return combat
+                .setFlag(CONST.moduleName, "alerts", alerts)
+                .then(() => console.log(`Turn Alert | Updated Alert ${data.id} on combat ${data.combatId}`));
+        } else {
+            console.log(
+                `Turn Alert | User ${game.userId} does not have permission to edit combat ${finalData.combatId}; sending updateAlert request...`
+            );
+            game.socket.emit(`module.${CONST.moduleName}`, { type: "updateAlert", alertData: finalData });
+        }
     }
 
     /**
@@ -287,9 +301,16 @@ export default class TurnAlert {
 
         delete alerts[alertId];
 
-        await combat.unsetFlag(CONST.moduleName, "alerts");
-        return combat
-            .setFlag(CONST.moduleName, "alerts", alerts)
-            .then(() => console.log(`Turn Alert | Deleted Alert ${alertId} on combat ${combatId}`));
+        if (combat.can(game.user, "update")) {
+            await combat.unsetFlag(CONST.moduleName, "alerts");
+            return combat
+                .setFlag(CONST.moduleName, "alerts", alerts)
+                .then(() => console.log(`Turn Alert | Deleted Alert ${alertId} on combat ${combatId}`));
+        } else {
+            console.log(
+                `Turn Alert | User ${game.userId} does not have permission to edit combat ${finalData.combatId}; sending updateAlert request...`
+            );
+            game.socket.emit(`module.${CONST.moduleName}`, { type: "updateAlert", alertData: finalData });
+        }
     }
 }

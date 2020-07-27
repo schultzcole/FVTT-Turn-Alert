@@ -1,4 +1,3 @@
-import TurnAlertManager from "./scripts/TurnAlertManager.js";
 import {
     patch_CombatTracker_getEntryContextOptions,
     patch_CombatTracker_activateListeners,
@@ -7,9 +6,11 @@ import handleUpdateCombat from "./scripts/handleUpdateCombat.js";
 import CONST from "./scripts/const.js";
 import CombatAlertsApplication from "./apps/CombatAlertsApplication.js";
 import TurnAlert from "./scripts/TurnAlert.js";
+import TurnAlertConfig from "./apps/TurnAlertConfig.js";
 
 Hooks.on("init", () => {
-    game.TurnAlertManager = new TurnAlertManager();
+    globalThis.TurnAlert = TurnAlert;
+    globalThis.TurnAlertConfig = TurnAlertConfig;
 
     patch_CombatTracker_activateListeners();
     patch_CombatTracker_getEntryContextOptions();
