@@ -19,16 +19,21 @@ Hooks.on("init", () => {
         const firstGm = game.users.find((u) => u.isGM && u.active);
         switch (payload.type) {
             case "createAlert":
-                if (firstGm && game.user !== firstGm) break;
+                if (!firstGm || game.user !== firstGm) break;
                 await TurnAlert.create(payload.alertData);
                 break;
             case "updateAlert":
-                if (firstGm && game.user !== firstGm) break;
+                if (!firstGm || game.user !== firstGm) break;
                 await TurnAlert.update(payload.alertData);
                 break;
+            case "deleteAlert":
+                if (!firstGm || game.user !== firstGm) break;
+                await TurnAlert.delete(payload.combatId, payload.alertId);
             default:
                 throw new Error(
-                    `Unknown socket payload type: ${payload.type} | payload contents:\n${JSON.stringify(payload)}`
+                    `Turn Alert | Unknown socket payload type: ${payload.type} | payload contents:\n${JSON.stringify(
+                        payload
+                    )}`
                 );
                 break;
         }
