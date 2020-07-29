@@ -198,23 +198,24 @@ export default class TurnAlert {
      * @param {id string} data.userId                   The user that created this alert
      */
     static async create(data) {
-        const combat = game.combats.get(data.combatId);
-        if (!combat) {
-            throw new Error(`Invalid combat id provided, cannot add alert to combat: ${data.combatId}`);
+        const defaultData = TurnAlert.defaultData;
+        const alertData = mergeObject(defaultData, data);
+        if (alertData.repeating) {
+            alertData.repeating = mergeObject(TurnAlert.defaultRepeatingData, alertData.repeating);
         }
 
-        if (data.turnId !== null && TurnAlert.getTurnIndex(data) === -1) {
+        const combat = game.combats.get(alertData.combatId);
+        if (!combat) {
+            throw new Error(`Invalid combat id provided, cannot add alert to combat: ${alertData.combatId}`);
+        }
+
+        if (alertData.turnId !== null && TurnAlert.getTurnIndex(alertData) === -1) {
             throw new Error(
-                `The provided turnId ("${data.turnId}") does not match any combatants in combat ${data.combatId}`
+                `The provided turnId ("${alertData.turnId}") does not match any combatants in combat "${alertData.combatId}"`
             );
         }
 
         if (combat.can(game.user, "update")) {
-            const alertData = mergeObject(TurnAlert.defaultData, data);
-            if (alertData.repeating) {
-                alertData.repeating = mergeObject(TurnAlert.defaultRepeatingData, alertData.repeating);
-            }
-
             const id = randomID(16);
             alertData.id = id;
 
@@ -225,10 +226,10 @@ export default class TurnAlert {
 
             return combat
                 .update({ [`flags.${CONST.moduleName}.alerts`]: combatAlerts })
-                .then(() => console.log(`Turn Alert | Created Alert ${id} on combat ${data.combatId}`));
+                .then(() => console.log(`Turn Alert | Created Alert ${id} on combat ${alertData.combatId}`));
         } else {
             console.log(
-                `Turn Alert | User ${game.userId} does not have permission to edit combat ${data.combatId}; sending createAlert request...`
+                `Turn Alert | User ${game.userId} does not have permission to edit combat ${alertData.combatId}; sending createAlert request...`
             );
             game.socket.emit(`module.${CONST.moduleName}`, { type: "createAlert", alertData: data });
         }
