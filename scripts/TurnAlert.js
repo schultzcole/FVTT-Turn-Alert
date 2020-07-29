@@ -36,7 +36,7 @@ export default class TurnAlert {
             message: "",
             macro: null,
             userId: null,
-            recipientIds: null,
+            recipientIds: [],
         };
     }
 
