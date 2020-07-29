@@ -217,14 +217,12 @@ export default class TurnAlert {
             );
         }
 
-        let combatAlerts = combat.getFlag(CONST.moduleName, "alerts");
-
-        if (!combatAlerts) combatAlerts = {};
-        else combatAlerts = duplicate(combatAlerts);
-
-        combatAlerts[id] = alertData;
-
         if (combat.can(game.user, "update")) {
+            let combatAlerts = combat.getFlag(CONST.moduleName, "alerts");
+            if (!combatAlerts) combatAlerts = {};
+            else combatAlerts = duplicate(combatAlerts);
+            combatAlerts[id] = alertData;
+
             return combat
                 .update({ [`flags.${CONST.moduleName}.alerts`]: combatAlerts })
                 .then(() => console.log(`Turn Alert | Created Alert ${id} on combat ${data.combatId}`));
@@ -254,22 +252,22 @@ export default class TurnAlert {
             throw new Error(`The combat "${data.combatID}" does not exist.`);
         }
 
-        const alerts = combat.getFlag(CONST.moduleName, "alerts");
-        const existingData = getProperty(alerts, data.id);
-
-        if (!existingData) {
-            throw new Error(
-                `Cannot update alert ${data.id} in combat ${data.combatId} because that alert doesn't already exist in that combat.`
-            );
-        }
-
         if (data.repeating) {
             data.repeating = mergeObject(this.prototype.constructor.defaultRepeatingData, data.repeating);
         }
 
-        alerts[data.id] = mergeObject(existingData, data);
-
         if (combat.can(game.user, "update")) {
+            const alerts = combat.getFlag(CONST.moduleName, "alerts");
+            const existingData = getProperty(alerts, data.id);
+
+            if (!existingData) {
+                throw new Error(
+                    `Cannot update alert ${data.id} in combat ${data.combatId} because that alert doesn't already exist in that combat.`
+                );
+            }
+
+            alerts[data.id] = mergeObject(existingData, data);
+
             await combat.unsetFlag(CONST.moduleName, "alerts");
             return combat
                 .setFlag(CONST.moduleName, "alerts", alerts)
@@ -294,15 +292,15 @@ export default class TurnAlert {
             throw new Error(`The combat "${data.combatID}" does not exist.`);
         }
 
-        const alerts = combat.getFlag(CONST.moduleName, "alerts") || {};
-
-        if (!(alertId in alerts)) {
-            throw new Error(`The alert "${alertId}" does not exist in combat "${combatId}".`);
-        }
-
-        delete alerts[alertId];
-
         if (combat.can(game.user, "update")) {
+            const alerts = combat.getFlag(CONST.moduleName, "alerts") || {};
+
+            if (!(alertId in alerts)) {
+                throw new Error(`The alert "${alertId}" does not exist in combat "${combatId}".`);
+            }
+
+            delete alerts[alertId];
+
             await combat.unsetFlag(CONST.moduleName, "alerts");
             return combat
                 .setFlag(CONST.moduleName, "alerts", alerts)
