@@ -203,14 +203,6 @@ export default class TurnAlert {
             throw new Error(`Invalid combat id provided, cannot add alert to combat: ${data.combatId}`);
         }
 
-        const alertData = mergeObject(TurnAlert.defaultData, data);
-        if (alertData.repeating) {
-            alertData.repeating = mergeObject(TurnAlert.defaultRepeatingData, alertData.repeating);
-        }
-
-        const id = randomID(16);
-        alertData.id = id;
-
         if (data.turnId !== null && TurnAlert.getTurnIndex(data) === -1) {
             throw new Error(
                 `The provided turnId ("${data.turnId}") does not match any combatants in combat ${data.combatId}`
@@ -218,6 +210,14 @@ export default class TurnAlert {
         }
 
         if (combat.can(game.user, "update")) {
+            const alertData = mergeObject(TurnAlert.defaultData, data);
+            if (alertData.repeating) {
+                alertData.repeating = mergeObject(TurnAlert.defaultRepeatingData, alertData.repeating);
+            }
+
+            const id = randomID(16);
+            alertData.id = id;
+
             let combatAlerts = combat.getFlag(CONST.moduleName, "alerts");
             if (!combatAlerts) combatAlerts = {};
             else combatAlerts = duplicate(combatAlerts);
@@ -252,18 +252,18 @@ export default class TurnAlert {
             throw new Error(`The combat "${data.combatID}" does not exist.`);
         }
 
-        if (data.repeating) {
-            data.repeating = mergeObject(this.prototype.constructor.defaultRepeatingData, data.repeating);
+        const alerts = combat.getFlag(CONST.moduleName, "alerts");
+        const existingData = getProperty(alerts, data.id);
+
+        if (!existingData) {
+            throw new Error(
+                `Cannot update alert ${data.id} in combat ${data.combatId} because that alert doesn't already exist in that combat.`
+            );
         }
 
         if (combat.can(game.user, "update")) {
-            const alerts = combat.getFlag(CONST.moduleName, "alerts");
-            const existingData = getProperty(alerts, data.id);
-
-            if (!existingData) {
-                throw new Error(
-                    `Cannot update alert ${data.id} in combat ${data.combatId} because that alert doesn't already exist in that combat.`
-                );
+            if (data.repeating) {
+                data.repeating = mergeObject(this.prototype.constructor.defaultRepeatingData, data.repeating);
             }
 
             alerts[data.id] = mergeObject(existingData, data);
