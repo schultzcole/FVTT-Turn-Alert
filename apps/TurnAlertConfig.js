@@ -7,6 +7,11 @@ import TurnAlert from "../scripts/TurnAlert.js";
  */
 export default class TurnAlertConfig extends FormApplication {
     constructor(data, options) {
+        data = mergeObject(TurnAlert.defaultData, data);
+        if (data.repeating) {
+            data.repeating = mergeObject(TurnAlert.defaultRepeatingData, data.repeating);
+        }
+
         super(data, options);
 
         if (!game.combats.has(data.combatId)) {
