@@ -203,9 +203,9 @@ export default class TurnAlert {
             throw new Error(`Invalid combat id provided, cannot add alert to combat: ${data.combatId}`);
         }
 
-        const alertData = mergeObject(this.prototype.constructor.defaultData, data);
+        const alertData = mergeObject(TurnAlert.defaultData, data);
         if (alertData.repeating) {
-            alertData.repeating = mergeObject(this.prototype.constructor.defaultRepeatingData, alertData.repeating);
+            alertData.repeating = mergeObject(TurnAlert.defaultRepeatingData, alertData.repeating);
         }
 
         const id = randomID(16);
