@@ -132,7 +132,6 @@ export default class CombatAlertsApplication extends Application {
                 createdRound: this._combat.data.round,
                 round: 1,
                 turnId: event.currentTarget.dataset.turnid || null,
-                userId: game.userId,
             };
             new TurnAlertConfig(alertData, {}).render(true);
         });

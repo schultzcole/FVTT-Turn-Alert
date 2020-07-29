@@ -31,11 +31,8 @@ export function patch_CombatTracker_getEntryContextOptions() {
             },
             callback: (li) => {
                 const alertData = {
-                    combatId: this.combat.data._id,
-                    createdRound: this.combat.data.round,
                     round: 1,
                     turnId: li.data("combatant-id"),
-                    userId: game.userId,
                 };
                 new TurnAlertConfig(alertData, {}).render(true);
             },
