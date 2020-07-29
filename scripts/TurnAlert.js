@@ -26,8 +26,8 @@ export default class TurnAlert {
     static get defaultData() {
         return {
             id: null,
-            combatId: null,
-            createdRound: 0,
+            combatId: game.combat.data._id,
+            createdRound: game.combat.data.round,
             round: 0,
             turnId: null,
             endOfTurn: false,
@@ -35,7 +35,7 @@ export default class TurnAlert {
             repeating: null,
             message: "",
             macro: null,
-            userId: null,
+            userId: game.userId,
             recipientIds: [],
         };
     }
@@ -43,7 +43,7 @@ export default class TurnAlert {
     static get defaultRepeatingData() {
         return {
             frequency: 1,
-            expire: null,
+            expire: Infinity,
             expireAbsolute: false,
         };
     }
