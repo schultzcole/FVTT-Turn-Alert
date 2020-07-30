@@ -1,5 +1,22 @@
 # CHANGELOG
 
+## [1.2.0] 2020-07-29
+
+### ADDED
+
+- Add two macro compendia: One for example alert creation macros, and one for a debug macro that will display all active alerts.
+
+### FIXED
+
+- Fixed an issue that would cause an error when an alert with a message triggered when recipientIds was not set.
+
+### CHANGED
+
+- Change some default turn alert property values, including `combatId`, `createdRound`, `message`, `userId`, `recipientIds`.
+  This should not be a breaking change, but it will make it simpler to create new alerts via macro.
+- Allow for players to delete alerts even when they do not have permission to update the containing combat.
+  There is no UI for this yet, but players should now be able to execute macros that delete turn alerts.
+
 ## [1.1.1] 2020-07-27
 
 ### ADDED
