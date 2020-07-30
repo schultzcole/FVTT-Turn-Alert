@@ -33,7 +33,7 @@ export default class TurnAlert {
             turnId: null,
             endOfTurn: false,
             repeating: null,
-            message: "",
+            message: null,
             recipientIds: [],
             macro: null,
             userId: game.userId,
