@@ -17,6 +17,22 @@
     "styles": [
         "styles/turn-alert-style.css"
     ],
+    "packs": [
+        {
+            "name": "turn-alert-examples",
+            "label": "Turn Alert Example Macros",
+            "module": "turnAlert",
+            "path": "packs/turn-alert-examples.db",
+            "entity": "Macro"
+        },
+        {
+            "name": "turn-alert-debug",
+            "label": "Turn Alert Debug Macros",
+            "module": "turnAlert",
+            "path": "packs/turn-alert-debug.db",
+            "entity": "Macro"
+        }
+    ],
     "socket": true,
     "minimumCoreVersion": "0.6.4",
     "compatibleCoreVersion": "0.6.5",
