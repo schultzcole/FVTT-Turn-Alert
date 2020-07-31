@@ -1,0 +1,56 @@
+{
+    "turnAlert": {
+        "APP": {
+            "AbsoluteRound": "절대적 라운드 값",
+            "AddAlert": "알림 추가",
+            "CreateAlert": "알림 생성",
+            "ChatMessage": "채팅 메시지",
+            "ChatMessagePlaceholder": "알림이 작동될 때 표시할 채팅 메시지. 없다면 비워두십시오.",
+            "CombatAlertsTitle": "전투 알림",
+            "CurrentInitiative": "현재 우선도",
+            "CurrentRound": "현재 라운드",
+            "CurrentTurn": "현재 턴",
+            "DeleteAll": "모든 알림 삭제",
+            "DeleteAlert": "알림 삭제",
+            "EditAlert": "알림 수정",
+            "MacroLabel": "매크로",
+            "MacroHint": "트리거에서 실행할 매크로의 ID 또는 이름.",
+            "MacroInvalid": "매크로 ID 또는 이름이 월드 매크로와 일치하지 않습니다.",
+            "RepeatEveryNRounds": "{num} 라운드마다 반복",
+            "RepeatEveryOneRound": "매 라운드마다 반복",
+            "RepeatExpireAfter": "라운드 후 만료",
+            "RepeatExpireOn": "라운드에 만료",
+            "RepeatExpireAbsolute": "절대적 만료 라운드 값",
+            "RepeatFrequency": "잦은 반복",
+            "Repeating": "반복",
+            "RoundNum": "라운드 {num}",
+            "TopOfRound": "라운드 시작시",
+            "TriggerAfterRounds": "라운드 후에 작동",
+            "TriggerAtTopOfRoundNum": "{num} 라운드가 시작시 작동",
+            "TriggerAtStartOfTurnNum": "{num} 라운드에 턴 시작시 작동",
+            "TriggerAtEndOfTurnNum": "{num} 라운드에 턴 종료시 작동",
+            "TriggerEndOfTurn": "턴 종료시 작동",
+            "TriggerOnRound": "턴에 작동",
+            "TriggerOnTopOfRound": "이 알림은 지정 라운드가 되었을 때 작동합니다",
+            "TriggerOnTurn": "이 알림은 다음 턴에 작동합니다:",
+            "TurnAlert": "Turn Alert",
+            "TurnAlertConfigTitle": "Turn Alert 환경 설정",
+            "UpdateAlert": "알림 업데이트",
+            "ValidRoundWarning": "경고:이 알림의 조건이 이미 발생했습니다!",
+            "WhisperToHint": "위의 채팅 메시지는 다음 선택된 유저에게만 전송됩니다. 선택하지 않으면 기본적으로 공용 메시지가 됩니다. 여러 사용자를 선택하려면 Ctrl 또는 CMD를 누르십시오.",
+            "WhisperTo": "귓속말 대상"
+        },
+        "ERROR": {
+            "CannotCreateAlert": {
+                "NoCombatants": "현재 턴에 알림을 생성할 수 없습니다. 활성중인 전투에 전투원이 없습니다.",
+                "NoCombats": "전투가 없을 때는 Turn Alert을 생성할 수 없습니다."
+            },
+            "CannotShowAlertConfig": {
+                "NoCombatId": "전투 ID가 제공되지 않았거나 제공된 ID가 활성중인 전투에 일치하지 않습니다."
+            },
+            "CannotViewCombatAlert": {
+                "NoCombat": "전투 ID가 제공되지 않았고 현재 활성중인 전투가 없으므로 전투에 대한 알림을 볼 수 없습니다!"
+            }
+        }
+    }
+}
