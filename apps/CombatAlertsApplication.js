@@ -53,9 +53,12 @@ export default class CombatAlertsApplication extends Application {
                     img: null,
                     name: game.i18n.localize(`${CONST.moduleName}.APP.TopOfRound`),
                     initiative: null,
+                    isVisible: game.user.isGM,
                     alerts: this._alertsForTurn(null).map(this._createAlertDisplayData.bind(this)),
                 },
-            ].concat(this._turnData()),
+            ]
+                .concat(this._turnData())
+                .filter((turn) => turn.isVisible),
             currentRound: this._combat.data.round,
             currentTurn: this._combat.data.turn + 1,
             currentInitiative: this._combat.turns[this._combat.data.turn]?.initiative,
@@ -70,7 +73,10 @@ export default class CombatAlertsApplication extends Application {
             img: turn.img,
             name: turn.name,
             initiative: turn.initiative,
-            alerts: this._alertsForTurn(turn._id).map(this._createAlertDisplayData.bind(this)),
+            isVisible: turn.owner && turn.visible && !turn.hidden,
+            alerts: this._alertsForTurn(turn._id)
+                .map(this._createAlertDisplayData.bind(this))
+                .filter((alert) => alert.isVisible),
         }));
     }
 
@@ -96,6 +102,7 @@ export default class CombatAlertsApplication extends Application {
             message: alert.message,
             repeating: alert.repeating,
             round: nextTrigger,
+            isVisible: game.user.isGM || game.userId == alert.userId,
             repeatString,
             roundTitle,
             roundIcon,

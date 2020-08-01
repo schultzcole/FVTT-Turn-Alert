@@ -348,7 +348,7 @@ export default class TurnAlert {
                 .then(() => console.log(`Turn Alert | Deleted Alert ${alertId} on combat ${combatId}`));
         } else {
             console.log(
-                `Turn Alert | User ${game.userId} does not have permission to edit combat ${finalData.combatId}; sending updateAlert request...`
+                `Turn Alert | User ${game.userId} does not have permission to edit combat ${combatId}; sending updateAlert request...`
             );
             game.socket.emit(`module.${CONST.moduleName}`, { type: "deleteAlert", combatId, alertId });
         }
