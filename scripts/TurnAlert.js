@@ -18,6 +18,7 @@ import { compareTurns } from "./utils.js";
  *     message: string,                      // The message to be displayed in chat when the alert is activated
  *     recipientIds: [user id strings]       // The users to whom the message should be whispered. If empty, the message is public
  *     macro: string                         // The macro id or name to trigger when this alert is triggered
+ *     args: [Object]                        // An array of arguments that will be available to the macro when it is executed
  *     userId: id string,                    // The user that created this alert
  * }
  */
@@ -36,6 +37,7 @@ export default class TurnAlert {
             message: null,
             recipientIds: [],
             macro: null,
+            args: [],
             userId: game.userId,
         };
     }
@@ -167,6 +169,7 @@ export default class TurnAlert {
             const speaker = ChatMessage.getSpeaker({ token });
             const actor = game.actors.get(speaker.actor);
             const character = game.user.character;
+            const args = alert.args;
             try {
                 eval(macro.data.command);
             } catch (err) {
@@ -195,6 +198,7 @@ export default class TurnAlert {
      * @param {string} data.message                     The message to be displayed in chat when the alert is activated
      * @param {Array(id string)} data.recipientIds      The users to whom the message should be whispered. If empty, the message is public
      * @param {string} data.macro                       The macro id or name to trigger when this alert is triggered
+     * @param {Array} data.args                         An array of arguments that will be available and in scope when the macro executes
      * @param {id string} data.userId                   The user that created this alert
      */
     static async create(data) {
