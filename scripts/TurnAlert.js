@@ -180,6 +180,42 @@ export default class TurnAlert {
         }
     }
 
+    /** gets the alerts flag on the given combat. */
+    static _getAlertObjectForCombat(combatId) {
+        combatId = combatId || game.combat.data._id;
+        const combat = game.combats.get(combatId);
+        if (!combat) throw new Error(`No combat exists with ID ${combatId}`);
+
+        return combat.data.flags.turnAlert?.alerts;
+    }
+
+    /**
+     * Gets a specific alert on a specific combat. Returns undefined if the alert doesn't exist
+     * If combatId is undefined or null, assumes the current combat.
+     * @param {string} alertId The ID of the alert to get
+     * @param {string} combatId The ID of the combat that the alert can be found on
+     */
+    static getAlertById(alertId, combatId) {
+        const alerts = this._getAlertObjectForCombat(combatId);
+        if (!alerts) return undefined;
+        else return alerts[alertId];
+    }
+
+    /**
+     * Returns an array of all alerts on a given combat.
+     * If combatId is undefined or null, assumes the current combat.
+     * @param {string} combatId The ID of the combat to get all alerts from
+     */
+    static getAlerts(combatId) {
+        const alerts = this._getAlertObjectForCombat(combatId);
+        if (!alerts) return undefined;
+        else return Object.values(alerts);
+    }
+
+    static find(fn, combatId) {
+        return this.getAlerts(combatId).find(fn);
+    }
+
     /**
      * Creates a new turn alert with the given data.
      * This function creates the alert in the database by attaching the alert data
