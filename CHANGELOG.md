@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## [1.3.0] 2020-08-01
+
+### ADDED
+
+- Players can now view the Combat Alerts window. In this window, players will only be able to see combatants that they own, and will only be able to see alerts that they created.
+
+### API
+
+- Added some convenience methods to make it easier to get alert data for existing alerts. `getAlertById`, `getAlerts`, and `find`.
+- Explicitly add the `args` property to alert data.
+
+For more information on these API changes, see <https://github.com/schultzcole/FVTT-Turn-Alert/wiki/Turn-Alert-API>, which has been updated for 1.3.0.
+
 ## [1.2.0] 2020-07-29
 
 ### ADDED
