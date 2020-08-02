@@ -212,8 +212,13 @@ export default class TurnAlert {
         else return Object.values(alerts);
     }
 
-    static find(fn, combatId) {
-        return this.getAlerts(combatId).find(fn);
+    /**
+     * Returns the first alert on the given combat that matches the predicate function
+     * @param {function} predicate The predicate function to check all alerts against
+     * @param {string} combatId The ID of the combat to search
+     */
+    static find(predicate, combatId) {
+        return this.getAlerts(combatId).find(predicate);
     }
 
     /**
