@@ -29,6 +29,7 @@ Hooks.on("init", () => {
             case "deleteAlert":
                 if (!firstGm || game.user !== firstGm) break;
                 await TurnAlert.delete(payload.combatId, payload.alertId);
+                break;
             default:
                 throw new Error(
                     `Turn Alert | Unknown socket payload type: ${payload.type} | payload contents:\n${JSON.stringify(
