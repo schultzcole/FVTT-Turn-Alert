@@ -4,6 +4,7 @@
 
 ### ADDED
 
+- Added Korean Language translation. Many thanks to KLO for the translations.
 - Players can now view the Combat Alerts window. In this window, players will only be able to see combatants that they own, and will only be able to see alerts that they created.
 
 ### API
