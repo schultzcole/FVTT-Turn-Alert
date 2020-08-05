@@ -78,6 +78,22 @@ export default class TurnAlertConfig extends FormApplication {
         };
     }
 
+    _getHeaderButtons() {
+        let buttons = super._getHeaderButtons();
+        buttons.unshift({
+            icon: "fas fa-info-circle",
+            class: "icon",
+            label: "",
+            onclick: async (event) => {
+                window.open(
+                    "https://github.com/schultzcole/FVTT-Turn-Alert/wiki/User-Guide#turn-alert-configuration-dialog"
+                );
+            },
+        });
+
+        return buttons;
+    }
+
     /** @override */
     activateListeners(html) {
         super.activateListeners(html);

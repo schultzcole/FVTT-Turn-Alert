@@ -122,6 +122,20 @@ export default class CombatAlertsApplication extends Application {
         return Object.values(alerts).filter((alert) => alert.turnId === turnId);
     }
 
+    _getHeaderButtons() {
+        let buttons = super._getHeaderButtons();
+        buttons.unshift({
+            icon: "fas fa-info-circle",
+            class: "icon",
+            label: "",
+            onclick: async (event) => {
+                window.open("https://github.com/schultzcole/FVTT-Turn-Alert/wiki/User-Guide#combat-alerts-window");
+            },
+        });
+
+        return buttons;
+    }
+
     /** @override */
     activateListeners(html) {
         super.activateListeners(html);
