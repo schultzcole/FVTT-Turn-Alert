@@ -3,14 +3,12 @@
 Set alerts to trigger on a particular round of combat or on a particular token's turn.
 Alerts can create a chat message or execute a macro, for endless possibilities.
 
+Easily create new alerts [through the UI](https://github.com/schultzcole/FVTT-Turn-Alert/wiki/User-Guide), or create alerts [programmatically](https://github.com/schultzcole/FVTT-Turn-Alert/wiki/Turn-Alert-API) with macros for more advanced options.
+
 ## Use Cases
 
 So when would you want to use this module, and what was this module designed for?
-The intended use of this module is to allow a user to quickly set a reminder for an event or effect.
-It was designed with my preferred play style in mind, which is a relatively low automation style, just with the need for a reminder every once in a while.
-That is not to say that it won't integrate with a high automation style of play, but keep the intent in mind when trying to make it do whatever shenanigans you want.
-
-On to the use cases. These are a few situations that come to mind as exemplary uses of this module:
+These are a few situations that come to mind as exemplary uses of this module:
 
 1. Renee the barbarian uses rage, which expires in 1 minute (10 turns in dnd5e land).
 You can set an alert that will trigger 10 turns from now at the end of the turn, reminding you that the rage effect has expired.
@@ -22,8 +20,12 @@ You can set a repeating alert to trigger at the end of each of the enemy's turns
 When the enemy successfully makes its save, you can easily delete the repeating alert through the Combat Alerts window.
 4. Waldeck is about to be hit by an enemy, but casts shield, raising their AC by 5 until the start of their next turn.
 You can set an alert to remind you to change the AC back when the time comes (or automatically change the AC back with a macro, if you fancy that).
-5. Andrew the GM knows that a while his players are fighting a group of goblins, reinforcements are on their way and will arrive at the start of the 10th round of combat.
+5. Andrew the GM knows that while his players are fighting a group of goblins, reinforcements are on their way and will arrive at the start of the 10th round of combat.
 Andrew can set an alert for himself at the top of the 10th round, which will whisper him—and only him—a reminder that the reinforcements should arrive.
+
+The intended use of this module is to allow a user to quickly set a reminder for an event or effect.
+It was designed with my preferred play style in mind, which is a relatively low automation style, just with the need for a reminder every once in a while.
+That is not to say that it won't integrate with a high automation style of play, but keep the intent in mind when trying to make it do whatever shenanigans you want.
 
 ## User Guide
 
@@ -31,7 +33,8 @@ The user guide has moved to the [repository wiki](https://github.com/schultzcole
 
 ## Compatibility
 
-This module should be compatible with almost any other module. However, as of yet, it is not compatible with Furnace advanced macros. Sorry. It is on the list of things to investigate, but I won't make any promises.
+This module should be compatible with almost any other module, however macros triggered from a Turn Alert are not compatible with Furnace advanced macros features.
+Some of the features added by Furnace advanced macros are covered by Turn Alert; see [the relevant wiki page](https://github.com/schultzcole/FVTT-Turn-Alert/wiki/Triggering-Macros-from-a-Turn-Alert) for details and workarounds.
 
 This module doesn't coordinate with about time, dynamic effects, minor QOL, etc., however it is likely compatible.
 
