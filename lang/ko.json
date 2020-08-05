@@ -3,6 +3,8 @@
         "APP": {
             "AbsoluteRound": "절대적 라운드 값",
             "AddAlert": "알림 추가",
+            "AlertLabel": "이름표",
+            "AlertLabelHint": "전투 알림 창에서 알림을 식별하는 짧은 이름표이다",
             "CreateAlert": "알림 생성",
             "ChatMessage": "채팅 메시지",
             "ChatMessagePlaceholder": "알림이 작동될 때 표시할 채팅 메시지. 없다면 비워두십시오.",
