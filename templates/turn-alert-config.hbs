@@ -19,6 +19,14 @@
         <hr>
         <div>
             <div class="form-group">
+                <label for="label">{{localize 'turnAlert.APP.AlertLabel'}}</label>
+                <input id="label" type="text" name="label" value="{{object.label}}" data-dtype="String">
+                <p class="notes">{{localize 'turnAlert.APP.AlertLabelHint'}}</p>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <div class="form-group">
                 <label id="roundLabel" for="round">{{roundLabel}}</label>
                 <input id="round" type="text" name="round" value="{{object.round}}" data-dtype="Number">
             </div>

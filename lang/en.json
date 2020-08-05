@@ -3,6 +3,8 @@
         "APP": {
             "AbsoluteRound": "Absolute round number",
             "AddAlert": "Add Alert",
+            "AlertLabel": "Label",
+            "AlertLabelHint": "A short label to identify this alert in the Combat Alerts window",
             "CreateAlert": "Create Alert",
             "ChatMessage": "Chat Message",
             "ChatMessagePlaceholder": "The chat message to display when the alert is triggered. Leave blank for no message.",

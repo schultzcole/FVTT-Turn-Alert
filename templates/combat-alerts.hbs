@@ -55,12 +55,22 @@
                         {{this.repeating.frequency}}</span>
                     {{/if}}
 
+                    {{#if this.message}}
+                    <span class="tag message" title="{{localize 'turnAlert.APP.ChatMessage'}}: {{this.message}}"><i
+                            class="fas fa-comments"></i></span>
+                    {{/if}}
+
+                    {{#if this.recipientNames}}
+                    <span class="tag message" title="{{localize 'turnAlert.APP.WhisperTo'}}: {{this.recipientNames}}"><i
+                            class="fas fa-user-secret"></i></span>
+                    {{/if}}
+
                     {{#if this.macroName}}
                     <span class="tag macroName" title="{{this.macroName}}"><i class="fas fa-terminal"></i></span>
                     {{/if}}
 
                     <span class="separator"></span>
-                    <span class="alert-message" title="{{this.message}}">{{{this.message}}}</span>
+                    <span class="alert-label" title="{{localize 'turnAlert.APP.AlertLabel'}}">{{{this.label}}}</span>
                     <span class="separator"></span>
                     <button class="edit-alert-button" title="{{localize 'turnAlert.APP.EditAlert'}}"
                         data-id="{{this.id}}">

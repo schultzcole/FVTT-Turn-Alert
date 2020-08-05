@@ -114,13 +114,12 @@
 .alert-li.flexrow {
     border: 2px groove #eeede0;
     border-top: 0;
-    height: 30px;
-    line-height: 30px;
+    min-height: 30px;
     align-items: center;
     margin: 0;
 }
 
-.alert-li .alert-message {
+.alert-li .alert-label {
     flex-grow: 1;
     white-space: nowrap;
     overflow: hidden;
@@ -161,7 +160,7 @@
 
 .alert-li .separator {
     flex: 0 0 1px;
-    height: 80%;
+    height: 25px;
     border-left: 1px solid #999;
 }
 

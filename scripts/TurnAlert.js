@@ -5,6 +5,7 @@ import { compareTurns } from "./utils.js";
  * Data structure schema:
  * {
  *     id: id string,                        // The 16 char (allegedly) unique ID for this alert
+ *     name: string                          // A human readable, identifier that may be specified for programmatically created alerts and used to find them later.
  *     combatId: id string,                  // The id of the combat that this turn alert belongs to
  *     createdRound: integer                 // The combat round during which this alert was created
  *     round: integer,                       // The round that this turn alert will activate on
@@ -15,6 +16,7 @@ import { compareTurns } from "./utils.js";
  *     repeating.frequency: integer          // The number of rounds in a period before the alert triggers again
  *     repeating.expire: integer             // The round number on which this repeating alert expires. If expireAbsolute is *false*, this will be relative to the initial trigger round of the alert. If zero or null, will not expire.
  *     repeating.expireAbsolute: boolean     // Whether the expire round is absolute or not
+ *     label: string                         // A short human-readable string that is displayed in the Combat Alerts window.
  *     message: string,                      // The message to be displayed in chat when the alert is activated
  *     recipientIds: [user id strings]       // The users to whom the message should be whispered. If empty, the message is public
  *     macro: string                         // The macro id or name to trigger when this alert is triggered
@@ -27,6 +29,7 @@ export default class TurnAlert {
     static get defaultData() {
         return {
             id: null,
+            name: null,
             combatId: game.combat.data._id,
             createdRound: game.combat.data.round,
             round: 0,
@@ -34,6 +37,7 @@ export default class TurnAlert {
             turnId: null,
             endOfTurn: false,
             repeating: null,
+            label: null,
             message: null,
             recipientIds: [],
             macro: null,
@@ -202,6 +206,16 @@ export default class TurnAlert {
     }
 
     /**
+     * Gets the first alert with a name that matches the given one.
+     * If combatId is undefined or null, assumes the current combat.
+     * @param {string} alertName The name property of the alert that you want to find
+     * @param {string} combatId The ID of the combat that the alert can be found on
+     */
+    static getAlertByName(alertName, combatId) {
+        return TurnAlert.find((alert) => alert.name === alertName, combatId);
+    }
+
+    /**
      * Returns an array of all alerts on a given combat.
      * If combatId is undefined or null, assumes the current combat.
      * @param {string} combatId The ID of the combat to get all alerts from
@@ -236,6 +250,7 @@ export default class TurnAlert {
      * @param {integer} data.repeating.frequency        The number of rounds in a period before the alert triggers again
      * @param {integer} data.repeating.expire           The round number on which this repeating alert expires. If expireAbsolute is *false*, this will be relative to the initial trigger round of the alert.
      * @param {boolean} data.repeating.expireAbsolute   Whether the expire round is absolute or relative
+     * @param {string} data.label                       A short human-readable string to identify the alert. Displayed in the Combat Alerts window
      * @param {string} data.message                     The message to be displayed in chat when the alert is activated
      * @param {Array(id string)} data.recipientIds      The users to whom the message should be whispered. If empty, the message is public
      * @param {string} data.macro                       The macro id or name to trigger when this alert is triggered

@@ -233,6 +233,7 @@ export default class TurnAlertConfig extends FormApplication {
                   }
                 : null,
             endOfTurn: !this.object.topOfRound && formData.endOfTurn,
+            label: formData.label,
             message: formData.message,
             recipientIds: whisperRecipients.every((r) => r.selected)
                 ? []

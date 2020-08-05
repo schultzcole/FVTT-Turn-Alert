@@ -99,7 +99,9 @@ export default class CombatAlertsApplication extends Application {
 
         return {
             id: alert.id,
+            label: alert.label,
             message: alert.message,
+            recipientNames: alert.recipientIds.map((id) => game.users.get(id).data.name).join(", "),
             repeating: alert.repeating,
             round: nextTrigger,
             isVisible: game.user.isGM || game.userId == alert.userId,
