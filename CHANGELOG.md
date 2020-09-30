@@ -2,7 +2,7 @@
 
 ## [1.4.0] 2020-08-05
 
-## ADDED
+### ADDED
 
 - Add "Label" field for alerts. This is the label that will be shown in the Combat Alerts window for this alert. Now you can easily identify alerts in the Combat Alerts window, even if they don't specify a chat message.
 - Add "Chat Message" and "Whisper To" indicators for alerts in the Combat Alerts window. These indicators designate that the alert has a chat message or whisper recipients defined, and you can hover over them for more information.
@@ -10,7 +10,7 @@
 
 For more information on these features, please visit the [User Guide](https://github.com/schultzcole/FVTT-Turn-Alert/wiki/User-Guide).
 
-## API
+### API
 
 - Add `name` property on alert data. This property can be used as an identifier for easily finding an alert that pertains to a particular effect.
 - Add `TurnAlert#getAlertByName` to easily get the first alert that has a given name on the given combat.
