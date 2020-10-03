@@ -119,7 +119,12 @@ export default class TurnAlertConfig extends FormApplication {
 
     /** @override */
     _onChangeInput(event) {
-        const fd = this._getFormData(event.currentTarget.form);
+        let fd = null;
+        if (isNewerVersion(game.data.version, "0.7.0")) {
+            fd = new FormDataExtended(event.currentTarget.form);
+        } else {
+            fd = this._getFormData(event.currentTarget.form);
+        }
 
         let formRound = Number(fd.get("round"));
         const formRoundAbsolute = fd.get("roundAbsolute") === "true";
