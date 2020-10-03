@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## [1.5.0] 2020-09-30
+
+Ensure compatibility with core version 0.7.3.
+
+### FIXED
+
+- Ensure that module.json correctly adds Korean as an available language (thank you KLO/drdwing).
+- Fixed an issue where repeating alerts without a turnId defined would not trigger.
+
 ## [1.4.0] 2020-08-05
 
 ### ADDED
