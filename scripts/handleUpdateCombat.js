@@ -17,7 +17,7 @@ export async function handleUpdateCombat(combat, changed, options, userId) {
     }
 
     let alerts = combat.getFlag(CONST.moduleName, "alerts");
-    if (!alerts) return; // allow the update, but quit the handler early
+    if (!alerts) return;
     alerts = duplicate(alerts);
 
     const prevRound = options.prevRound;
@@ -25,7 +25,7 @@ export async function handleUpdateCombat(combat, changed, options, userId) {
     const nextRound = "round" in changed ? changed.round : prevRound;
     const nextTurn = "turn" in changed ? changed.turn : prevTurn;
 
-    if (compareTurns(prevRound, prevTurn, nextRound, nextTurn) > 0) return; // allow the update, but quit the handler early
+    if (compareTurns(prevRound, prevTurn, nextRound, nextTurn) > 0) return;
 
     let anyDeleted = false;
     for (let id in alerts) {
