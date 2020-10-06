@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.5.1] 2020-10-06
+
+### FIXED
+
+- Fix an issue where an alert that triggered at the top of the round would not properly execute a script macro because the top of the round does not correspond with a specific combatant.
+
 ## [1.5.0] 2020-09-30
 
 Ensure compatibility with core version 0.7.3.
