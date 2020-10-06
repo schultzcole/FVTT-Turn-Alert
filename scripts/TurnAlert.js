@@ -171,7 +171,7 @@ export default class TurnAlert {
                 return ui.notifications.warn(`You are not allowed to use JavaScript macros.`);
             }
             const turn = this.getCombat(alert).turns.find((t) => t._id === alert.turnId);
-            const token = canvas.tokens.get(turn.tokenId);
+            const token = canvas.tokens.get(turn?.tokenId);
             const speaker = ChatMessage.getSpeaker({ token });
             const actor = game.actors.get(speaker.actor);
             const character = game.user.character;
