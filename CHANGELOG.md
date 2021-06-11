@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## [2.0.0] 2021-06-11
+
+*Core 0.8 compatibility*
+
+### FIXED
+
+- Fixed an outdated API usage issue that would prevent a Turn Alert from being created.
+- Fixed an outdated API usage issue that would prevent the Turn Alert Config window from appearing.
+- Fixed an issue that would prevent the combatant image from showing in the Turn Alert Config window. 
+- Fixed an issue that would prevent the "Add Alert" context menu option on combatants from appearing.
+- Remove usage of deprecated `Document` properties.
+
+### CHANGED
+
+- Update example macro packs to remove usage of deprecated properties.
+
 ## [1.5.1] 2020-10-06
 
 ### FIXED
