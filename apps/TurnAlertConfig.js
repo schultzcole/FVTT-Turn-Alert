@@ -34,7 +34,7 @@ export default class TurnAlertConfig extends FormApplication {
         return !this.turn
             ? null
             : {
-                  imgPath: this.turn.token.img,
+                  imgPath: this.turn.token.data.img,
                   name: this.turn.token.name,
                   initiative: this.turn.initiative,
               };
