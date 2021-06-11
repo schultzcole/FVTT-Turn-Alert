@@ -277,7 +277,7 @@ export default class TurnAlert {
             );
         }
 
-        if (combat.can(game.user, "update")) {
+        if (combat.canUserModify(game.user, "update")) {
             const id = randomID(16);
             alertData.id = id;
 
@@ -324,7 +324,7 @@ export default class TurnAlert {
             );
         }
 
-        if (combat.can(game.user, "update")) {
+        if (combat.canUserModify(game.user, "update")) {
             if (data.repeating) {
                 data.repeating = mergeObject(this.prototype.constructor.defaultRepeatingData, data.repeating);
             }
@@ -355,7 +355,7 @@ export default class TurnAlert {
             throw new Error(`The combat "${data.combatID}" does not exist.`);
         }
 
-        if (combat.can(game.user, "update")) {
+        if (combat.canUserModify(game.user, "update")) {
             const alerts = combat.getFlag(CONST.moduleName, "alerts") || {};
 
             if (!(alertId in alerts)) {
