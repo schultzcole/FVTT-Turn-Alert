@@ -12,7 +12,7 @@
 const alertData = {
     round: 1,
     roundAbsolute: false,
-    turnId: game.combat.combatant._id,
+    turnId: game.combat.combatant.id,
     message: "My Message",
 };
 

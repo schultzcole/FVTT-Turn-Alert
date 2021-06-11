@@ -27,7 +27,7 @@ export default class TurnAlertConfig extends FormApplication {
         this._expireAbsolute = data.repeating?.expireAbsolute;
 
         this.combat = game.combats.get(data.combatId);
-        this.turn = this.object.turnId ? this.combat.turns.find((turn) => turn._id === this.object.turnId) : null;
+        this.turn = this.object.turnId ? this.combat.turns.find((turn) => turn.id === this.object.turnId) : null;
     }
 
     get _turnData() {
@@ -66,9 +66,9 @@ export default class TurnAlertConfig extends FormApplication {
             turnData: this._turnData,
             repeating: Boolean(repeating),
             users: game.users.map((user) => ({
-                id: user.data._id,
+                id: user.data.id,
                 name: user.data.name,
-                selected: this.object.recipientIds?.includes(user.data._id),
+                selected: this.object.recipientIds?.includes(user.data.id),
             })),
             userCount: game.users.entries.length,
             options: this.options,
@@ -103,7 +103,7 @@ export default class TurnAlertConfig extends FormApplication {
 
     _onCombatantHover(event) {
         event.preventDefault();
-        const token = canvas.tokens.get(this.turn?.token?._id);
+        const token = canvas.tokens.get(this.turn?.token?.id);
         if (token && token.isVisible && !token._controlled) {
             token._onHoverIn(event);
         }
@@ -111,7 +111,7 @@ export default class TurnAlertConfig extends FormApplication {
 
     _onCombatantHoverOut(event) {
         event.preventDefault();
-        const token = canvas.tokens.get(this.turn?.token?._id);
+        const token = canvas.tokens.get(this.turn?.token?.id);
         if (token) {
             token._onHoverOut(event);
         }
@@ -221,7 +221,7 @@ export default class TurnAlertConfig extends FormApplication {
     _validRound(round, roundAbsolute, endOfTurn) {
         const thisRoundLater = this.combat.data.round < round;
         const isCurrentRound = this.combat.data.round == round;
-        const thisTurnIndex = this.combat.turns.findIndex((turn) => turn._id === this.object.turnId);
+        const thisTurnIndex = this.combat.turns.findIndex((turn) => turn.id === this.object.turnId);
         const thisTurnLater = this.combat.data.turn < thisTurnIndex;
         const isCurrentTurn = this.combat.data.turn == thisTurnIndex;
         const turnValid = thisTurnLater || (endOfTurn && isCurrentTurn);

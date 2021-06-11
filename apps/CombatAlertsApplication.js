@@ -24,7 +24,7 @@ export default class CombatAlertsApplication extends Application {
      * A handler called each time the combat associated with this instance changes.
      */
     _onCombatUpdate(combat, changed, options, userId) {
-        if (combat.data._id === this.combatId && changed.active === false) {
+        if (combat.data.id === this.combatId && changed.active === false) {
             this.close();
         } else {
             this.render(false);
@@ -69,12 +69,12 @@ export default class CombatAlertsApplication extends Application {
     _turnData() {
         return this._combat.turns.map((turn, index) => ({
             index,
-            id: turn._id,
+            id: turn.id,
             img: turn.img,
             name: turn.name,
             initiative: turn.initiative,
-            isVisible: turn.owner && turn.visible && !turn.hidden,
-            alerts: this._alertsForTurn(turn._id)
+            isVisible: turn.isOwner && turn.visible && !turn.hidden,
+            alerts: this._alertsForTurn(turn.id)
                 .map(this._createAlertDisplayData.bind(this))
                 .filter((alert) => alert.isVisible),
         }));

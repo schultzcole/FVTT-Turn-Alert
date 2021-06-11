@@ -13,7 +13,7 @@
 const alertData = {
     round: 5,
     roundAbsolute: false,
-    turnId: game.combat.combatant._id,
+    turnId: game.combat.combatant.id,
     repeating: {
         frequency: 1,
         expire: 5,

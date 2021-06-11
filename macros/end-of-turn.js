@@ -12,7 +12,7 @@
 const alertData = {
     round: 0,
     roundAbsolute: false,
-    turnId: game.combat.combatant._id,
+    turnId: game.combat.combatant.id,
     endOfTurn: true,
     message: "End of Turn!",
 };

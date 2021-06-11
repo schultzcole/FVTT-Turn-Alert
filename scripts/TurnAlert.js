@@ -30,7 +30,7 @@ export default class TurnAlert {
         return {
             id: null,
             name: null,
-            combatId: game.combat.data._id,
+            combatId: game.combat.data.id,
             createdRound: game.combat.data.round,
             round: 0,
             roundAbsolute: false,
@@ -58,7 +58,7 @@ export default class TurnAlert {
     static getCombat = (alert) => game.combats.get(alert.combatId);
 
     /** gets the index of the turn that this alert is set to trigger on. */
-    static getTurnIndex = (alert) => TurnAlert.getCombat(alert).turns.findIndex((t) => t._id === alert.turnId);
+    static getTurnIndex = (alert) => TurnAlert.getCombat(alert).turns.findIndex((t) => t.id === alert.turnId);
 
     /** gets the next upcoming round and turn that this alert will trigger on. */
     static getNextTriggerTurn = (alert, currentRound, currentTurn) => ({
@@ -167,10 +167,10 @@ export default class TurnAlert {
 
         // Script macros
         else if (macro.data.type === "script") {
-            if (!Macros.canUseScripts(game.user)) {
+            if (!game.user.can("MACRO_SCRIPT")) {
                 return ui.notifications.warn(`You are not allowed to use JavaScript macros.`);
             }
-            const turn = this.getCombat(alert).turns.find((t) => t._id === alert.turnId);
+            const turn = this.getCombat(alert).turns.find((t) => t.id === alert.turnId);
             const token = canvas.tokens.get(turn?.tokenId);
             const speaker = ChatMessage.getSpeaker({ token });
             const actor = game.actors.get(speaker.actor);
@@ -188,7 +188,7 @@ export default class TurnAlert {
 
     /** gets the alerts flag on the given combat. */
     static _getAlertObjectForCombat(combatId) {
-        combatId = combatId || game.combat.data._id;
+        combatId = combatId || game.combat.data.id;
         const combat = game.combats.get(combatId);
         if (!combat) throw new Error(`No combat exists with ID ${combatId}`);
 

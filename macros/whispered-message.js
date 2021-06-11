@@ -14,7 +14,7 @@ const alertData = {
     roundAbsolute: true,
     turnId: null,
     message: "So secret... shhhh",
-    recipientIds: game.users.filter((u) => u.isGM).map((u) => u.data._id),
+    recipientIds: game.users.filter((u) => u.isGM).map((u) => u.data.id),
 };
 
 TurnAlert.create(alertData);

@@ -52,7 +52,7 @@ Hooks.on("renderCombatTracker", (tracker, html, data) => {
     alertButton.attr("title", game.i18n.localize(`${CONST.moduleName}.APP.CombatAlertsTitle`));
     alertButton.html('<i class="fas fa-bell"></i>');
     alertButton.click((event) => {
-        const combatId = data.combat.data._id;
+        const combatId = data.combat.id;
         const app = new CombatAlertsApplication({ combatId });
         app.render(true);
     });
