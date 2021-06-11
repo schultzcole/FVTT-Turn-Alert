@@ -30,7 +30,7 @@ export default class TurnAlert {
         return {
             id: null,
             name: null,
-            combatId: game.combat.data.id,
+            combatId: game.combat.id,
             createdRound: game.combat.data.round,
             round: 0,
             roundAbsolute: false,
