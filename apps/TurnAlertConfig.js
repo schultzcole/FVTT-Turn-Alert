@@ -65,7 +65,7 @@ export default class TurnAlertConfig extends FormApplication {
             topOfRound: !turnId,
             turnData: this._turnData,
             repeating: Boolean(repeating),
-            users: game.users.entries.map((user) => ({
+            users: game.users.map((user) => ({
                 id: user.data._id,
                 name: user.data.name,
                 selected: this.object.recipientIds?.includes(user.data._id),
