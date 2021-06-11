@@ -33,7 +33,7 @@ export default class CombatAlertsApplication extends Application {
 
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             template: `${CONST.modulePath}/templates/combat-alerts.hbs`,
             title: game.i18n.localize(`${CONST.moduleName}.APP.CombatAlertsTitle`),
             width: 650,

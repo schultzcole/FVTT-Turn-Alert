@@ -261,9 +261,9 @@ export default class TurnAlert {
      */
     static async create(data) {
         const defaultData = TurnAlert.defaultData;
-        const alertData = mergeObject(defaultData, data);
+        const alertData = foundry.utils.mergeObject(defaultData, data);
         if (alertData.repeating) {
-            alertData.repeating = mergeObject(TurnAlert.defaultRepeatingData, alertData.repeating);
+            alertData.repeating = foundry.utils.mergeObject(TurnAlert.defaultRepeatingData, alertData.repeating);
         }
 
         const combat = game.combats.get(alertData.combatId);
@@ -283,7 +283,7 @@ export default class TurnAlert {
 
             let combatAlerts = combat.getFlag(CONST.moduleName, "alerts");
             if (!combatAlerts) combatAlerts = {};
-            else combatAlerts = duplicate(combatAlerts);
+            else combatAlerts = foundry.utils.deepClone(combatAlerts);
             combatAlerts[id] = alertData;
 
             return combat
@@ -326,10 +326,10 @@ export default class TurnAlert {
 
         if (combat.canUserModify(game.user, "update")) {
             if (data.repeating) {
-                data.repeating = mergeObject(this.prototype.constructor.defaultRepeatingData, data.repeating);
+                data.repeating = foundry.utils.mergeObject(this.prototype.constructor.defaultRepeatingData, data.repeating);
             }
 
-            alerts[data.id] = mergeObject(existingData, data);
+            alerts[data.id] = foundry.utils.mergeObject(existingData, data);
 
             await combat.unsetFlag(CONST.moduleName, "alerts");
             return combat

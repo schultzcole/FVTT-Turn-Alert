@@ -7,9 +7,9 @@ import TurnAlert from "../scripts/TurnAlert.js";
  */
 export default class TurnAlertConfig extends FormApplication {
     constructor(data, options) {
-        data = mergeObject(TurnAlert.defaultData, data);
+        data = foundry.utils.mergeObject(TurnAlert.defaultData, data);
         if (data.repeating) {
-            data.repeating = mergeObject(TurnAlert.defaultRepeatingData, data.repeating);
+            data.repeating = foundry.utils.mergeObject(TurnAlert.defaultRepeatingData, data.repeating);
         }
 
         super(data, options);
@@ -42,7 +42,7 @@ export default class TurnAlertConfig extends FormApplication {
 
     /** @override */
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             id: "turn-alert-config",
             classes: ["sheet"],
             title: game.i18n.localize(`${CONST.moduleName}.APP.TurnAlertConfigTitle`),
@@ -58,7 +58,7 @@ export default class TurnAlertConfig extends FormApplication {
     getData(options) {
         const { round, roundAbsolute, endOfTurn, turnId, repeating } = this.object;
         return {
-            object: duplicate(this.object),
+            object: foundry.utils.deepClone(this.object),
             roundLabel: this._getRoundLabel(roundAbsolute),
             expireLabel: this._getExpireLabel(repeating?.expireAbsolute),
             validRound: this._validRound(round, roundAbsolute, endOfTurn),
@@ -262,7 +262,7 @@ export default class TurnAlertConfig extends FormApplication {
             macro: formData.macro,
         };
 
-        let finalData = mergeObject(this.object, newData, { inplace: false });
+        let finalData = foundry.utils.mergeObject(this.object, newData, { inplace: false });
 
         if (this.object.id) {
             TurnAlert.update(finalData);

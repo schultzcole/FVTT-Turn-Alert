@@ -18,7 +18,7 @@ export async function handleUpdateCombat(combat, changed, options, userId) {
 
     let alerts = combat.getFlag(CONST.moduleName, "alerts");
     if (!alerts) return;
-    alerts = duplicate(alerts);
+    alerts = foundry.utils.deepClone(alerts);
 
     const prevRound = options.prevRound;
     const prevTurn = options.prevTurn;
