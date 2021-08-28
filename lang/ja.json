@@ -1,0 +1,58 @@
+{
+    "turnAlert": {
+        "APP": {
+            "AbsoluteRound": "発動するラウンドを指定する",
+            "AddAlert": "アラートを追加する",
+            "AlertLabel": "ラベル",
+            "AlertLabelHint": "コンバットアラートで表示されるアラート名です。",
+            "CreateAlert": "アラートを作成する",
+            "ChatMessage": "チャットメッセージ",
+            "ChatMessagePlaceholder": "アラートが発動した時に表示されるチャットメッセージです。メッセージが無い場合は空白のままにします。",
+            "CombatAlertsTitle": "コンバットアラート",
+            "CurrentInitiative": "現在のイニシアチブ",
+            "CurrentRound": "現在のラウンド",
+            "CurrentTurn": "現在のターン",
+            "DeleteAll": "全てのアラートを削除する",
+            "DeleteAlert": "アラートを削除する",
+            "EditAlert": "アラートを編集する",
+            "MacroLabel": "マクロ",
+            "MacroHint": "トリガーで実行するマクロのID/名前。",
+            "MacroInvalid": "マクロIDまたは名前がどのワールドマクロとも一致しません。",
+            "RepeatEveryNRounds": "{num}ラウンドごとに繰り返す",
+            "RepeatEveryOneRound": "毎ラウンド繰り返す",
+            "RepeatExpireAfter": "指定ラウンド後に発動",
+            "RepeatExpireOn": "指定ラウンドで発動",
+            "RepeatExpireAbsolute": "期限切れラウンド数",
+            "RepeatFrequency": "繰り返す回数",
+            "Repeating": "アラートを繰り返す",
+            "RoundNum": "ラウンド {num}",
+            "TopOfRound": "ラウンド開始時",
+            "TriggerAfterRounds": "指定ラウンド後に発動",
+            "TriggerAtTopOfRoundNum": "{num}ラウンドの開始時にトリガー",
+            "TriggerAtStartOfTurnNum": " {num}ラウンドのターン開始時にトリガー",
+            "TriggerAtEndOfTurnNum": "{num}ラウンドのターン終了時にトリガー",
+            "TriggerEndOfTurn": "ターン終了時にトリガーする",
+            "TriggerOnRound": "発動させるラウンド",
+            "TriggerOnTopOfRound": "このアラートはラウンド開始時にトリガーされます。",
+            "TriggerOnTurn": "このアラートは次のターンにトリガーされます。:",
+            "TurnAlert": "ターンアラート",
+            "TurnAlertConfigTitle": "ターンアラートの設定",
+            "UpdateAlert": "アラート設定を変更する",
+            "ValidRoundWarning": "警告：このアラートのトリガーはすでに発生しています！",
+            "WhisperToHint": "上記のチャットメッセージは、以下の選択されたユーザーにのみ送信されます。 何も選択されていない場合はパブリックメッセージになります。 CtrlキーまたはCMDキーを押しこむことで、複数のユーザーを選択します。",
+            "WhisperTo": "秘話機能"
+        },
+        "ERROR": {
+            "CannotCreateAlert": {
+                "NoCombatants": "現在のターンにアラートを作成できません。有効な戦闘に戦闘員がいません。",
+                "NoCombats": "有効な戦闘が存在しない場合、ターンアラートを作成できません。"
+            },
+            "CannotShowAlertConfig": {
+                "NoCombatId": "戦闘IDが提供されていないか、提供されたIDが有効な戦闘と一致しませんでした。"
+            },
+            "CannotViewCombatAlert": {
+                "NoCombat": "戦闘IDが提供されておらず、現在有効な戦闘がないため、戦闘のアラートを表示できません！"
+            }
+        }
+    }
+}
